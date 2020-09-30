@@ -1,6 +1,6 @@
 Node Applications Toolkit
 ===
 
-Utilities for developing Contentful NodeJS applications
-
+A collection of helpers and utilities for creating NodeJS Contentful Apps
+ 
  
