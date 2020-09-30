@@ -3,7 +3,10 @@
   "includeDeclarations": true,
   "excludeExternals": true,
   "excludeNotDocumented": true,
-  "exclude": "**/*.spec,**/*/index.ts",
+  "exclude": [
+    "**/*.spec.ts",
+    "**/*/index.ts"
+  ],
   "out": "docs",
   "theme": "minimal"
 }

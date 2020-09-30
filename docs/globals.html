@@ -48,10 +48,27 @@
 <div class="container container-main">
 	<div class="content-wrap">
 		<div class="tsd-panel tsd-typography">
-			<a href="#node-applications-toolkit" id="node-applications-toolkit" style="color: inherit; text-decoration: none;">
-				<h1>Node Applications Toolkit</h1>
+			<a href="#node-apps-toolkit" id="node-apps-toolkit" style="color: inherit; text-decoration: none;">
+				<h1>Node Apps Toolkit</h1>
 			</a>
 			<p>A collection of helpers and utilities for creating NodeJS Contentful Apps</p>
+			<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+				<h2>Getting started</h2>
+			</a>
+			<p>You can install this library via</p>
+			<pre><code>npm install --save contentful-<span class="hljs-keyword">node</span><span class="hljs-title">-apps-toolkit</span></code></pre>
+			<p>and include it in your code like</p>
+			<pre><code class="language-js"><span class="hljs-keyword">const</span> {getManagementToken} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;contentful-node-apps-toolkit&#x27;</span>);
+
+getManagementToken(PRIVATE_KEY)
+    .then(<span class="hljs-function"><span class="hljs-params">token</span> =&gt;</span> {
+      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Here is your app token&#x27;</span>)
+      <span class="hljs-built_in">console</span>.log(token)
+    })</code></pre>
+			<a href="#api-docs" id="api-docs" style="color: inherit; text-decoration: none;">
+				<h2>API Docs</h2>
+			</a>
+			<p>API documentation is available <a href="https://contentful.github.io/node-apps-toolkit/">here</a></p>
 		</div>
 		<section class="tsd-panel-group tsd-index-group">
 			<h2>Index</h2>
@@ -61,7 +78,6 @@
 						<h3>Modules</h3>
 						<ul class="tsd-index-list">
 							<li class="tsd-kind-module"><a href="modules/_get_management_token_.html" class="tsd-kind-icon">&quot;get-<wbr>management-<wbr>token&quot;</a></li>
-							<li class="tsd-kind-module"><a href="modules/_get_management_token_spec_.html" class="tsd-kind-icon">&quot;get-<wbr>management-<wbr>token.spec&quot;</a></li>
 						</ul>
 					</section>
 				</div>
