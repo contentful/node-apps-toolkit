@@ -1,0 +1,9 @@
+{
+  "name": "contentful-node-apps-toolkit",
+  "includeDeclarations": true,
+  "excludeExternals": true,
+  "excludeNotDocumented": true,
+  "exclude": "**/*.spec,**/*/index.ts",
+  "out": "docs",
+  "theme": "minimal"
+}
