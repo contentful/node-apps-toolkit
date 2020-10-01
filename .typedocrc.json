@@ -6,7 +6,8 @@
   "exclude": [
     "**/*.spec.ts",
     "**/*/index.ts",
-    "src/utils/**/*"
+    "src/utils/**/*",
+    "test/**/*"
   ],
   "out": "docs",
   "stripInternal": true,
