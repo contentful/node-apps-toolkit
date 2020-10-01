@@ -5,8 +5,10 @@
   "excludeNotDocumented": true,
   "exclude": [
     "**/*.spec.ts",
-    "**/*/index.ts"
+    "**/*/index.ts",
+    "src/utils/**/*"
   ],
   "out": "docs",
-  "theme": "minimal"
+  "stripInternal": true,
+  "excludeNotExported": true
 }
