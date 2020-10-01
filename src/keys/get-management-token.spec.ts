@@ -8,7 +8,7 @@ import { createGetManagementToken, getManagementToken } from './get-management-t
 import { HttpClient, HttpError, Response } from '../utils'
 import { Logger } from '../utils'
 
-const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '__fixtures__', 'key.pem'), 'utf-8')
+const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.pem'), 'utf-8')
 const APP_ID = 'app_id'
 const SPACE_ID = 'space_id'
 const ENVIRONMENT_ID = 'env_id'

@@ -9,7 +9,7 @@ import {
 } from '../utils'
 
 interface GetManagementTokenOptions {
-  appId: string
+  appInstallationId: string
   spaceId: string
   environmentId?: string
 }
@@ -31,14 +31,20 @@ const generateAppToken = (privateKey: string, appId: string, { log }: { log: Log
 
 const getTokenFromAppToken = async (
   appToken: string,
-  { appId, spaceId, environmentId }: { appId: string; spaceId: string; environmentId?: string },
+  {
+    appInstallationId,
+    spaceId,
+    environmentId
+  }: { appInstallationId: string; spaceId: string; environmentId?: string },
   { log, http }: { log: Logger; http: HttpClient }
 ) => {
   const validateStatusCode = createValidateStatusCode([201])
 
+  log(`Requesting CMA Token with given App Token`)
+
   const response = await http.post(
     `spaces/${spaceId}/environments/${environmentId ??
-      'master'}/app_installations/${appId}/access_tokens`,
+      'master'}/app_installations/${appInstallationId}/access_tokens`,
     {
       headers: {
         Authorization: `Bearer ${appToken}`
@@ -50,7 +56,7 @@ const getTokenFromAppToken = async (
   )
 
   log(
-    `Successfully retrieved app access token for app ${appId} in space ${spaceId} and environment ${environmentId}`
+    `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`
   )
 
   return JSON.parse(response.body).token
@@ -66,7 +72,7 @@ export const createGetManagementToken = (log: Logger, http: HttpClient) => {
       throw new ReferenceError('Invalid privateKey: expected a string representing a private key')
     }
 
-    const appToken = generateAppToken(privateKey, opts.appId, { log })
+    const appToken = generateAppToken(privateKey, opts.appInstallationId, { log })
     return getTokenFromAppToken(appToken, opts, { log, http })
   }
 }
