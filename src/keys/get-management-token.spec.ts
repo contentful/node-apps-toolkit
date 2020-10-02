@@ -12,7 +12,11 @@ const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'ke
 const APP_ID = 'app_id'
 const SPACE_ID = 'space_id'
 const ENVIRONMENT_ID = 'env_id'
-const DEFAULT_OPTIONS = { appId: APP_ID, spaceId: SPACE_ID, environmentId: ENVIRONMENT_ID }
+const DEFAULT_OPTIONS = {
+  appInstallationId: APP_ID,
+  spaceId: SPACE_ID,
+  environmentId: ENVIRONMENT_ID
+}
 const noop = () => {}
 
 describe('getManagementToken', () => {
@@ -33,6 +37,27 @@ describe('getManagementToken', () => {
         sinon.match({ headers: { Authorization: sinon.match.string } })
       )
     )
+  })
+
+  describe('when using a keyId', () => {
+    it('fetches a token', async () => {
+      const mockToken = 'token'
+      const logger = (noop as unknown) as Logger
+      const post = sinon.stub()
+      post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
+      const httpClient = ({ post } as unknown) as HttpClient
+      const getManagementToken = createGetManagementToken(logger, httpClient)
+
+      const result = await getManagementToken(PRIVATE_KEY, { ...DEFAULT_OPTIONS, keyId: 'keyId' })
+
+      assert.deepStrictEqual(result, mockToken)
+      assert(
+        post.calledWith(
+          `spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
+          sinon.match({ headers: { Authorization: sinon.match.string } })
+        )
+      )
+    })
   })
 
   describe('when private key is incorrect', () => {
