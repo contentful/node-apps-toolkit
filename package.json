@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
   "main": "lib/index.js",
-  "private": true,
   "scripts": {
     "lint": "eslint --ext .ts ./src",
     "lint:fix": "npm run lint -- --fix",
@@ -14,7 +13,8 @@
     "build": "npm run build:lib && npm run build:docs",
     "build:lib": "rm -rf lib && tsc",
     "build:docs": "typedoc --options .typedocrc.json src",
-    "start:docs": "serve ./docs"
+    "start:docs": "serve ./docs",
+    "semantic-release": "semantic-release"
   },
   "author": "Contentful GmbH",
   "license": "MIT",
