@@ -2,7 +2,7 @@ import got, { Got, HTTPError, Response as GotResponse } from 'got'
 
 const config = {
   prefixUrl: process.env.BASE_URL || 'https://api.contentful.com',
-  retry: { limit: 3 }
+  retry: { limit: 3 },
 }
 
 export const createHttpClient = () => {

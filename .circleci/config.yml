@@ -2,7 +2,7 @@ version: 2.1
 executors:
   node:
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:14
 
 setup-npm:
   &setup-npm
@@ -40,7 +40,7 @@ jobs:
       - *npm-install
       - run:
           name: Linting commits
-          command: npm run commitlint-circle
+          command: npx commitlint --to $(git rev-parse HEAD) -V
   semantic-release:
     docker:
       - image: circleci/node:12
@@ -59,13 +59,14 @@ jobs:
           command: npm run semantic-release
 workflows:
   version: 2.1
-  test:
+  build:
     jobs:
-      - lint
-      - test-with-coverage
+      - lint-and-test
       - lint-commits
       - semantic-release:
+          filters:
+            branches:
+              only: master
           requires:
-            - lint
-            - test-with-coverage
+            - lint-and-test
             - lint-commits
