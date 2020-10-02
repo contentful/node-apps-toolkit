@@ -14,7 +14,8 @@
     "build": "npm run build:lib && npm run build:docs",
     "build:lib": "rm -rf lib && tsc",
     "build:docs": "typedoc --options .typedocrc.json src",
-    "start:docs": "serve ./docs"
+    "start:docs": "serve ./docs",
+    "semantic-release": "semantic-release"
   },
   "author": "Contentful GmbH",
   "license": "MIT",
