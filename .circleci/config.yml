@@ -1,0 +1,71 @@
+version: 2.1
+executors:
+  node:
+    docker:
+      - image: circleci/node:12
+
+setup-npm:
+  &setup-npm
+  run:
+    name: Provide NPM Token
+    command: |-
+      echo $'@contentful:registry=https://registry.npmjs.org/
+      //registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
+
+install-node-modules:
+  &npm-install
+  run:
+    name: Install dependencies
+    command: npm ci
+
+jobs:
+  lint-and-test:
+    executor: node
+    steps:
+      - *setup-npm
+      - checkout
+      - *npm-install
+      - run:
+          name: Run linter
+          command: npm run lint
+      - run:
+          name: Run tests
+          command: npm run test
+  lint-commits:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - *setup-npm
+      - checkout
+      - *npm-install
+      - run:
+          name: Linting commits
+          command: npm run commitlint-circle
+  semantic-release:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run:
+          name: Setup NPM
+          command: |-
+            echo $'@contentful:registry=https://registry.npmjs.org/
+            //registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
+      - run:
+          name: npm ci
+          command: npm ci
+      - run:
+          name: Releasing
+          command: npm run semantic-release
+workflows:
+  version: 2.1
+  test:
+    jobs:
+      - lint
+      - test-with-coverage
+      - lint-commits
+      - semantic-release:
+          requires:
+            - lint
+            - test-with-coverage
+            - lint-commits
