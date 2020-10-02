@@ -8,7 +8,7 @@ const http = createHttpClient()
 
 export const setPublicKey = (publicKey: Buffer) => {
   const organizationId = process.env.ORGANIZATION_ID
-  const appDefinitionId = process.env.APP_DEFINITION_ID
+  const appDefinitionId = process.env.APP_ID
   const keyId = base64url(
     crypto
       .createHash('sha256')
