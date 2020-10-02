@@ -15,7 +15,7 @@ describe('Keys Utilities', () => {
   })
 
   it('fetches a valid CMA token for a valid key pair', async () => {
-    const appInstallationId = process.env.APP_INSTALLATION_ID
+    const appInstallationId = process.env.APP_ID
     const spaceId = process.env.SPACE_ID
     const environmentId = process.env.ENVIRONMENT_ID
 

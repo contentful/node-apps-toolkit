@@ -1,7 +1,5 @@
-# App Definition for the test Application
-APP_DEFINITION_ID=
-# App Installation for the test Application
-APP_INSTALLATION_ID=
+# App Id for the test Application
+APP_ID=
 # Space where the Application is Installed
 SPACE_ID=
 # Environment where the Application is Installed
