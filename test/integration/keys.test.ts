@@ -4,13 +4,14 @@ import * as assert from 'assert'
 
 //TODO use built version
 import { getManagementToken } from '../../src/keys'
-import { setPublicKey } from '../utils'
+import { cleanOldKeys, setPublicKey } from '../utils'
 import { createHttpClient } from '../../src/utils'
 
 describe('Keys Utilities', () => {
   before(async () => {
-    const pubKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.der.pub'))
+    await cleanOldKeys()
 
+    const pubKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.der.pub'))
     await setPublicKey(pubKey)
   })
 
@@ -28,7 +29,7 @@ describe('Keys Utilities', () => {
     const token = await getManagementToken(privateKey, {
       appInstallationId,
       spaceId,
-      environmentId
+      environmentId,
     })
 
     await assert.doesNotReject(() => {
@@ -36,8 +37,8 @@ describe('Keys Utilities', () => {
 
       return http.get(`spaces/${spaceId}/entries`, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       })
     })
   })

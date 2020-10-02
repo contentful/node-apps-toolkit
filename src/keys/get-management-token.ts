@@ -5,7 +5,7 @@ import {
   Logger,
   createHttpClient,
   createValidateStatusCode,
-  HttpClient
+  HttpClient,
 } from '../utils'
 
 interface GetManagementTokenOptions {
@@ -42,7 +42,7 @@ const getTokenFromOneTimeToken = async (
   {
     appInstallationId,
     spaceId,
-    environmentId
+    environmentId,
   }: { appInstallationId: string; spaceId: string; environmentId: string },
   { log, http }: { log: Logger; http: HttpClient }
 ) => {
@@ -54,11 +54,11 @@ const getTokenFromOneTimeToken = async (
     `spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
     {
       headers: {
-        Authorization: `Bearer ${appToken}`
+        Authorization: `Bearer ${appToken}`,
       },
       hooks: {
-        afterResponse: [validateStatusCode]
-      }
+        afterResponse: [validateStatusCode],
+      },
     }
   )
 

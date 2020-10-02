@@ -15,7 +15,7 @@ const ENVIRONMENT_ID = 'env_id'
 const DEFAULT_OPTIONS = {
   appInstallationId: APP_ID,
   spaceId: SPACE_ID,
-  environmentId: ENVIRONMENT_ID
+  environmentId: ENVIRONMENT_ID,
 }
 const noop = () => {}
 
