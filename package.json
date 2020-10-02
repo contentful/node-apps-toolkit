@@ -1,7 +1,7 @@
 {
   "name": "@contentful/node-apps-toolkit",
-  "version": "0.0.1",
-  "description": "Utilities for developing your Contentful application in NodeJS",
+  "version": "0.1.0",
+  "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
   "main": "lib/index.js",
   "private": true,
   "scripts": {
@@ -16,8 +16,8 @@
     "build:docs": "typedoc --options .typedocrc.json src",
     "start:docs": "serve ./docs"
   },
-  "author": "Contentful",
-  "license": "ISC",
+  "author": "Contentful GmbH",
+  "license": "MIT",
   "dependencies": {
     "got": "^11.7.0",
     "jsonwebtoken": "^8.5.1"
