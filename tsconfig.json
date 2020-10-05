@@ -16,7 +16,8 @@
     "noErrorTruncation": true,
     "skipLibCheck": true,
     "strict": true,
-    "pretty": true
+    "pretty": true,
+    "declaration": true
   },
   "include": ["./src/**/*"]
 }
