@@ -8,7 +8,7 @@ A collection of helpers and utilities for creating NodeJS Contentful Apps
 You can install this library via
  
 ```
-npm install --save contentful-node-apps-toolkit
+npm install --save @contentful/node-apps-toolkit
 ```
 
 and include it in your code like
