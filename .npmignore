@@ -1,6 +1,7 @@
+.env
 .circleci
 docs
-keys
+/keys
 scripts
 src
 test
