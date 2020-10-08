@@ -1,0 +1,8 @@
+.env
+.circleci
+docs
+/keys
+scripts
+src
+test
+.idea
