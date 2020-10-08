@@ -17,6 +17,7 @@ interface GetManagementTokenOptions {
 
 /**
  * Synchronously sign the given privateKey into a JSON Web Token string
+ * @internal
  */
 const generateOneTimeToken = (
   privateKey: string,
