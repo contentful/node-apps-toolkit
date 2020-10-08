@@ -13,7 +13,7 @@
     "build": "npm run build:lib && npm run build:docs",
     "build:lib": "rm -rf lib && tsc",
     "build:docs": "typedoc --options .typedocrc.json src",
-    "start:docs": "ln -s docs node-apps-toolkit && serve .",
+    "start:docs": "serve ./docs",
     "prepublish": "npm run build",
     "semantic-release": "semantic-release"
   },

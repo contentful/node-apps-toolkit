@@ -1,9 +1,9 @@
 <!doctype html>
-<html class="minimal no-js">
+<html class="default no-js">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>contentful-node-apps-toolkit | contentful-node-apps-toolkit</title>
+	<title>contentful-node-apps-toolkit</title>
 	<meta name="description" content="Documentation for contentful-node-apps-toolkit">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
@@ -13,8 +13,16 @@
 	<div class="tsd-page-toolbar">
 		<div class="container">
 			<div class="table-wrap">
-				<div class="table-cell">
-					<strong><a href="index.html">contentful-node-apps-toolkit</a></strong>
+				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="index.html" class="title">contentful-node-apps-toolkit</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -30,34 +38,39 @@
 							</div>
 							<input type="checkbox" id="tsd-filter-inherited" checked />
 							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-							<input type="checkbox" id="tsd-filter-only-exported" />
-							<label class="tsd-widget" for="tsd-filter-only-exported">Only exported</label>
 						</div>
 					</div>
-					<a href="#typedoc-main-index" class="tsd-widget menu no-caption">Menu</a>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="globals.html">Globals</a>
+				</li>
+			</ul>
+			<h1>contentful-node-apps-toolkit</h1>
+		</div>
+	</div>
 </header>
-<nav class="tsd-navigation secondary">
-	<ul>
-	</ul>
-</nav>
 <div class="container container-main">
-	<div class="content-wrap">
-		<div class="tsd-panel tsd-typography">
-			<a href="#node-apps-toolkit" id="node-apps-toolkit" style="color: inherit; text-decoration: none;">
-				<h1>Node Apps Toolkit</h1>
-			</a>
-			<p>A collection of helpers and utilities for creating NodeJS Contentful Apps</p>
-			<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
-				<h2>Getting started</h2>
-			</a>
-			<p>You can install this library via</p>
-			<pre><code>npm install --save contentful-<span class="hljs-keyword">node</span><span class="hljs-title">-apps-toolkit</span></code></pre>
-			<p>and include it in your code like</p>
-			<pre><code class="language-js"><span class="hljs-keyword">const</span> {getManagementToken} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;contentful-node-apps-toolkit&#x27;</span>);
+	<div class="row">
+		<div class="col-8 col-content">
+			<div class="tsd-panel tsd-typography">
+				<a href="#node-apps-toolkit" id="node-apps-toolkit" style="color: inherit; text-decoration: none;">
+					<h1>Node Apps Toolkit</h1>
+				</a>
+				<p>A collection of helpers and utilities for creating NodeJS Contentful Apps</p>
+				<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
+					<h2>Getting started</h2>
+				</a>
+				<p>You can install this library via</p>
+				<pre><code>npm install --save @contentful/<span class="hljs-keyword">node</span><span class="hljs-title">-apps-toolkit</span></code></pre>
+				<p>and include it in your code like</p>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> {getManagementToken} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@contentful/node-apps-toolkit&#x27;</span>);
 <span class="hljs-keyword">const</span> {appInstallationId, spaceId, privateKey} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./some-constants&#x27;</span>);
 
 getManagementToken(privateKey, {appInstallationId, spaceId})
@@ -65,48 +78,52 @@ getManagementToken(privateKey, {appInstallationId, spaceId})
       <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Here is your app token&#x27;</span>)
       <span class="hljs-built_in">console</span>.log(token)
     })</code></pre>
-			<a href="#api-docs" id="api-docs" style="color: inherit; text-decoration: none;">
-				<h2>API Docs</h2>
-			</a>
-			<p>API documentation is available <a href="https://contentful.github.io/node-apps-toolkit/">here</a></p>
-			<a href="#testing" id="testing" style="color: inherit; text-decoration: none;">
-				<h2>Testing</h2>
-			</a>
-			<blockquote>
-				<p><strong>:warning: Please Note</strong></p>
-				<p>In order to run integration tests all the environment variables present in
-				<a href="./.env.tpl"><code>.env.tpl</code></a> must be provided.</p>
-			</blockquote>
-		</div>
-		<div style="position:relative;"><a name="typedoc-main-index" class="tsd-anchor"></a></div>
-		<section class="tsd-panel-group tsd-index-group">
-			<h2>Index</h2>
-			<section class="tsd-panel tsd-index-panel">
-				<div class="tsd-index-content">
-					<section class="tsd-index-section ">
-						<h3>Modules</h3>
-						<ul class="tsd-index-list">
-							<li class="tsd-kind-module"><a href="modules/_get_management_token_.html" class="tsd-kind-icon">&quot;get-<wbr>management-<wbr>token&quot;</a></li>
-						</ul>
-					</section>
-				</div>
-			</section>
-		</section>
-		<footer class="with-border-bottom">
-			<div class="container">
-				<h2>Legend</h2>
-				<div class="tsd-legend-group">
-					<ul class="tsd-legend">
-						<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
-					</ul>
-				</div>
+				<a href="#api-docs" id="api-docs" style="color: inherit; text-decoration: none;">
+					<h2>API Docs</h2>
+				</a>
+				<p>API documentation is available <a href="https://contentful.github.io/node-apps-toolkit/">here</a></p>
+				<a href="#testing" id="testing" style="color: inherit; text-decoration: none;">
+					<h2>Testing</h2>
+				</a>
+				<blockquote>
+					<p><strong>:warning: Please Note</strong></p>
+					<p>In order to run integration tests all the environment variables present in
+					<a href="./.env.tpl"><code>.env.tpl</code></a> must be provided.</p>
+				</blockquote>
 			</div>
-		</footer>
-		<div class="container tsd-generator">
-			<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class="globals  ">
+						<a href="globals.html"><em>Globals</em></a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-function">
+						<a href="globals.html#generateonetimetoken" class="tsd-kind-icon">generate<wbr>One<wbr>Time<wbr>Token</a>
+					</li>
+					<li class=" tsd-kind-function">
+						<a href="globals.html#getmanagementtoken" class="tsd-kind-icon">get<wbr>Management<wbr>Token</a>
+					</li>
+				</ul>
+			</nav>
 		</div>
 	</div>
 </div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
 <script src="assets/js/main.js"></script>
 </body>
 </html>
