@@ -12,5 +12,6 @@
   "out": "docs",
   "stripInternal": true,
   "excludeNotExported": true,
-  "gitRevision": "master"
+  "gitRevision": "master",
+  "theme": "./docs-theme"
 }

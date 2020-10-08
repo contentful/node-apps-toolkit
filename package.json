@@ -1,9 +1,8 @@
 {
   "name": "@contentful/node-apps-toolkit",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
   "main": "lib/index.js",
-  "private": true,
   "scripts": {
     "lint": "eslint --ext .ts ./src",
     "lint:fix": "npm run lint -- --fix",
@@ -14,12 +13,14 @@
     "build": "npm run build:lib && npm run build:docs",
     "build:lib": "rm -rf lib && tsc",
     "build:docs": "typedoc --options .typedocrc.json src",
-    "start:docs": "serve ./docs",
+    "start:docs": "ln -s docs node-apps-toolkit && serve .",
+    "prepublish": "npm run build",
     "semantic-release": "semantic-release"
   },
   "author": "Contentful GmbH",
   "license": "MIT",
   "dependencies": {
+    "debug": "^4.2.0",
     "got": "^11.7.0",
     "jsonwebtoken": "^8.5.1"
   },
@@ -34,7 +35,6 @@
     "@typescript-eslint/eslint-plugin": "^4.3.0",
     "@typescript-eslint/parser": "^4.3.0",
     "base64url": "^3.0.1",
-    "debug": "^4.2.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.10.0",
     "eslint-config-prettier": "^6.12.0",
