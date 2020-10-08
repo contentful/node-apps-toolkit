@@ -13,6 +13,5 @@
   "stripInternal": true,
   "excludeNotExported": true,
   "gitRevision": "master",
-  "theme": "minimal"
+  "theme": "./docs-theme"
 }
-
