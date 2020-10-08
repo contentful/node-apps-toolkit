@@ -14,7 +14,7 @@ npm install --save @contentful/node-apps-toolkit
 and include it in your code like
 
 ```js
-const {getManagementToken} = require('contentful-node-apps-toolkit');
+const {getManagementToken} = require('@contentful/node-apps-toolkit');
 const {appInstallationId, spaceId, privateKey} = require('./some-constants');
 
 getManagementToken(privateKey, {appInstallationId, spaceId})
