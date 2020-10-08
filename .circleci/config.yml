@@ -58,9 +58,9 @@ workflows:
       - lint-and-test
       - lint-commits
       - semantic-release:
-          #filters:
-          #  branches:
-          #    only: master
+          filters:
+            branches:
+              only: master
           requires:
             - lint-and-test
             - lint-commits
