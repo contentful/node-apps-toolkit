@@ -32,8 +32,7 @@ jobs:
           name: Run tests
           command: npm run test
   lint-commits:
-    docker:
-      - image: circleci/node:12
+    executor: node
     steps:
       - *setup-npm
       - checkout
@@ -42,15 +41,10 @@ jobs:
           name: Linting commits
           command: npx commitlint --to $(git rev-parse HEAD) -V
   semantic-release:
-    docker:
-      - image: circleci/node:12
+    executor: node
     steps:
       - checkout
-      - run:
-          name: Setup NPM
-          command: |-
-            echo $'@contentful:registry=https://registry.npmjs.org/
-            //registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
+      - *setup-npm
       - run:
           name: npm ci
           command: npm ci
