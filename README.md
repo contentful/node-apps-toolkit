@@ -1,21 +1,22 @@
 Node Apps Toolkit
 ===
 
-A collection of helpers and utilities for creating NodeJS Contentful Apps
+The Node Apps Toolkit is a growing collection of helpers, and utilities, for creating NodeJS Contentful Apps.
 
 ## Getting started
  
-You can install this library via
+You can install this library with npm or yarn
  
 ```
 npm install --save @contentful/node-apps-toolkit
+or
+yarn add @contentful/node-apps-toolkit
 ```
 
-and include it in your code like
-
+You can include the library in your project like this
 ```js
-const {getManagementToken} = require('@contentful/node-apps-toolkit');
-const {appInstallationId, spaceId, privateKey} = require('./some-constants');
+const { getManagementToken } = require('@contentful/node-apps-toolkit');
+const { appInstallationId, spaceId, privateKey } = require('./some-constants');
 
 getManagementToken(privateKey, {appInstallationId, spaceId})
     .then((token) => {
@@ -24,16 +25,14 @@ getManagementToken(privateKey, {appInstallationId, spaceId})
     })
 ```
 
-Management tokens are cached internally until until they expire.
-Pass `reuseToken: false` in the options for `getManagementToken` to disable this feature.
+## API Documentation
 
-## API Docs
+In depth API documentation is available [here](https://contentful.github.io/node-apps-toolkit/)
 
-API documentation is available [here](https://contentful.github.io/node-apps-toolkit/)
+## More coming soon
+We're excited to expand this toolkit with new features. If you have any suggestions or requests for features you'd like to see please create an issue in this repo!
 
-## Testing
+## Contributing and local development
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute to this project.
 
-> **:warning: Please Note**
-> 
-> In order to run integration tests all the environment variables present in 
-[`.env.tpl`](./.env.tpl) must be provided.
+
