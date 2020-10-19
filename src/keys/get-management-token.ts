@@ -1,5 +1,5 @@
-import { sign, SignOptions } from 'jsonwebtoken'
-
+import { decode, sign, SignOptions } from 'jsonwebtoken'
+import * as NodeCache from 'node-cache'
 import {
   createLogger,
   Logger,
@@ -8,12 +8,15 @@ import {
   HttpClient,
 } from '../utils'
 
-interface GetManagementTokenOptions {
+export interface GetManagementTokenOptions {
   appInstallationId: string
   spaceId: string
   environmentId: string
   keyId?: string
+  reuseToken?: boolean
 }
+
+const cache = new NodeCache()
 
 /**
  * Synchronously sign the given privateKey into a JSON Web Token string
@@ -67,7 +70,7 @@ const getTokenFromOneTimeToken = async (
     `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`
   )
 
-  return JSON.parse(response.body).token
+  return JSON.parse(response.body).token as Promise<string>
 }
 
 /**
@@ -75,9 +78,17 @@ const getTokenFromOneTimeToken = async (
  * @internal
  */
 export const createGetManagementToken = (log: Logger, http: HttpClient) => {
-  return (privateKey: unknown, opts: GetManagementTokenOptions): Promise<string> => {
+  return async (privateKey: unknown, opts: GetManagementTokenOptions): Promise<string> => {
     if (!(typeof privateKey === 'string')) {
       throw new ReferenceError('Invalid privateKey: expected a string representing a private key')
+    }
+
+    const cacheKey = opts.appInstallationId + opts.environmentId + privateKey
+    if (opts.reuseToken !== false) {
+      const existing = cache.get(cacheKey) as string
+      if (existing !== undefined) {
+        return existing
+      }
     }
 
     const appToken = generateOneTimeToken(
@@ -85,7 +96,19 @@ export const createGetManagementToken = (log: Logger, http: HttpClient) => {
       { appId: opts.appInstallationId, keyId: opts.keyId },
       { log }
     )
-    return getTokenFromOneTimeToken(appToken, opts, { log, http })
+    const ott = await getTokenFromOneTimeToken(appToken, opts, { log, http })
+
+    if (opts.reuseToken !== false) {
+      const decoded = decode(ott)
+      if (decoded && typeof decoded === 'object') {
+        // Internally expire cached tokens a bit earlier to make sure token isn't expired on arrival
+        const safetyMargin = 10
+        const ttlSeconds = decoded.exp - Math.floor(Date.now() / 1000) - safetyMargin
+        cache.set(cacheKey, ott, ttlSeconds)
+      }
+    }
+
+    return ott
   }
 }
 

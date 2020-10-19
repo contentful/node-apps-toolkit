@@ -78,6 +78,8 @@ getManagementToken(privateKey, {appInstallationId, spaceId})
       <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Here is your app token&#x27;</span>)
       <span class="hljs-built_in">console</span>.log(token)
     })</code></pre>
+				<p>Management tokens are cached internally until until they expire.
+				Pass <code>reuseToken: false</code> in the options for <code>getManagementToken</code> to disable this feature.</p>
 				<a href="#api-docs" id="api-docs" style="color: inherit; text-decoration: none;">
 					<h2>API Docs</h2>
 				</a>
