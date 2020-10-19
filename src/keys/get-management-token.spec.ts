@@ -56,7 +56,7 @@ describe('getManagementToken', () => {
     const httpClient = ({ post } as unknown) as HttpClient
     const getManagementToken = createGetManagementToken(logger, httpClient)
 
-    const optionsWithCaching = {...DEFAULT_OPTIONS, reuseToken: true} 
+    const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
     assert.strictEqual(result, mockToken)
     const secondResult = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
