@@ -82,11 +82,11 @@ describe('getManagementToken', () => {
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
     assert.strictEqual(result, mockToken)
 
-    // Overwrite TTL
+    // Overwrite TTL expiry to 5ms
     const cacheKey = APP_ID + ENVIRONMENT_ID + PRIVATE_KEY.slice(32, 132)
     cache.set(cacheKey, result, 0.005)
 
-    // Sleep 100ms
+    // Sleep 10ms
     await new Promise((resolve) => {
       setTimeout(resolve, 10)
     })
