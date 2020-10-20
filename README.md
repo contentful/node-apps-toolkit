@@ -24,6 +24,9 @@ getManagementToken(privateKey, {appInstallationId, spaceId})
     })
 ```
 
+Management tokens are cached internally until until they expire.
+Pass `reuseToken: false` in the options for `getManagementToken` to disable this feature.
+
 ## API Docs
 
 API documentation is available [here](https://contentful.github.io/node-apps-toolkit/)

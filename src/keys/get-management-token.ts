@@ -1,5 +1,5 @@
-import { sign, SignOptions } from 'jsonwebtoken'
-
+import { decode, sign, SignOptions } from 'jsonwebtoken'
+import * as NodeCache from 'node-cache'
 import {
   createLogger,
   Logger,
@@ -8,11 +8,12 @@ import {
   HttpClient,
 } from '../utils'
 
-interface GetManagementTokenOptions {
+export interface GetManagementTokenOptions {
   appInstallationId: string
   spaceId: string
   environmentId: string
   keyId?: string
+  reuseToken?: boolean
 }
 
 /**
@@ -46,7 +47,7 @@ const getTokenFromOneTimeToken = async (
     environmentId,
   }: { appInstallationId: string; spaceId: string; environmentId: string },
   { log, http }: { log: Logger; http: HttpClient }
-) => {
+): Promise<string> => {
   const validateStatusCode = createValidateStatusCode([201])
 
   log(`Requesting CMA Token with given App Token`)
@@ -74,10 +75,27 @@ const getTokenFromOneTimeToken = async (
  * Factory method for GetManagementToken
  * @internal
  */
-export const createGetManagementToken = (log: Logger, http: HttpClient) => {
-  return (privateKey: unknown, opts: GetManagementTokenOptions): Promise<string> => {
+export const createGetManagementToken = (
+  log: Logger,
+  http: HttpClient,
+  existingCache?: NodeCache
+) => {
+  const cache = existingCache || new NodeCache()
+  return async (privateKey: unknown, opts: GetManagementTokenOptions): Promise<string> => {
     if (!(typeof privateKey === 'string')) {
       throw new ReferenceError('Invalid privateKey: expected a string representing a private key')
+    }
+
+    if (opts.reuseToken === undefined) {
+      opts.reuseToken = true
+    }
+
+    const cacheKey = opts.appInstallationId + opts.environmentId + privateKey.slice(32, 132)
+    if (opts.reuseToken) {
+      const existing = cache.get(cacheKey) as string
+      if (existing) {
+        return existing as string
+      }
     }
 
     const appToken = generateOneTimeToken(
@@ -85,7 +103,18 @@ export const createGetManagementToken = (log: Logger, http: HttpClient) => {
       { appId: opts.appInstallationId, keyId: opts.keyId },
       { log }
     )
-    return getTokenFromOneTimeToken(appToken, opts, { log, http })
+    const ott = await getTokenFromOneTimeToken(appToken, opts, { log, http })
+    if (opts.reuseToken) {
+      const decoded = decode(ott)
+      if (decoded && typeof decoded === 'object') {
+        // Internally expire cached tokens a bit earlier to make sure token isn't expired on arrival
+        const safetyMargin = 10
+        const ttlSeconds = decoded.exp - Math.floor(Date.now() / 1000) - safetyMargin
+        cache.set(cacheKey, ott, ttlSeconds)
+      }
+    }
+
+    return ott
   }
 }
 
