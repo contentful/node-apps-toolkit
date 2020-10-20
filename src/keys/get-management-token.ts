@@ -75,7 +75,12 @@ const getTokenFromOneTimeToken = async (
  * Factory method for GetManagementToken
  * @internal
  */
-export const createGetManagementToken = (log: Logger, http: HttpClient, cache?: NodeCache) => {
+export const createGetManagementToken = (
+  log: Logger,
+  http: HttpClient,
+  existingCache?: NodeCache
+) => {
+  const cache = existingCache || new NodeCache()
   return async (privateKey: unknown, opts: GetManagementTokenOptions): Promise<string> => {
     if (!(typeof privateKey === 'string')) {
       throw new ReferenceError('Invalid privateKey: expected a string representing a private key')
@@ -86,7 +91,7 @@ export const createGetManagementToken = (log: Logger, http: HttpClient, cache?: 
     }
 
     const cacheKey = opts.appInstallationId + opts.environmentId + privateKey.slice(32, 132)
-    if (cache && opts.reuseToken) {
+    if (opts.reuseToken) {
       const existing = cache.get(cacheKey) as string
       if (existing) {
         return existing as string
@@ -99,8 +104,7 @@ export const createGetManagementToken = (log: Logger, http: HttpClient, cache?: 
       { log }
     )
     const ott = await getTokenFromOneTimeToken(appToken, opts, { log, http })
-
-    if (cache && opts.reuseToken) {
+    if (opts.reuseToken) {
       const decoded = decode(ott)
       if (decoded && typeof decoded === 'object') {
         // Internally expire cached tokens a bit earlier to make sure token isn't expired on arrival
@@ -127,11 +131,9 @@ export const createGetManagementToken = (log: Logger, http: HttpClient, cache?: 
  *    })
  * ~~~
  */
-const cache = new NodeCache()
 export const getManagementToken = (privateKey: unknown, opts: GetManagementTokenOptions) => {
-  return createGetManagementToken(
-    createLogger({ filename: __filename }),
-    createHttpClient(),
-    cache
-  )(privateKey, opts)
+  return createGetManagementToken(createLogger({ filename: __filename }), createHttpClient())(
+    privateKey,
+    opts
+  )
 }

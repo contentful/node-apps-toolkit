@@ -55,7 +55,7 @@ describe('getManagementToken', () => {
 
     post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
     const httpClient = ({ post } as unknown) as HttpClient
-    const getManagementToken = createGetManagementToken(logger, httpClient, new NodeCache())
+    const getManagementToken = createGetManagementToken(logger, httpClient)
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
@@ -64,6 +64,36 @@ describe('getManagementToken', () => {
     assert.strictEqual(secondResult, mockToken)
 
     assert(post.calledOnce)
+  })
+
+  it('does not cache expired token', async () => {
+    const logger = (noop as unknown) as Logger
+    const post = sinon.stub()
+    const mockToken = sign({ a: 'b' }, 'a-secret-key', {
+      expiresIn: '5 minutes',
+    })
+
+    post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
+    const httpClient = ({ post } as unknown) as HttpClient
+    const cache = new NodeCache()
+    const getManagementToken = createGetManagementToken(logger, httpClient, cache)
+
+    const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
+    const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
+    assert.strictEqual(result, mockToken)
+
+    // Overwrite TTL
+    const cacheKey = APP_ID + ENVIRONMENT_ID + PRIVATE_KEY.slice(32, 132)
+    cache.set(cacheKey, result, 0.005)
+
+    // Sleep 100ms
+    await new Promise((resolve) => {
+      setTimeout(resolve, 10)
+    })
+
+    const secondResult = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
+    assert.strictEqual(secondResult, mockToken)
+    assert(post.calledTwice)
   })
 
   describe('when using a keyId', () => {
