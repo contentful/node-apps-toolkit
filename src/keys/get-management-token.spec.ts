@@ -12,6 +12,7 @@ import {
 import { HttpClient, HttpError, Response } from '../utils'
 import { Logger } from '../utils'
 import { sign } from 'jsonwebtoken'
+import NodeCache = require('node-cache')
 
 const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.pem'), 'utf-8')
 const APP_ID = 'app_id'
@@ -54,7 +55,7 @@ describe('getManagementToken', () => {
 
     post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
     const httpClient = ({ post } as unknown) as HttpClient
-    const getManagementToken = createGetManagementToken(logger, httpClient)
+    const getManagementToken = createGetManagementToken(logger, httpClient, new NodeCache())
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)

@@ -16,8 +16,6 @@ export interface GetManagementTokenOptions {
   reuseToken?: boolean
 }
 
-const cache = new NodeCache()
-
 /**
  * Synchronously sign the given privateKey into a JSON Web Token string
  * @internal
@@ -49,7 +47,7 @@ const getTokenFromOneTimeToken = async (
     environmentId,
   }: { appInstallationId: string; spaceId: string; environmentId: string },
   { log, http }: { log: Logger; http: HttpClient }
-) => {
+): Promise<string> => {
   const validateStatusCode = createValidateStatusCode([201])
 
   log(`Requesting CMA Token with given App Token`)
@@ -70,24 +68,28 @@ const getTokenFromOneTimeToken = async (
     `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`
   )
 
-  return JSON.parse(response.body).token as Promise<string>
+  return JSON.parse(response.body).token
 }
 
 /**
  * Factory method for GetManagementToken
  * @internal
  */
-export const createGetManagementToken = (log: Logger, http: HttpClient) => {
+export const createGetManagementToken = (log: Logger, http: HttpClient, cache?: NodeCache) => {
   return async (privateKey: unknown, opts: GetManagementTokenOptions): Promise<string> => {
     if (!(typeof privateKey === 'string')) {
       throw new ReferenceError('Invalid privateKey: expected a string representing a private key')
     }
 
-    const cacheKey = opts.appInstallationId + opts.environmentId + privateKey
-    if (opts.reuseToken !== false) {
+    if (opts.reuseToken === undefined) {
+      opts.reuseToken = true
+    }
+
+    const cacheKey = opts.appInstallationId + opts.environmentId + privateKey.slice(32, 132)
+    if (cache && opts.reuseToken) {
       const existing = cache.get(cacheKey) as string
-      if (existing !== undefined) {
-        return existing
+      if (existing) {
+        return existing as string
       }
     }
 
@@ -98,7 +100,7 @@ export const createGetManagementToken = (log: Logger, http: HttpClient) => {
     )
     const ott = await getTokenFromOneTimeToken(appToken, opts, { log, http })
 
-    if (opts.reuseToken !== false) {
+    if (cache && opts.reuseToken) {
       const decoded = decode(ott)
       if (decoded && typeof decoded === 'object') {
         // Internally expire cached tokens a bit earlier to make sure token isn't expired on arrival
@@ -125,9 +127,11 @@ export const createGetManagementToken = (log: Logger, http: HttpClient) => {
  *    })
  * ~~~
  */
+const cache = new NodeCache()
 export const getManagementToken = (privateKey: unknown, opts: GetManagementTokenOptions) => {
-  return createGetManagementToken(createLogger({ filename: __filename }), createHttpClient())(
-    privateKey,
-    opts
-  )
+  return createGetManagementToken(
+    createLogger({ filename: __filename }),
+    createHttpClient(),
+    cache
+  )(privateKey, opts)
 }
