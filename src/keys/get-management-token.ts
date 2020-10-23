@@ -120,6 +120,12 @@ export const createGetManagementToken = (
 
 /**
  * Returns a Contentful Management API token from private key
+ * Management tokens are cached internally until until they expire.
+ * Pass `reuseToken: false` in the options for `getManagementToken` to disable this feature.
+ *
+ * NodeJS Contentful Apps need a management token to interact with Contentful's APIs.
+ * Creating a management token requires a key pair to be regsitered for the app, follow [this link](http://contentful./developers/docs/references/content-management-api/#/reference/app-keys/app-keys) for more information on key pairs.
+ * Once a key pair is registered the getManagementToken function can be used to generate a valid token.
  *
  * ~~~
  * const {getManagementToken} = require('contentful-node-apps-toolkit')

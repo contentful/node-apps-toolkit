@@ -63,35 +63,35 @@
 				<a href="#node-apps-toolkit" id="node-apps-toolkit" style="color: inherit; text-decoration: none;">
 					<h1>Node Apps Toolkit</h1>
 				</a>
-				<p>A collection of helpers and utilities for creating NodeJS Contentful Apps</p>
+				<p>The Node Apps Toolkit is a growing collection of helpers, and utilities, for creating NodeJS Contentful Apps.</p>
 				<a href="#getting-started" id="getting-started" style="color: inherit; text-decoration: none;">
 					<h2>Getting started</h2>
 				</a>
-				<p>You can install this library via</p>
-				<pre><code>npm install --save @contentful/<span class="hljs-keyword">node</span><span class="hljs-title">-apps-toolkit</span></code></pre>
-				<p>and include it in your code like</p>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> {getManagementToken} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@contentful/node-apps-toolkit&#x27;</span>);
-<span class="hljs-keyword">const</span> {appInstallationId, spaceId, privateKey} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./some-constants&#x27;</span>);
+				<p>You can install this library with npm or yarn</p>
+				<pre><code>npm install --save @contentful/<span class="hljs-keyword">node</span><span class="hljs-title">-apps-toolkit</span>
+<span class="hljs-keyword">or</span>
+yarn add @contentful/<span class="hljs-keyword">node</span><span class="hljs-title">-apps-toolkit</span></code></pre>
+				<p>You can include the library in your project like this</p>
+				<pre><code class="language-js"><span class="hljs-keyword">const</span> { getManagementToken } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@contentful/node-apps-toolkit&#x27;</span>);
+<span class="hljs-keyword">const</span> { appInstallationId, spaceId, privateKey } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./some-constants&#x27;</span>);
 
 getManagementToken(privateKey, {appInstallationId, spaceId})
     .then(<span class="hljs-function">(<span class="hljs-params">token</span>) =&gt;</span> {
       <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Here is your app token&#x27;</span>)
       <span class="hljs-built_in">console</span>.log(token)
     })</code></pre>
-				<p>Management tokens are cached internally until until they expire.
-				Pass <code>reuseToken: false</code> in the options for <code>getManagementToken</code> to disable this feature.</p>
-				<a href="#api-docs" id="api-docs" style="color: inherit; text-decoration: none;">
-					<h2>API Docs</h2>
+				<a href="#api-documentation" id="api-documentation" style="color: inherit; text-decoration: none;">
+					<h2>API Documentation</h2>
 				</a>
-				<p>API documentation is available <a href="https://contentful.github.io/node-apps-toolkit/">here</a></p>
-				<a href="#testing" id="testing" style="color: inherit; text-decoration: none;">
-					<h2>Testing</h2>
+				<p>In depth API documentation is available <a href="https://contentful.github.io/node-apps-toolkit/">here</a></p>
+				<a href="#more-coming-soon" id="more-coming-soon" style="color: inherit; text-decoration: none;">
+					<h2>More coming soon</h2>
 				</a>
-				<blockquote>
-					<p><strong>:warning: Please Note</strong></p>
-					<p>In order to run integration tests all the environment variables present in
-					<a href="./.env.tpl"><code>.env.tpl</code></a> must be provided.</p>
-				</blockquote>
+				<p>We&#39;re excited to expand this toolkit with new features. If you have any suggestions or requests for features you&#39;d like to see please create an issue in this repo!</p>
+				<a href="#contributing-and-local-development" id="contributing-and-local-development" style="color: inherit; text-decoration: none;">
+					<h2>Contributing and local development</h2>
+				</a>
+				<p>Please see <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> for more information on how to contribute to this project.</p>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
