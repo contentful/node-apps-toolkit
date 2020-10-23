@@ -11,5 +11,8 @@ module.exports = {
   extends: [
     "eslint:recommended",
     "plugin:prettier/recommended",
-  ]
+  ],
+  rules: {
+    'no-unused-vars': ["error", {"ignoreRestSiblings": true}]
+  }
 }
