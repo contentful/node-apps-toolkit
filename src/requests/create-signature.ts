@@ -35,8 +35,8 @@ const hash = (normalizedCanonicalRequest: CanonicalRequest, secret: string) => {
  * const SECRET = process.env.SECRET
  *
  * server.post('/api/my-resources', (req, res) => {
- *   const incomingSignature = req.headers['x-signature']
- *   const incomingTimestamp = req.headers['x-timestamp']
+ *   const incomingSignature = req.headers['x-contentful-signature']
+ *   const incomingTimestamp = req.headers['x-contentful-timestamp']
  *   const now = Date.now()
  *
  *   if (!incomingSignature) {
@@ -51,8 +51,9 @@ const hash = (normalizedCanonicalRequest: CanonicalRequest, secret: string) => {
  *     SECRET,
  *     {
  *       method: req.method,
- *       path: req.url
- *       headers: omit(req.headers, 'x-signature'),
+ *       path: req.url,
+ *       signedHeaders: ['Authorization']
+ *       headers: req.headers,
  *       body: JSON.stringify(req.body)
  *     },
  *     incomingTimestamp
@@ -78,8 +79,9 @@ export const createSignature = (
 
   const path = getNormalizedEncodedURI(canonicalRequest.path)
   const method = canonicalRequest.method
+  const signedHeaders = canonicalRequest.signedHeaders ?? []
   const headers = canonicalRequest.headers
-    ? getNormalizedHeaders(canonicalRequest.headers, timestamp)
+    ? getNormalizedHeaders(canonicalRequest.headers, signedHeaders, timestamp)
     : {}
   const body = canonicalRequest.body ?? ''
 

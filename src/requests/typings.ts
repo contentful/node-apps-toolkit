@@ -21,6 +21,7 @@ export const CanonicalRequestValidator = runtypes
   })
   .And(
     runtypes.Partial({
+      signedHeaders: runtypes.Array(runtypes.String),
       headers: runtypes.Dictionary(runtypes.String, 'string'),
       body: runtypes.String,
     })

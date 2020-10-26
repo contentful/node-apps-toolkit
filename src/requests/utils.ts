@@ -1,29 +1,30 @@
 import * as querystring from 'querystring'
-import * as url from 'url'
+import { ContentfulSigningHeader } from './constants'
 import type { Timestamp } from './typings'
 
 export const getNormalizedEncodedURI = (uri: string) => {
-  const parsedUri = url.parse(uri)
+  const [pathname, search] = uri.split('?')
+  const escapedSearch = search ? querystring.escape(search) : ''
 
-  parsedUri.query = parsedUri.query ? querystring.escape(parsedUri.query) : ''
-
-  return encodeURI(url.format(parsedUri))
+  return encodeURI(escapedSearch ? `${pathname}?${escapedSearch}` : pathname)
 }
 
-export const getNormalizedHeaders = (headers: Record<string, string>, timestamp: Timestamp) => {
-  const sortedHeaders = Object.entries(headers).sort(([keyOne], [keyTwo]) =>
-    keyOne > keyTwo ? 1 : 0
-  )
-
+export const getNormalizedHeaders = (
+  headers: Record<string, string>,
+  signedHeaders: Array<string>,
+  timestamp: Timestamp
+) => {
   const normalizedHeaders: Record<string, string> = {}
 
-  for (const [key, header] of sortedHeaders) {
-    const normalizedKey = key.toLowerCase().trim()
+  for (const headerKey of signedHeaders) {
+    const headerValue = headers[headerKey]
+    const normalizedKey = headerKey.toLowerCase().trim()
 
-    normalizedHeaders[normalizedKey] = header.trim()
+    normalizedHeaders[normalizedKey] = encodeURI(headerValue.trim())
   }
 
-  normalizedHeaders['x-contentful-timestamp'] = timestamp.toString()
+  normalizedHeaders[ContentfulSigningHeader.Timestamp] = timestamp.toString()
+  normalizedHeaders[ContentfulSigningHeader.SignedHeaders] = signedHeaders.join(',')
 
   return normalizedHeaders
 }

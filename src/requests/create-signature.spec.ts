@@ -90,22 +90,89 @@ describe('create-signature', () => {
   })
 
   describe('when input is valid', () => {
-    it('generates different signatures with differently ordered headers', () => {
+    it('generates different signatures with different url search order', () => {
       const headerOne = 'one'
-      const headerTwo = 'two'
 
-      const headers = { headerOne, headerTwo }
-      const headersShuffled = { headerTwo, headerOne }
+      const headers = { headerOne }
+      const signedHeaders = ['headerOne']
 
       assert.notStrictEqual(
-        createSignature(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
         createSignature(
           VALID_SECRET,
-          { ...VALID_REQUEST, headers: headersShuffled },
+          { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers, signedHeaders },
+          VALID_TIMESTAMP
+        ),
+        createSignature(
+          VALID_SECRET,
+          { ...VALID_REQUEST, path: '/api/resources?w=2&q=1', headers, signedHeaders },
           VALID_TIMESTAMP
         )
       )
     })
+
+    it('generates different signatures with different url search', () => {
+      const headerOne = 'one'
+
+      const headers = { headerOne }
+      const signedHeaders = ['headerOne']
+
+      assert.notStrictEqual(
+        createSignature(
+          VALID_SECRET,
+          { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers, signedHeaders },
+          VALID_TIMESTAMP
+        ),
+        createSignature(
+          VALID_SECRET,
+          { ...VALID_REQUEST, path: '/api/resources?q=12', headers, signedHeaders },
+          VALID_TIMESTAMP
+        )
+      )
+    })
+
+    it('generates different signatures with different signed headers list', () => {
+      const headerOne = 'one'
+      const headerTwo = 'two'
+
+      const headers = { headerOne, headerTwo }
+
+      assert.notStrictEqual(
+        createSignature(
+          VALID_SECRET,
+          {
+            ...VALID_REQUEST,
+            headers,
+            signedHeaders: ['headerOne', 'headerTwo'],
+          },
+          VALID_TIMESTAMP
+        ),
+        createSignature(
+          VALID_SECRET,
+          { ...VALID_REQUEST, headers, signedHeaders: ['headerTwo', 'headerOne'] },
+          VALID_TIMESTAMP
+        )
+      )
+    })
+
+    it('does not break with headers with linebreaks', () => {
+      const headerTwo = 'two\nthree'
+
+      const headers = { headerTwo }
+      const signedHeaders = ['headerTwo']
+
+      assert.doesNotThrow(() =>
+        createSignature(
+          VALID_SECRET,
+          {
+            ...VALID_REQUEST,
+            headers,
+            signedHeaders,
+          },
+          VALID_TIMESTAMP
+        )
+      )
+    })
+
     it('generates same signature if headers key are provided with different casing', () => {
       const headerOne = 'one'
       const headerTwo = 'two'
