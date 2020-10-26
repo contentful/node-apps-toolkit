@@ -1,6 +1,6 @@
-import * as querystring from "querystring";
-import * as url from "url";
-import type {Timestamp} from "./typings";
+import * as querystring from 'querystring'
+import * as url from 'url'
+import type { Timestamp } from './typings'
 
 export const getNormalizedEncodedURI = (uri: string) => {
   const parsedUri = url.parse(uri)
@@ -11,7 +11,9 @@ export const getNormalizedEncodedURI = (uri: string) => {
 }
 
 export const getNormalizedHeaders = (headers: Record<string, string>, timestamp: Timestamp) => {
-  const sortedHeaders = Object.entries(headers).sort(([keyOne], [keyTwo]) => keyOne > keyTwo ? 1 : 0)
+  const sortedHeaders = Object.entries(headers).sort(([keyOne], [keyTwo]) =>
+    keyOne > keyTwo ? 1 : 0
+  )
 
   const normalizedHeaders: Record<string, string> = {}
 
@@ -22,7 +24,6 @@ export const getNormalizedHeaders = (headers: Record<string, string>, timestamp:
   }
 
   normalizedHeaders['x-contentful-timestamp'] = timestamp.toString()
-
 
   return normalizedHeaders
 }

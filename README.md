@@ -7,9 +7,9 @@ The Node Apps Toolkit is a growing collection of helpers, and utilities, for cre
  
 You can install this library with npm or yarn
  
-```
+```shell script
 npm install --save @contentful/node-apps-toolkit
-or
+# or
 yarn add @contentful/node-apps-toolkit
 ```
 

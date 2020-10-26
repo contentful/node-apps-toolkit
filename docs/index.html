@@ -68,9 +68,9 @@
 					<h2>Getting started</h2>
 				</a>
 				<p>You can install this library with npm or yarn</p>
-				<pre><code>npm install --save @contentful/<span class="hljs-keyword">node</span><span class="hljs-title">-apps-toolkit</span>
-<span class="hljs-keyword">or</span>
-yarn add @contentful/<span class="hljs-keyword">node</span><span class="hljs-title">-apps-toolkit</span></code></pre>
+				<pre><code class="language-shell">npm install --save @contentful/node-apps-toolkit
+<span class="hljs-meta">#</span><span class="bash"> or</span>
+yarn add @contentful/node-apps-toolkit</code></pre>
 				<p>You can include the library in your project like this</p>
 				<pre><code class="language-js"><span class="hljs-keyword">const</span> { getManagementToken } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@contentful/node-apps-toolkit&#x27;</span>);
 <span class="hljs-keyword">const</span> { appInstallationId, spaceId, privateKey } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./some-constants&#x27;</span>);
@@ -104,6 +104,9 @@ getManagementToken(privateKey, {appInstallationId, spaceId})
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-function">
+						<a href="globals.html#createsignature" class="tsd-kind-icon">create<wbr>Signature</a>
+					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getmanagementtoken" class="tsd-kind-icon">get<wbr>Management<wbr>Token</a>
 					</li>
