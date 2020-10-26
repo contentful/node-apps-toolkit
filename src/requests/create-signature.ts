@@ -19,7 +19,7 @@ const hash = (normalizedCanonicalRequest: CanonicalRequest, secret: string) => {
 
   hmac.update(stringifiedRequest)
 
-  return hmac.digest('base64')
+  return hmac.digest('hex')
 }
 
 /**
