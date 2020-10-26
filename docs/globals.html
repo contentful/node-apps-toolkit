@@ -85,7 +85,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/create-signature.ts#L70">requests/create-signature.ts:70</a></li>
+									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/create-signature.ts#L71">requests/create-signature.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -101,8 +101,8 @@
 <span class="hljs-keyword">const</span> SECRET = process.env.SECRET
 
 server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> incomingSignature = req.headers[<span class="hljs-string">&#x27;x-signature&#x27;</span>]
-  <span class="hljs-keyword">const</span> incomingTimestamp = req.headers[<span class="hljs-string">&#x27;x-timestamp&#x27;</span>]
+  <span class="hljs-keyword">const</span> incomingSignature = req.headers[<span class="hljs-string">&#x27;x-contentful-signature&#x27;</span>]
+  <span class="hljs-keyword">const</span> incomingTimestamp = req.headers[<span class="hljs-string">&#x27;x-contentful-timestamp&#x27;</span>]
   <span class="hljs-keyword">const</span> now = <span class="hljs-built_in">Date</span>.now()
 
   <span class="hljs-keyword">if</span> (!incomingSignature) {
@@ -117,8 +117,9 @@ server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <spa
     SECRET,
     {
       <span class="hljs-attr">method</span>: req.method,
-      <span class="hljs-attr">path</span>: req.url
-      <span class="hljs-attr">headers</span>: omit(req.headers, <span class="hljs-string">&#x27;x-signature&#x27;</span>),
+      <span class="hljs-attr">path</span>: req.url,
+      <span class="hljs-attr">signedHeaders</span>: [<span class="hljs-string">&#x27;Authorization&#x27;</span>]
+      <span class="hljs-attr">headers</span>: req.headers,
       <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify(req.body)
     },
     incomingTimestamp
