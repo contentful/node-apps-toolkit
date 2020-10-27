@@ -1,8 +1,8 @@
 import * as assert from 'assert'
-import { CanonicalRequest } from './typings'
+import { CanonicalRequest, Secret } from './typings'
 import { createSignature } from './create-signature'
 
-const VALID_SECRET = 'this-is-a-valid-secret'
+const VALID_SECRET: Secret = new Array(64).fill('a').join('')
 const VALID_TIMESTAMP = 1603379941037
 const VALID_REQUEST: CanonicalRequest = {
   method: 'GET',
@@ -198,8 +198,9 @@ describe('create-signature', () => {
       )
     })
     it('generates different signatures with different secrets', () => {
+      const newSecret = `q${VALID_SECRET.slice(1, VALID_SECRET.length)}`
       assert.notStrictEqual(
-        createSignature(VALID_SECRET + '1', VALID_REQUEST, VALID_TIMESTAMP),
+        createSignature(newSecret, VALID_REQUEST, VALID_TIMESTAMP),
         createSignature(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP)
       )
     })

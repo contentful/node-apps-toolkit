@@ -2,6 +2,7 @@ import * as crypto from 'crypto'
 import type { CanonicalRequest, Secret, Timestamp } from './typings'
 import { CanonicalRequestValidator, SecretValidator, TimestampValidator } from './typings'
 import { getNormalizedEncodedURI, getNormalizedHeaders } from './utils'
+import { ContentfulSigningHeader } from './constants'
 
 const hash = (normalizedCanonicalRequest: CanonicalRequest, secret: string) => {
   const stringifiedHeaders = Object.entries(normalizedCanonicalRequest.headers!)
@@ -20,6 +21,23 @@ const hash = (normalizedCanonicalRequest: CanonicalRequest, secret: string) => {
   hmac.update(stringifiedRequest)
 
   return hmac.digest('hex')
+}
+
+const enrichHeadersWithMetadata = (
+  headers: Record<string, string>,
+  signedHeaders: string[],
+  timestamp: number
+) => {
+  const result: Record<string, string> = {}
+  const joinedSignedHeaders = signedHeaders.join(',')
+
+  result[ContentfulSigningHeader.Timestamp] = timestamp.toString()
+
+  if (joinedSignedHeaders) {
+    result[ContentfulSigningHeader.SignedHeaders] = joinedSignedHeaders
+  }
+
+  return { ...headers, ...result }
 }
 
 /**
@@ -81,9 +99,11 @@ export const createSignature = (
   const method = canonicalRequest.method
   const signedHeaders = canonicalRequest.signedHeaders ?? []
   const headers = canonicalRequest.headers
-    ? getNormalizedHeaders(canonicalRequest.headers, signedHeaders, timestamp)
+    ? getNormalizedHeaders(canonicalRequest.headers, signedHeaders)
     : {}
   const body = canonicalRequest.body ?? ''
 
-  return hash({ method, headers, path, body }, secret)
+  const headersWithMetadata = enrichHeadersWithMetadata(headers, signedHeaders, timestamp)
+
+  return hash({ method, headers: headersWithMetadata, path, body }, secret)
 }
