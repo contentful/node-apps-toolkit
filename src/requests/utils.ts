@@ -1,4 +1,5 @@
 import * as querystring from 'querystring'
+import { NormalizedHeaders } from './typings'
 
 export const getNormalizedEncodedURI = (uri: string) => {
   const [pathname, search] = uri.split('?')
@@ -7,24 +8,28 @@ export const getNormalizedEncodedURI = (uri: string) => {
   return encodeURI(escapedSearch ? `${pathname}?${escapedSearch}` : pathname)
 }
 
-const normalizeHeaderKey = (key: string) => key.toLowerCase().trim()
+export const normalizeHeaderKey = (key: string) => key.toLowerCase().trim()
+const normalizeHeaderValue = (value: string) => encodeURI(value.trim())
 
-export const getNormalizedHeaders = (
-  rawHeaders: Record<string, string | unknown>,
-  headersToNormalize: Array<string>
-) => {
-  //in case the list of the headers to normalize is not normalized itself
-  const normalizedHeadersToNormalize: string[] = headersToNormalize.map(normalizeHeaderKey)
+export const getNormalizedHeaders = (rawHeaders: Record<string, string>): NormalizedHeaders => {
+  // @ts-expect-error .sort messes up with the typings
+  return Object.entries(rawHeaders)
+    .map(([key, value]) => [normalizeHeaderKey(key), normalizeHeaderValue(value)])
+    .sort(([keyA], [keyB]) => (keyA > keyB ? 1 : -1))
+}
 
-  const normalizedHeaders: Record<string, string> = {}
-
-  for (const [key, value] of Object.entries(rawHeaders)) {
-    const normalizedKey = normalizeHeaderKey(key)
-
-    if (normalizedHeadersToNormalize.includes(normalizedKey) && typeof value === 'string') {
-      normalizedHeaders[normalizedKey] = encodeURI(value.trim())
-    }
+export const pickHeaders = (object?: Record<string, string>, keys?: string[]) => {
+  if (!object) {
+    return {}
   }
 
-  return normalizedHeaders
+  if (!keys) {
+    return object
+  }
+
+  const normalizedKeys = keys.map(normalizeHeaderKey)
+
+  return Object.fromEntries(
+    Object.entries(object).filter(([key]) => normalizedKeys.includes(normalizeHeaderKey(key)))
+  )
 }

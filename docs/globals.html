@@ -86,7 +86,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/create-signature.ts#L88">requests/create-signature.ts:88</a></li>
+									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/create-signature.ts#L90">requests/create-signature.ts:90</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -96,6 +96,7 @@
 									sender and integrity of the payload.</p>
 								</div>
 								<pre><code><span class="hljs-keyword">const</span> {createSignature} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;contentful-node-apps-toolkit&#x27;</span>)
+<span class="hljs-keyword">const</span> {pick} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;lodash&#x27;</span>)
 <span class="hljs-keyword">const</span> {server} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./imaginary-server&#x27;</span>)
 
 <span class="hljs-keyword">const</span> SECRET = process.env.SECRET
@@ -118,8 +119,7 @@ server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <spa
     {
       <span class="hljs-attr">method</span>: req.method,
       <span class="hljs-attr">path</span>: req.url,
-      <span class="hljs-attr">signedHeaders</span>: [<span class="hljs-string">&#x27;Authorization&#x27;</span>]
-      <span class="hljs-attr">headers</span>: req.headers,
+      <span class="hljs-attr">headers</span>: pick(req.headers, [<span class="hljs-string">&#x27;Authorization&#x27;</span>]),
       <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify(req.body)
     },
     incomingTimestamp
@@ -202,7 +202,7 @@ getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/is-verified-request.ts#L50">requests/is-verified-request.ts:50</a></li>
+									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/is-verified-request.ts#L56">requests/is-verified-request.ts:56</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">

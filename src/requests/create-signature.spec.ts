@@ -94,17 +94,16 @@ describe('create-signature', () => {
       const headerOne = 'one'
 
       const headers = { headerOne }
-      const signedHeaders = ['headerOne']
 
       assert.notStrictEqual(
         createSignature(
           VALID_SECRET,
-          { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers, signedHeaders },
+          { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers },
           VALID_TIMESTAMP
         ),
         createSignature(
           VALID_SECRET,
-          { ...VALID_REQUEST, path: '/api/resources?w=2&q=1', headers, signedHeaders },
+          { ...VALID_REQUEST, path: '/api/resources?w=2&q=1', headers },
           VALID_TIMESTAMP
         )
       )
@@ -114,41 +113,16 @@ describe('create-signature', () => {
       const headerOne = 'one'
 
       const headers = { headerOne }
-      const signedHeaders = ['headerOne']
 
       assert.notStrictEqual(
         createSignature(
           VALID_SECRET,
-          { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers, signedHeaders },
+          { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers },
           VALID_TIMESTAMP
         ),
         createSignature(
           VALID_SECRET,
-          { ...VALID_REQUEST, path: '/api/resources?q=12', headers, signedHeaders },
-          VALID_TIMESTAMP
-        )
-      )
-    })
-
-    it('generates different signatures with different signed headers list', () => {
-      const headerOne = 'one'
-      const headerTwo = 'two'
-
-      const headers = { headerOne, headerTwo }
-
-      assert.notStrictEqual(
-        createSignature(
-          VALID_SECRET,
-          {
-            ...VALID_REQUEST,
-            headers,
-            signedHeaders: ['headerOne', 'headerTwo'],
-          },
-          VALID_TIMESTAMP
-        ),
-        createSignature(
-          VALID_SECRET,
-          { ...VALID_REQUEST, headers, signedHeaders: ['headerTwo', 'headerOne'] },
+          { ...VALID_REQUEST, path: '/api/resources?q=12', headers },
           VALID_TIMESTAMP
         )
       )
@@ -158,7 +132,6 @@ describe('create-signature', () => {
       const headerTwo = 'two\nthree'
 
       const headers = { headerTwo }
-      const signedHeaders = ['headerTwo']
 
       assert.doesNotThrow(() =>
         createSignature(
@@ -166,7 +139,6 @@ describe('create-signature', () => {
           {
             ...VALID_REQUEST,
             headers,
-            signedHeaders,
           },
           VALID_TIMESTAMP
         )

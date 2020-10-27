@@ -7,20 +7,26 @@ import {
   SecretValidator,
 } from './typings'
 import { ContentfulSigningHeader, CONTENTFUL_SIGNING_HEADERS } from './constants'
-import { getNormalizedHeaders } from './utils'
+import { getNormalizedHeaders, pickHeaders } from './utils'
 import { createSignature } from './create-signature'
 
 const getRequestMetadata = (canonicalRequest: CanonicalRequest): RequestMetadata => {
-  const normalizedSigningHeaders = getNormalizedHeaders(
-    canonicalRequest.headers ?? {},
-    CONTENTFUL_SIGNING_HEADERS
+  const normalizedHeaders = getNormalizedHeaders(canonicalRequest.headers ?? {})
+
+  const signingHeaders = normalizedHeaders.filter(([key]) =>
+    CONTENTFUL_SIGNING_HEADERS.includes(key)
   )
 
-  const signature = normalizedSigningHeaders[ContentfulSigningHeader.Signature]
-  const signedHeaders = normalizedSigningHeaders[ContentfulSigningHeader.SignedHeaders]
-    ? normalizedSigningHeaders[ContentfulSigningHeader.SignedHeaders].split(',')
-    : []
-  const timestamp = Number.parseInt(normalizedSigningHeaders[ContentfulSigningHeader.Timestamp], 10)
+  // In order to not rely in order we perform a find. Array is short, not a big deal
+  const [, signature] =
+    signingHeaders.find(([key]) => key === ContentfulSigningHeader.Signature) ?? []
+  const [, rawSignedHeaders] =
+    signingHeaders.find(([key]) => key === ContentfulSigningHeader.SignedHeaders) ?? []
+  const [, rawTimestamp] =
+    signingHeaders.find(([key]) => key === ContentfulSigningHeader.Timestamp) ?? []
+
+  const signedHeaders = rawSignedHeaders ? rawSignedHeaders.split(',') : []
+  const timestamp = Number.parseInt(rawTimestamp ?? '', 10)
 
   return RequestMetadataValidator.check({ signature, signedHeaders, timestamp })
 }
@@ -56,7 +62,10 @@ export const isVerifiedRequest = (
 
   const { signature, signedHeaders, timestamp } = getRequestMetadata(canonicalRequest)
 
-  const requestToValidate = { ...canonicalRequest, signedHeaders }
+  const requestToValidate = {
+    ...canonicalRequest,
+    headers: pickHeaders(canonicalRequest.headers, signedHeaders),
+  }
 
   const computedSignature = createSignature(secret, requestToValidate, timestamp)
 

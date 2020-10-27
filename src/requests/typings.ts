@@ -18,8 +18,6 @@ const SignatureValidator = runtypes.String.withConstraint((s) => s.length === 64
   name: 'SignatureLength',
 })
 
-const SignedHeadersValidator = runtypes.Array(runtypes.String)
-
 export const CanonicalRequestValidator = runtypes
   .Record({
     method: MethodValidator,
@@ -27,7 +25,6 @@ export const CanonicalRequestValidator = runtypes
   })
   .And(
     runtypes.Partial({
-      signedHeaders: SignedHeadersValidator,
       headers: runtypes.Dictionary(runtypes.String, 'string'),
       body: runtypes.String,
     })
@@ -53,7 +50,15 @@ export const RequestMetadataValidator = runtypes
   })
   .And(
     runtypes.Partial({
-      signedHeaders: SignedHeadersValidator,
+      signedHeaders: runtypes.Array(runtypes.String),
     })
   )
 export type RequestMetadata = runtypes.Static<typeof RequestMetadataValidator>
+
+export type NormalizedHeaders = [key: string, value: string][]
+export type NormalizedCanonicalRequest = {
+  method: CanonicalRequest['method']
+  path: CanonicalRequest['path']
+  headers: NormalizedHeaders
+  body: CanonicalRequest['body']
+}

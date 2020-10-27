@@ -1,12 +1,18 @@
 import * as crypto from 'crypto'
-import type { CanonicalRequest, Secret, Timestamp } from './typings'
+import type {
+  CanonicalRequest,
+  NormalizedCanonicalRequest,
+  NormalizedHeaders,
+  Secret,
+  Timestamp,
+} from './typings'
 import { CanonicalRequestValidator, SecretValidator, TimestampValidator } from './typings'
 import { getNormalizedEncodedURI, getNormalizedHeaders } from './utils'
 import { ContentfulSigningHeader } from './constants'
 
-const hash = (normalizedCanonicalRequest: CanonicalRequest, secret: string) => {
-  const stringifiedHeaders = Object.entries(normalizedCanonicalRequest.headers!)
-    .map(([key, value]) => `${key}:${value}`)
+const hash = (normalizedCanonicalRequest: NormalizedCanonicalRequest, secret: string) => {
+  const stringifiedHeaders = normalizedCanonicalRequest
+    .headers!.map(([key, value]) => `${key}:${value}`)
     .join(';')
 
   const stringifiedRequest = [
@@ -23,21 +29,17 @@ const hash = (normalizedCanonicalRequest: CanonicalRequest, secret: string) => {
   return hmac.digest('hex')
 }
 
-const enrichHeadersWithMetadata = (
-  headers: Record<string, string>,
-  signedHeaders: string[],
-  timestamp: number
-) => {
-  const result: Record<string, string> = {}
-  const joinedSignedHeaders = signedHeaders.join(',')
+const enrichNormalizedHeadersWithMetadata = (headers: NormalizedHeaders, timestamp: number) => {
+  const result = [...headers]
+  const joinedSignedHeaders = headers.map(([key]) => key).join(',')
 
-  result[ContentfulSigningHeader.Timestamp] = timestamp.toString()
+  result.push([ContentfulSigningHeader.Timestamp, timestamp.toString()])
 
   if (joinedSignedHeaders) {
-    result[ContentfulSigningHeader.SignedHeaders] = joinedSignedHeaders
+    result.push([ContentfulSigningHeader.SignedHeaders, joinedSignedHeaders])
   }
 
-  return { ...headers, ...result }
+  return result
 }
 
 /**
@@ -47,6 +49,7 @@ const enrichHeadersWithMetadata = (
  *
  * ~~~
  * const {createSignature} = require('contentful-node-apps-toolkit')
+ * const {pick} = require('lodash')
  * const {server} = require('./imaginary-server')
  *
  * const SECRET = process.env.SECRET
@@ -69,8 +72,7 @@ const enrichHeadersWithMetadata = (
  *     {
  *       method: req.method,
  *       path: req.url,
- *       signedHeaders: ['Authorization']
- *       headers: req.headers,
+ *       headers: pick(req.headers, ['Authorization']),
  *       body: JSON.stringify(req.body)
  *     },
  *     incomingTimestamp
@@ -96,13 +98,10 @@ export const createSignature = (
 
   const path = getNormalizedEncodedURI(canonicalRequest.path)
   const method = canonicalRequest.method
-  const signedHeaders = canonicalRequest.signedHeaders ?? []
-  const headers = canonicalRequest.headers
-    ? getNormalizedHeaders(canonicalRequest.headers, signedHeaders)
-    : {}
+  const headers = canonicalRequest.headers ? getNormalizedHeaders(canonicalRequest.headers) : []
   const body = canonicalRequest.body ?? ''
 
-  const headersWithMetadata = enrichHeadersWithMetadata(headers, signedHeaders, timestamp)
+  const normalizedHeadersWithMetadata = enrichNormalizedHeadersWithMetadata(headers, timestamp)
 
-  return hash({ method, headers: headersWithMetadata, path, body }, secret)
+  return hash({ method, headers: normalizedHeadersWithMetadata, path, body }, secret)
 }

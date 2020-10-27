@@ -9,20 +9,17 @@ const makeRequest = ({
   path = '/api/v1/resources/1',
   method = 'GET',
   headers,
-  signedHeaders,
   body,
 }: {
   path?: string
   method?: 'GET' | 'POST'
   headers?: Record<string, string>
-  signedHeaders?: string[]
   body?: string
 }): CanonicalRequest => {
   return {
     method,
     path,
     headers,
-    signedHeaders,
     body,
   }
 }
@@ -37,8 +34,8 @@ const makeIncomingRequest = (request: CanonicalRequest) => {
     [ContentfulSigningHeader.Timestamp]: now.toString(),
   }
 
-  if (request.signedHeaders) {
-    headers[ContentfulSigningHeader.SignedHeaders] = request.signedHeaders.join(',')
+  if (request.headers) {
+    headers[ContentfulSigningHeader.SignedHeaders] = Object.keys(request.headers).join(',')
   }
 
   return { ...request, headers }
@@ -52,7 +49,6 @@ describe('isVerifiedRequest', () => {
       headers: {
         Authorization: 'Bearer TOKEN',
       },
-      signedHeaders: ['Authorization'],
     })
     const incomingRequest = makeIncomingRequest(validRequest)
 
@@ -111,7 +107,6 @@ describe('isVerifiedRequest', () => {
     it('does not throw if missing signed headers', () => {
       const request = makeRequest({
         headers: { Authorization: 'Bearer TOKEN' },
-        signedHeaders: ['Authorization'],
       })
       const incomingRequest = makeIncomingRequest(request)
 
@@ -132,7 +127,6 @@ describe('isVerifiedRequest', () => {
           Authorization: authorization,
           'Cache-Control': cacheControl,
         },
-        signedHeaders: ['Authorization', 'Cache-Control'],
       })
       // This request holds the signature generated with the headers above
       const incomingRequest = makeIncomingRequest(request)
@@ -158,7 +152,6 @@ describe('isVerifiedRequest', () => {
           Authorization: authorization,
           'Cache-Control': cacheControl,
         },
-        signedHeaders: ['Authorization', 'Cache-Control'],
       })
       // This request holds the signature generated with the headers above
       const incomingRequest = makeIncomingRequest(request)
@@ -184,7 +177,6 @@ describe('isVerifiedRequest', () => {
           Authorization: authorization,
           'Cache-Control': cacheControl,
         },
-        signedHeaders: ['Authorization', 'Cache-Control'],
       })
       const incomingRequest = makeIncomingRequest(request)
 
@@ -201,7 +193,6 @@ describe('isVerifiedRequest', () => {
           Authorization: authorization,
           'Cache-Control': cacheControl,
         },
-        signedHeaders: ['Authorization', 'Cache-Control'],
       })
       const incomingRequest = makeIncomingRequest(request)
 
@@ -243,7 +234,6 @@ describe('isVerifiedRequest', () => {
         headers: {
           Authorization: 'Bearer TOKEN',
         },
-        signedHeaders: ['Authorization'],
       })
       const incomingRequest = makeIncomingRequest(validRequest)
       const differentSecret = `q${VALID_SECRET.slice(1, VALID_SECRET.length)}`
