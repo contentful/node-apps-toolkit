@@ -1,38 +1,31 @@
-Node Apps Toolkit
-===
+# Node Toolkit for Contentful Apps
 
-The Node Apps Toolkit is a growing collection of helpers, and utilities, for creating NodeJS Contentful Apps.
+The `node-apps-toolkit` is a growing collection of helpers and utilities for building [Contentful Apps](https://www.contentful.com/developers/docs/extensibility/app-framework/) with Node.js.
 
-## Getting started
+## Installation
  
-You can install this library with npm or yarn
- 
-```
+```shell
 npm install --save @contentful/node-apps-toolkit
-or
+# or
 yarn add @contentful/node-apps-toolkit
 ```
 
-You can include the library in your project like this
+## Usage
+
 ```js
 const { getManagementToken } = require('@contentful/node-apps-toolkit');
 const { appInstallationId, spaceId, privateKey } = require('./some-constants');
 
 getManagementToken(privateKey, {appInstallationId, spaceId})
     .then((token) => {
-      console.log('Here is your app token')
-      console.log(token)
+      console.log('Here is your app token:', token)
     })
 ```
 
-## API Documentation
-
-In depth API documentation is available [here](https://contentful.github.io/node-apps-toolkit/)
+For more information, check out the full [API documentation](https://contentful.github.io/node-apps-toolkit/).
 
 ## More coming soon
-We're excited to expand this toolkit with new features. If you have any suggestions or requests for features you'd like to see please create an issue in this repo!
+We're excited to expand this toolkit with new features. If you have any suggestions or requests for features you'd like to see, please [create an issue](https://github.com/contentful/node-apps-toolkit/issues/new) in this repo.
 
 ## Contributing and local development
 Please see [CONTRIBUTING.md](CONTRIBUTING.md) for more information on how to contribute to this project.
-
-
