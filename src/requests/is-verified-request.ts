@@ -25,6 +25,28 @@ const getRequestMetadata = (canonicalRequest: CanonicalRequest): RequestMetadata
   return RequestMetadataValidator.check({ signature, signedHeaders, timestamp })
 }
 
+/**
+ * Given a secret verifies a CanonicalRequest
+ *
+ * ~~~
+ * const {isVerifiedRequest} = require('contentful-node-apps-toolkit')
+ * const {server} = require('./imaginary-server')
+ * const {makeCanonicalRequestFromImaginaryServerRequest} = require('./imaginary-utils')
+ *
+ * const SECRET = process.env.SECRET
+ *
+ * server.post('/api/my-resources', (req, res) => {
+ *   const canonicalRequest = makeCanonicalRequestFromImaginaryServerRequest(req)
+ *
+ *   if (!isVerifiedRequest(SECRET, canonicalRequest)) {
+ *     res.send(403, 'Invalid signature')
+ *   }
+ *
+ *   // Rest of the code
+ * })
+ *
+ * ~~~
+ */
 export const isVerifiedRequest = (
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest

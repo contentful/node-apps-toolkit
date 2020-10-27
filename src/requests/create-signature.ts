@@ -47,7 +47,6 @@ const enrichHeadersWithMetadata = (
  *
  * ~~~
  * const {createSignature} = require('contentful-node-apps-toolkit')
- * const {omit} = require('lodash')
  * const {server} = require('./imaginary-server')
  *
  * const SECRET = process.env.SECRET
