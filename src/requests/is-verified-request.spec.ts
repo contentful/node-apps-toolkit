@@ -236,4 +236,19 @@ describe('isVerifiedRequest', () => {
       assert(!isVerifiedRequest(VALID_SECRET, incomingRequest))
     })
   })
+
+  describe('with secrets', () => {
+    it('does not verify with different secrets', () => {
+      const validRequest = makeRequest({
+        headers: {
+          Authorization: 'Bearer TOKEN',
+        },
+        signedHeaders: ['Authorization'],
+      })
+      const incomingRequest = makeIncomingRequest(validRequest)
+      const differentSecret = `q${VALID_SECRET.slice(1, VALID_SECRET.length)}`
+
+      assert(!isVerifiedRequest(differentSecret, incomingRequest))
+    })
+  })
 })
