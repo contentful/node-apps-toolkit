@@ -29,7 +29,7 @@ export const CanonicalRequestValidator = runtypes
 
 export type CanonicalRequest = runtypes.Static<typeof CanonicalRequestValidator>
 
-export const SecretValidator = runtypes.String.withConstraint((s) => s.length > 16, {
+export const SecretValidator = runtypes.String.withConstraint((s) => s.length === 64, {
   name: 'SecretLength',
 })
 export type Secret = runtypes.Static<typeof SecretValidator>
