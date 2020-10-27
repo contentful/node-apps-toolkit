@@ -24,8 +24,7 @@ const makeRequest = ({
   }
 }
 
-const makeIncomingRequest = (request: CanonicalRequest) => {
-  const now = Date.now()
+const makeIncomingRequest = (request: CanonicalRequest, now = Date.now()) => {
   const signature = createSignature(VALID_SECRET, request, now)
 
   const headers = {
@@ -53,6 +52,18 @@ describe('isVerifiedRequest', () => {
     const incomingRequest = makeIncomingRequest(validRequest)
 
     assert(isVerifiedRequest(VALID_SECRET, incomingRequest))
+  })
+
+  it('does not verify if request is too old', () => {
+    const validRequest = makeRequest({
+      headers: {
+        Authorization: 'Bearer TOKEN',
+      },
+    })
+    const oneMinuteAgo = Date.now() - 1000 * 60
+    const incomingRequest = makeIncomingRequest(validRequest, oneMinuteAgo)
+
+    assert(!isVerifiedRequest(VALID_SECRET, incomingRequest, 1))
   })
 
   describe('with contentful headers', () => {

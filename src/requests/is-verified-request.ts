@@ -5,6 +5,7 @@ import {
   RequestMetadataValidator,
   Secret,
   SecretValidator,
+  Timestamp,
 } from './typings'
 import { ContentfulSigningHeader, CONTENTFUL_SIGNING_HEADERS } from './constants'
 import { getNormalizedHeaders, pickHeaders } from './utils'
@@ -31,6 +32,10 @@ const getRequestMetadata = (canonicalRequest: CanonicalRequest): RequestMetadata
   return RequestMetadataValidator.check({ signature, signedHeaders, timestamp })
 }
 
+const isRequestTimestampTooOld = (ttl: number, timestamp: Timestamp) => {
+  return Date.now() - timestamp >= ttl * 1000
+}
+
 /**
  * Given a secret verifies a CanonicalRequest
  *
@@ -40,11 +45,12 @@ const getRequestMetadata = (canonicalRequest: CanonicalRequest): RequestMetadata
  * const {makeCanonicalRequestFromImaginaryServerRequest} = require('./imaginary-utils')
  *
  * const SECRET = process.env.SECRET
+ * const REQUEST_TTL = Number.parseInt(process.env.REQUEST_TTL, 10)
  *
  * server.post('/api/my-resources', (req, res) => {
  *   const canonicalRequest = makeCanonicalRequestFromImaginaryServerRequest(req)
  *
- *   if (!isVerifiedRequest(SECRET, canonicalRequest)) {
+ *   if (!isVerifiedRequest(SECRET, canonicalRequest, REQUEST_TTL)) {
  *     res.send(403, 'Invalid signature')
  *   }
  *
@@ -55,12 +61,17 @@ const getRequestMetadata = (canonicalRequest: CanonicalRequest): RequestMetadata
  */
 export const isVerifiedRequest = (
   rawSecret: Secret,
-  rawCanonicalRequest: CanonicalRequest
+  rawCanonicalRequest: CanonicalRequest,
+  ttl: number = 30
 ): boolean => {
   const canonicalRequest = CanonicalRequestValidator.check(rawCanonicalRequest)
   const secret = SecretValidator.check(rawSecret)
 
   const { signature, signedHeaders, timestamp } = getRequestMetadata(canonicalRequest)
+
+  if (isRequestTimestampTooOld(ttl, timestamp)) {
+    return false
+  }
 
   const requestToValidate = {
     ...canonicalRequest,
