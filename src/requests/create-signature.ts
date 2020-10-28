@@ -31,13 +31,14 @@ const hash = (normalizedCanonicalRequest: NormalizedCanonicalRequest, secret: st
 
 const enrichNormalizedHeadersWithMetadata = (headers: NormalizedHeaders, timestamp: number) => {
   const result = [...headers]
-  const joinedSignedHeaders = headers.map(([key]) => key).join(',')
+  const headerKeys = headers.map(([key]) => key)
+  const joinedSignedHeaders = headerKeys
+    // We always sign timestamp
+    .concat(ContentfulSigningHeader.Timestamp, ContentfulSigningHeader.SignedHeaders)
+    .join(',')
 
   result.push([ContentfulSigningHeader.Timestamp, timestamp.toString()])
-
-  if (joinedSignedHeaders) {
-    result.push([ContentfulSigningHeader.SignedHeaders, joinedSignedHeaders])
-  }
+  result.push([ContentfulSigningHeader.SignedHeaders, joinedSignedHeaders])
 
   return result
 }
@@ -57,6 +58,7 @@ const enrichNormalizedHeadersWithMetadata = (headers: NormalizedHeaders, timesta
  * server.post('/api/my-resources', (req, res) => {
  *   const incomingSignature = req.headers['x-contentful-signature']
  *   const incomingTimestamp = req.headers['x-contentful-timestamp']
+ *   const incomingSignedHeaders = req.headers['x-contentful-signed-headers']
  *   const now = Date.now()
  *
  *   if (!incomingSignature) {
@@ -67,12 +69,14 @@ const enrichNormalizedHeadersWithMetadata = (headers: NormalizedHeaders, timesta
  *     res.send(408, 'Request too old')
  *   }
  *
+ *   const signedHeaders = incomingSignedHeaders.split(',')
+ *
  *   const computedSignature = createSignature(
  *     SECRET,
  *     {
  *       method: req.method,
  *       path: req.url,
- *       headers: pick(req.headers, ['Authorization']),
+ *       headers: pick(req.headers, signedHeaders),
  *       body: JSON.stringify(req.body)
  *     },
  *     incomingTimestamp
