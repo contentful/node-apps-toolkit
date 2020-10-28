@@ -61,6 +61,7 @@ const isRequestTimestampTooOld = (ttl: number, timestamp: Timestamp) => {
  * })
  *
  * ~~~
+ * @category Requests
  */
 export const isVerifiedRequest = (
   rawSecret: Secret,

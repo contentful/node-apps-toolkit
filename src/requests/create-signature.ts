@@ -90,6 +90,7 @@ const enrichNormalizedHeadersWithMetadata = (headers: NormalizedHeaders, timesta
  * })
  *
  * ~~~
+ * @category Requests
  */
 export const createSignature = (
   rawSecret: Secret,

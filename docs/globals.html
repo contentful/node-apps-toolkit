@@ -64,10 +64,13 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Functions</h3>
+							<h3>Keys Functions</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-function"><a href="globals.html#getmanagementtoken" class="tsd-kind-icon">get<wbr>Management<wbr>Token</a></li>
+							</ul>
+							<h3>Requests Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function"><a href="globals.html#createsignature" class="tsd-kind-icon">create<wbr>Signature</a></li>
-								<li class="tsd-kind-function"><a href="globals.html#getmanagementtoken" class="tsd-kind-icon">get<wbr>Management<wbr>Token</a></li>
 								<li class="tsd-kind-function"><a href="globals.html#isverifiedrequest" class="tsd-kind-icon">is<wbr>Verified<wbr>Request</a></li>
 							</ul>
 						</section>
@@ -75,7 +78,55 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Functions</h2>
+				<h2>Keys Functions</h2>
+				<section class="tsd-panel tsd-member tsd-kind-function">
+					<a name="getmanagementtoken" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> get<wbr>Management<wbr>Token</h3>
+					<ul class="tsd-signatures tsd-kind-function">
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Management<wbr>Token<span class="tsd-signature-symbol">(</span>privateKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GetManagementTokenOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/keys/get-management-token.ts#L144">keys/get-management-token.ts:144</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Returns a Contentful Management API token from private key
+										Management tokens are cached internally until until they expire.
+									Pass <code>reuseToken: false</code> in the options for <code>getManagementToken</code> to disable this feature.</p>
+								</div>
+								<p>NodeJS Contentful Apps need a management token to interact with Contentful&#39;s APIs.
+									Creating a management token requires a key pair to be registered for the app, follow
+									<a href="http://contentful./developers/docs/references/content-management-api/#/reference/app-keys/app-keys">this link</a>
+								for more information on key pairs.</p>
+								<p>Once a key pair is registered the getManagementToken function can be used to generate a valid token.</p>
+								<pre><code>const {getManagementToken} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;contentful-node-apps-toolkit&#x27;</span>)
+
+getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
+   .<span class="hljs-keyword">then</span>( <span class="hljs-function"><span class="hljs-params">(token)</span> =&gt;</span> {
+     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Here is your token&#x27;</span>)
+     <span class="hljs-built_in">console</span>.log(token)
+   })</code></pre>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>privateKey: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>opts: <span class="tsd-signature-type">GetManagementTokenOptions</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Requests Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function">
 					<a name="createsignature" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> create<wbr>Signature</h3>
@@ -86,7 +137,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/create-signature.ts#L94">requests/create-signature.ts:94</a></li>
+									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/create-signature.ts#L95">requests/create-signature.ts:95</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -153,49 +204,6 @@ server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <spa
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function">
-					<a name="getmanagementtoken" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> get<wbr>Management<wbr>Token</h3>
-					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Management<wbr>Token<span class="tsd-signature-symbol">(</span>privateKey<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">unknown</span>, opts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">GetManagementTokenOptions</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/keys/get-management-token.ts#L140">keys/get-management-token.ts:140</a></li>
-								</ul>
-							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Returns a Contentful Management API token from private key
-										Management tokens are cached internally until until they expire.
-									Pass <code>reuseToken: false</code> in the options for <code>getManagementToken</code> to disable this feature.</p>
-								</div>
-								<p>NodeJS Contentful Apps need a management token to interact with Contentful&#39;s APIs.
-									Creating a management token requires a key pair to be regsitered for the app, follow <a href="http://contentful./developers/docs/references/content-management-api/#/reference/app-keys/app-keys">this link</a> for more information on key pairs.
-								Once a key pair is registered the getManagementToken function can be used to generate a valid token.</p>
-								<pre><code>const {getManagementToken} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;contentful-node-apps-toolkit&#x27;</span>)
-
-getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
-   .<span class="hljs-keyword">then</span>( <span class="hljs-function"><span class="hljs-params">(token)</span> =&gt;</span> {
-     <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Here is your token&#x27;</span>)
-     <span class="hljs-built_in">console</span>.log(token)
-   })</code></pre>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>privateKey: <span class="tsd-signature-type">unknown</span></h5>
-								</li>
-								<li>
-									<h5>opts: <span class="tsd-signature-type">GetManagementTokenOptions</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-function">
 					<a name="isverifiedrequest" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> is<wbr>Verified<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-function">
@@ -205,7 +213,7 @@ getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/is-verified-request.ts#L65">requests/is-verified-request.ts:65</a></li>
+									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/is-verified-request.ts#L66">requests/is-verified-request.ts:66</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
