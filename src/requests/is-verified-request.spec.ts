@@ -4,6 +4,7 @@ import { isVerifiedRequest } from './is-verified-request'
 import { CanonicalRequest, Secret } from './typings'
 import { createSignature } from './create-signature'
 import { ContentfulSigningHeader } from './constants'
+import { ExpiredRequestException } from './exceptions'
 
 const makeRequest = ({
   path = '/api/v1/resources/1',
@@ -54,16 +55,36 @@ describe('isVerifiedRequest', () => {
     assert(isVerifiedRequest(VALID_SECRET, incomingRequest))
   })
 
-  it('does not verify if request is too old', () => {
-    const validRequest = makeRequest({
-      headers: {
-        Authorization: 'Bearer TOKEN',
-      },
-    })
-    const oneMinuteAgo = Date.now() - 1000 * 60
-    const incomingRequest = makeIncomingRequest(validRequest, oneMinuteAgo)
+  describe('with time to live', () => {
+    it('throws if request is too old', () => {
+      const validRequest = makeRequest({
+        headers: {
+          Authorization: 'Bearer TOKEN',
+        },
+      })
+      const oneMinuteAgo = Date.now() - 1000 * 60
+      const incomingRequest = makeIncomingRequest(validRequest, oneMinuteAgo)
 
-    assert(!isVerifiedRequest(VALID_SECRET, incomingRequest, 1))
+      assert.throws(
+        () => isVerifiedRequest(VALID_SECRET, incomingRequest, 1),
+        ExpiredRequestException
+      )
+    })
+
+    it('does not check if ttl is 0', () => {
+      const validRequest = makeRequest({
+        headers: {
+          Authorization: 'Bearer TOKEN',
+        },
+      })
+      const oneMinuteAgo = Date.now() - 1000 * 60
+      const incomingRequest = makeIncomingRequest(validRequest, oneMinuteAgo)
+
+      assert.doesNotThrow(
+        () => isVerifiedRequest(VALID_SECRET, incomingRequest, 0),
+        ExpiredRequestException
+      )
+    })
   })
 
   describe('with contentful headers', () => {

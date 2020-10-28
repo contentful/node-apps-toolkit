@@ -55,6 +55,12 @@ export const RequestMetadataValidator = runtypes
   )
 export type RequestMetadata = runtypes.Static<typeof RequestMetadataValidator>
 
+export const TimeToLiveValidator = runtypes.Number.withConstraint((n) => n >= 0, {
+  name: 'PositiveNumber',
+})
+
+export type TimeToLive = runtypes.Static<typeof TimeToLiveValidator>
+
 export type NormalizedHeaders = [key: string, value: string][]
 export type NormalizedCanonicalRequest = {
   method: CanonicalRequest['method']

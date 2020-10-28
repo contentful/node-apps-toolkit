@@ -6,10 +6,12 @@ import {
   Secret,
   SecretValidator,
   Timestamp,
+  TimeToLive,
 } from './typings'
 import { ContentfulSigningHeader, CONTENTFUL_SIGNING_HEADERS } from './constants'
 import { getNormalizedHeaders, pickHeaders } from './utils'
 import { createSignature } from './create-signature'
+import { ExpiredRequestException } from './exceptions'
 
 const getRequestMetadata = (canonicalRequest: CanonicalRequest): RequestMetadata => {
   const normalizedHeaders = getNormalizedHeaders(canonicalRequest.headers ?? {})
@@ -37,7 +39,8 @@ const isRequestTimestampTooOld = (ttl: number, timestamp: Timestamp) => {
 }
 
 /**
- * Given a secret verifies a CanonicalRequest
+ * Given a secret verifies a CanonicalRequest. Throws when signature is older than `rawTimeToLive` seconds.
+ * Pass `rawTimeToLive = 0` to disable TTL checks.
  *
  * ~~~
  * const {isVerifiedRequest} = require('contentful-node-apps-toolkit')
@@ -62,15 +65,15 @@ const isRequestTimestampTooOld = (ttl: number, timestamp: Timestamp) => {
 export const isVerifiedRequest = (
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
-  ttl: number = 30
+  rawTimeToLive: TimeToLive = 30
 ): boolean => {
   const canonicalRequest = CanonicalRequestValidator.check(rawCanonicalRequest)
   const secret = SecretValidator.check(rawSecret)
 
   const { signature, signedHeaders, timestamp } = getRequestMetadata(canonicalRequest)
 
-  if (isRequestTimestampTooOld(ttl, timestamp)) {
-    return false
+  if (rawTimeToLive !== 0 && isRequestTimestampTooOld(rawTimeToLive, timestamp)) {
+    throw new ExpiredRequestException(rawTimeToLive)
   }
 
   const requestToValidate = {
