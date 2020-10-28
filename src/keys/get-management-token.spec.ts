@@ -120,6 +120,7 @@ describe('getManagementToken', () => {
   describe('when private key is incorrect', () => {
     it('throws if missing', async () => {
       await assert.rejects(async () => {
+        // @ts-ignore Testing javascript code
         await getManagementToken(undefined, DEFAULT_OPTIONS)
       })
     })
