@@ -3,7 +3,7 @@ import * as assert from 'assert'
 import { isVerifiedRequest } from './is-verified-request'
 import { CanonicalRequest, Secret } from './typings'
 import { createSignature } from './create-signature'
-import { ContentfulSigningHeader } from './constants'
+import { ContentfulHeader } from './constants'
 import { ExpiredRequestException } from './exceptions'
 
 const makeRequest = ({
@@ -30,12 +30,12 @@ const makeIncomingRequest = (request: CanonicalRequest, now = Date.now()) => {
 
   const headers = {
     ...request.headers,
-    [ContentfulSigningHeader.Signature]: signature,
-    [ContentfulSigningHeader.Timestamp]: now.toString(),
+    [ContentfulHeader.Signature]: signature,
+    [ContentfulHeader.Timestamp]: now.toString(),
   }
 
   if (request.headers) {
-    headers[ContentfulSigningHeader.SignedHeaders] = Object.keys(request.headers).join(',')
+    headers[ContentfulHeader.SignedHeaders] = Object.keys(request.headers).join(',')
   }
 
   return { ...request, headers }
@@ -94,11 +94,11 @@ describe('isVerifiedRequest', () => {
 
       // mess with casing
       incomingRequest.headers = {
-        [ContentfulSigningHeader.Signature.toUpperCase()]: incomingRequest.headers[
-          ContentfulSigningHeader.Signature
+        [ContentfulHeader.Signature.toUpperCase()]: incomingRequest.headers[
+          ContentfulHeader.Signature
         ],
-        [ContentfulSigningHeader.Timestamp.toUpperCase()]: incomingRequest.headers[
-          ContentfulSigningHeader.Timestamp
+        [ContentfulHeader.Timestamp.toUpperCase()]: incomingRequest.headers[
+          ContentfulHeader.Timestamp
         ],
       }
 
@@ -110,11 +110,11 @@ describe('isVerifiedRequest', () => {
 
       // mess with spacing
       incomingRequest.headers = {
-        [`${ContentfulSigningHeader.Signature}      `]: incomingRequest.headers[
-          ContentfulSigningHeader.Signature
+        [`${ContentfulHeader.Signature}      `]: incomingRequest.headers[
+          ContentfulHeader.Signature
         ],
-        [`      ${ContentfulSigningHeader.Timestamp}`]: incomingRequest.headers[
-          ContentfulSigningHeader.Timestamp
+        [`      ${ContentfulHeader.Timestamp}`]: incomingRequest.headers[
+          ContentfulHeader.Timestamp
         ],
       }
 
@@ -124,7 +124,7 @@ describe('isVerifiedRequest', () => {
       const request = makeRequest({})
       const incomingRequest = makeIncomingRequest(request)
 
-      delete incomingRequest.headers[ContentfulSigningHeader.Signature]
+      delete incomingRequest.headers[ContentfulHeader.Signature]
 
       assert.throws(() => isVerifiedRequest(VALID_SECRET, incomingRequest))
     })
@@ -132,7 +132,7 @@ describe('isVerifiedRequest', () => {
       const request = makeRequest({})
       const incomingRequest = makeIncomingRequest(request)
 
-      delete incomingRequest.headers[ContentfulSigningHeader.Timestamp]
+      delete incomingRequest.headers[ContentfulHeader.Timestamp]
 
       assert.throws(() => isVerifiedRequest(VALID_SECRET, incomingRequest))
     })
@@ -142,7 +142,7 @@ describe('isVerifiedRequest', () => {
       })
       const incomingRequest = makeIncomingRequest(request)
 
-      delete incomingRequest.headers[ContentfulSigningHeader.SignedHeaders]
+      delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
 
       assert.doesNotThrow(() => isVerifiedRequest(VALID_SECRET, incomingRequest))
       assert(!isVerifiedRequest(VALID_SECRET, incomingRequest))

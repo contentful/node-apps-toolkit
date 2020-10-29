@@ -8,7 +8,7 @@ import {
   Timestamp,
   TimeToLive,
 } from './typings'
-import { ContentfulSigningHeader, CONTENTFUL_SIGNING_HEADERS } from './constants'
+import { ContentfulHeader, CONTENTFUL_HEADERS } from './constants'
 import { getNormalizedHeaders, pickHeaders } from './utils'
 import { createSignature } from './create-signature'
 import { ExpiredRequestException } from './exceptions'
@@ -16,17 +16,13 @@ import { ExpiredRequestException } from './exceptions'
 const getRequestMetadata = (canonicalRequest: CanonicalRequest): RequestMetadata => {
   const normalizedHeaders = getNormalizedHeaders(canonicalRequest.headers ?? {})
 
-  const signingHeaders = normalizedHeaders.filter(([key]) =>
-    CONTENTFUL_SIGNING_HEADERS.includes(key)
-  )
+  const signingHeaders = normalizedHeaders.filter(([key]) => CONTENTFUL_HEADERS.includes(key))
 
   // In order to not rely in order we perform a find. Array is short, not a big deal
-  const [, signature] =
-    signingHeaders.find(([key]) => key === ContentfulSigningHeader.Signature) ?? []
+  const [, signature] = signingHeaders.find(([key]) => key === ContentfulHeader.Signature) ?? []
   const [, rawSignedHeaders] =
-    signingHeaders.find(([key]) => key === ContentfulSigningHeader.SignedHeaders) ?? []
-  const [, rawTimestamp] =
-    signingHeaders.find(([key]) => key === ContentfulSigningHeader.Timestamp) ?? []
+    signingHeaders.find(([key]) => key === ContentfulHeader.SignedHeaders) ?? []
+  const [, rawTimestamp] = signingHeaders.find(([key]) => key === ContentfulHeader.Timestamp) ?? []
 
   const signedHeaders = rawSignedHeaders ? rawSignedHeaders.split(',') : []
   const timestamp = Number.parseInt(rawTimestamp ?? '', 10)
