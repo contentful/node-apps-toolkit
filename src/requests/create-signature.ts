@@ -8,7 +8,7 @@ import type {
 } from './typings'
 import { CanonicalRequestValidator, SecretValidator, TimestampValidator } from './typings'
 import { getNormalizedEncodedURI, getNormalizedHeaders } from './utils'
-import { ContentfulHeader } from './constants'
+import { CONTENTFUL_HEADERS, ContentfulHeader } from './constants'
 
 const hash = (normalizedCanonicalRequest: NormalizedCanonicalRequest, secret: string) => {
   const stringifiedHeaders = normalizedCanonicalRequest
@@ -29,11 +29,15 @@ const hash = (normalizedCanonicalRequest: NormalizedCanonicalRequest, secret: st
   return hmac.digest('hex')
 }
 
+const removeExistingContentfulHeaders = (headers: NormalizedHeaders) => {
+  return headers.filter(([key]) => !CONTENTFUL_HEADERS.includes(key))
+}
+
 const enrichNormalizedHeadersWithMetadata = (headers: NormalizedHeaders, timestamp: number) => {
-  const result = [...headers]
-  const headerKeys = headers.map(([key]) => key)
-  const joinedSignedHeaders = headerKeys
-    // We always sign timestamp
+  const result = removeExistingContentfulHeaders(headers)
+  const joinedSignedHeaders = result
+    .map(([key]) => key)
+    // We always sign timestamp and signed headers
     .concat(ContentfulHeader.Timestamp, ContentfulHeader.SignedHeaders)
     .join(',')
 

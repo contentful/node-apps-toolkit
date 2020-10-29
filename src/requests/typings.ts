@@ -43,16 +43,15 @@ export const TimestampValidator = runtypes.Number.withConstraint((n) => n > 1577
 })
 export type Timestamp = runtypes.Static<typeof TimestampValidator>
 
-export const RequestMetadataValidator = runtypes
-  .Record({
-    signature: SignatureValidator,
-    timestamp: TimestampValidator,
-  })
-  .And(
-    runtypes.Partial({
-      signedHeaders: runtypes.Array(runtypes.String),
-    })
-  )
+const SignedHeadersValidator = runtypes
+  .Array(runtypes.String)
+  .withConstraint((l) => l.length >= 2, { name: 'MissingTimestampOrSignedHeaders' })
+
+export const RequestMetadataValidator = runtypes.Record({
+  signature: SignatureValidator,
+  timestamp: TimestampValidator,
+  signedHeaders: SignedHeadersValidator,
+})
 export type RequestMetadata = runtypes.Static<typeof RequestMetadataValidator>
 
 export const TimeToLiveValidator = runtypes.Number.withConstraint((n) => n >= 0, {
@@ -61,7 +60,8 @@ export const TimeToLiveValidator = runtypes.Number.withConstraint((n) => n >= 0,
 
 export type TimeToLive = runtypes.Static<typeof TimeToLiveValidator>
 
-export type NormalizedHeaders = [key: string, value: string][]
+export type NormalizedHeader = [key: string, value: string]
+export type NormalizedHeaders = NormalizedHeader[]
 export type NormalizedCanonicalRequest = {
   method: CanonicalRequest['method']
   path: CanonicalRequest['path']
