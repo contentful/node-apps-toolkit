@@ -114,6 +114,7 @@ export const createSignature = (
 
   return {
     signature: hash({ method, headers: normalizedHeadersWithMetadata, path, body }, secret),
+    // Last header is always going to be signed-headers because of `normalizedHeadersWithMetadata`
     signedHeaders: normalizedHeadersWithMetadata[normalizedHeadersWithMetadata.length - 1][1],
   }
 }
