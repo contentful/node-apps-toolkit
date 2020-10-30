@@ -1,5 +1,4 @@
 import * as querystring from 'querystring'
-import { NormalizedHeader, NormalizedHeaders } from './typings'
 
 export const getNormalizedEncodedURI = (uri: string) => {
   const [pathname, search] = uri.split('?')
@@ -8,32 +7,39 @@ export const getNormalizedEncodedURI = (uri: string) => {
   return encodeURI(escapedSearch ? `${pathname}?${escapedSearch}` : pathname)
 }
 
-export const normalizeHeaderKey = (key: string) => key.toLowerCase().trim()
-const normalizeHeaderValue = (value: string) => encodeURI(value.trim())
+export const sortHeaderKeys = (keyA: string, keyB: string) => (keyA > keyB ? 1 : -1)
 
-export const sortNormalizedHeaders = ([keyA]: NormalizedHeader, [keyB]: NormalizedHeader) =>
-  keyA > keyB ? 1 : -1
+const normalizeHeaderKey = (key: string) => key.toLowerCase().trim()
+const normalizeHeaderValue = (value: string) => value.trim()
+export const normalizeHeaders = (headers: Record<string, string>) =>
+  map(headers, ([key, value]) => [normalizeHeaderKey(key), normalizeHeaderValue(value)])
 
-export const getNormalizedHeaders = (rawHeaders: Record<string, string>): NormalizedHeaders => {
-  return Object.entries(rawHeaders)
-    .map(
-      ([key, value]) => [normalizeHeaderKey(key), normalizeHeaderValue(value)] as NormalizedHeader
-    )
-    .sort(sortNormalizedHeaders)
-}
-
-export const pickHeaders = (object?: Record<string, string>, keys?: string[]) => {
-  if (!object) {
+export const pickHeaders = (headers?: Record<string, string>, keys?: string[]) => {
+  if (!headers) {
     return {}
   }
 
   if (!keys) {
-    return object
+    return headers
   }
 
-  const normalizedKeys = keys.map(normalizeHeaderKey)
-
-  return Object.fromEntries(
-    Object.entries(object).filter(([key]) => normalizedKeys.includes(normalizeHeaderKey(key)))
-  )
+  return filter(headers, ([key]) => keys.includes(key))
 }
+
+// Remove when this eslint rule covers all the cases
+// https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
+/*eslint-disable no-unused-vars*/
+export const filter = <T = string>(
+  obj: Record<string, any>,
+  callback: (entry: [string, T]) => boolean
+) => {
+  return Object.fromEntries(Object.entries(obj).filter(callback))
+}
+
+export const map = <T = string>(
+  obj: Record<string, any>,
+  callback: (entry: [string, T]) => [string, T]
+) => {
+  return Object.fromEntries(Object.entries(obj).map(callback))
+}
+/*eslint-enable no-unused-vars*/

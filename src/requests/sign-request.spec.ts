@@ -1,6 +1,6 @@
 import * as assert from 'assert'
 import { CanonicalRequest, Secret } from './typings'
-import { createSignature } from './create-signature'
+import { signRequest } from './sign-request'
 
 const VALID_SECRET: Secret = new Array(64).fill('a').join('')
 const VALID_TIMESTAMP = 1603379941037
@@ -12,7 +12,7 @@ const VALID_REQUEST: CanonicalRequest = {
 const assertThrowsForFieldInValues = (field: keyof CanonicalRequest, values: any[]) => {
   for (const value of values) {
     assert.throws(() => {
-      createSignature(
+      signRequest(
         VALID_SECRET,
         {
           ...VALID_REQUEST,
@@ -42,13 +42,13 @@ describe('create-signature', () => {
     it('does not throw with empty bodies', () => {
       const { body, ...requestWithoutBody } = VALID_REQUEST
       assert.doesNotThrow(() => {
-        createSignature(VALID_SECRET, requestWithoutBody, VALID_TIMESTAMP)
+        signRequest(VALID_SECRET, requestWithoutBody, VALID_TIMESTAMP)
       })
     })
     it('does not throw with empty headers', () => {
       const { headers, ...requestWithoutBody } = VALID_REQUEST
       assert.doesNotThrow(() => {
-        createSignature(VALID_SECRET, requestWithoutBody, VALID_TIMESTAMP)
+        signRequest(VALID_SECRET, requestWithoutBody, VALID_TIMESTAMP)
       })
     })
   })
@@ -60,31 +60,31 @@ describe('create-signature', () => {
       for (const secret of invalidSecrets) {
         assert.throws(() => {
           // @ts-ignore
-          createSignature(secret, VALID_REQUEST, VALID_TIMESTAMP)
+          signRequest(secret, VALID_REQUEST, VALID_TIMESTAMP)
         }, `Did not throw for ${secret}`)
       }
     })
     it('does not throw if valid', () => {
       assert.doesNotThrow(() => {
-        createSignature(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP)
+        signRequest(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP)
       })
     })
   })
 
   describe('when validating timestamp', () => {
     it('throws if not a valid unix timestamp', () => {
-      const invalidTimestamps = [undefined, 1, false, 'string']
+      const invalidTimestamps = [1, false, 'string']
 
       for (const timestamp of invalidTimestamps) {
         assert.throws(() => {
           // @ts-ignore
-          createSignature(VALID_SECRET, VALID_REQUEST, timestamp)
+          signRequest(VALID_SECRET, VALID_REQUEST, timestamp)
         }, `Did not throw for ${timestamp}`)
       }
     })
-    it('does not throw if valid', () => {
+    it('does not throw if missing', () => {
       assert.doesNotThrow(() => {
-        createSignature(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP)
+        signRequest(VALID_SECRET, VALID_REQUEST)
       })
     })
   })
@@ -96,12 +96,12 @@ describe('create-signature', () => {
       const headers = { headerOne }
 
       assert.notStrictEqual(
-        createSignature(
+        signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers },
           VALID_TIMESTAMP
         ),
-        createSignature(
+        signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?w=2&q=1', headers },
           VALID_TIMESTAMP
@@ -115,12 +115,12 @@ describe('create-signature', () => {
       const headers = { headerOne }
 
       assert.notStrictEqual(
-        createSignature(
+        signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers },
           VALID_TIMESTAMP
         ),
-        createSignature(
+        signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?q=12', headers },
           VALID_TIMESTAMP
@@ -134,7 +134,7 @@ describe('create-signature', () => {
       const headers = { headerTwo }
 
       assert.doesNotThrow(() =>
-        createSignature(
+        signRequest(
           VALID_SECRET,
           {
             ...VALID_REQUEST,
@@ -153,8 +153,8 @@ describe('create-signature', () => {
       const headersCased = { headerone: headerOne, headerTWO: headerTwo }
 
       assert.deepStrictEqual(
-        createSignature(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
-        createSignature(VALID_SECRET, { ...VALID_REQUEST, headers: headersCased }, VALID_TIMESTAMP)
+        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
+        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers: headersCased }, VALID_TIMESTAMP)
       )
     })
     it('generates same signature if headers values are provided with different ending/starting spacing (trimming)', () => {
@@ -165,15 +165,15 @@ describe('create-signature', () => {
       const headersSpaced = { '      headerOne': headerOne, 'headerTwo        ': headerTwo }
 
       assert.deepStrictEqual(
-        createSignature(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
-        createSignature(VALID_SECRET, { ...VALID_REQUEST, headers: headersSpaced }, VALID_TIMESTAMP)
+        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
+        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers: headersSpaced }, VALID_TIMESTAMP)
       )
     })
     it('generates different signatures with different secrets', () => {
       const newSecret = `q${VALID_SECRET.slice(1, VALID_SECRET.length)}`
       assert.notStrictEqual(
-        createSignature(newSecret, VALID_REQUEST, VALID_TIMESTAMP),
-        createSignature(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP)
+        signRequest(newSecret, VALID_REQUEST, VALID_TIMESTAMP),
+        signRequest(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP)
       )
     })
   })

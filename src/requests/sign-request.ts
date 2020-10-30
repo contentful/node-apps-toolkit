@@ -1,14 +1,14 @@
 import * as crypto from 'crypto'
-import type {
+import {
   CanonicalRequest,
   NormalizedCanonicalRequest,
-  NormalizedHeaders,
   Secret,
+  SignedRequestHeaders,
   Timestamp,
+  ContentfulHeader,
 } from './typings'
 import { CanonicalRequestValidator, SecretValidator, TimestampValidator } from './typings'
-import { getNormalizedEncodedURI, getNormalizedHeaders } from './utils'
-import { CONTENTFUL_HEADERS, ContentfulHeader } from './constants'
+import { getNormalizedEncodedURI, normalizeHeaders, sortHeaderKeys } from './utils'
 
 const hash = (normalizedCanonicalRequest: NormalizedCanonicalRequest, secret: string) => {
   const stringifiedHeaders = normalizedCanonicalRequest
@@ -29,22 +29,27 @@ const hash = (normalizedCanonicalRequest: NormalizedCanonicalRequest, secret: st
   return hmac.digest('hex')
 }
 
-const removeExistingContentfulHeaders = (headers: NormalizedHeaders) => {
-  return headers.filter(([key]) => !CONTENTFUL_HEADERS.includes(key))
-}
+const getSortedAndSignedHeaders = (headers: Record<string, string>, timestamp: number) => {
+  const rawSignedHeaders = Object.keys(headers)
 
-const enrichNormalizedHeadersWithMetadata = (headers: NormalizedHeaders, timestamp: number) => {
-  const result = removeExistingContentfulHeaders(headers)
-  const joinedSignedHeaders = result
-    .map(([key]) => key)
-    // We always sign timestamp and signed headers
-    .concat(ContentfulHeader.Timestamp, ContentfulHeader.SignedHeaders)
-    .join(',')
+  if (!(ContentfulHeader.SignedHeaders in headers)) {
+    rawSignedHeaders.push(ContentfulHeader.SignedHeaders)
+  }
 
-  result.push([ContentfulHeader.Timestamp, timestamp.toString()])
-  result.push([ContentfulHeader.SignedHeaders, joinedSignedHeaders])
+  if (!(ContentfulHeader.Timestamp in headers)) {
+    rawSignedHeaders.push(ContentfulHeader.Timestamp)
+  }
 
-  return result
+  const signedHeaders = rawSignedHeaders.sort(sortHeaderKeys)
+
+  const signedHeadersString = signedHeaders.join(',')
+
+  headers[ContentfulHeader.Timestamp] = timestamp.toString()
+  headers[ContentfulHeader.SignedHeaders] = signedHeadersString
+
+  const sortedHeaders = Object.entries(headers).sort(([keyA], [keyB]) => sortHeaderKeys(keyA, keyB))
+
+  return { sortedHeaders, signedHeaders: signedHeadersString }
 }
 
 /**
@@ -53,7 +58,7 @@ const enrichNormalizedHeadersWithMetadata = (headers: NormalizedHeaders, timesta
  * sender and integrity of the payload.
  *
  * ~~~
- * const {createSignature} = require('contentful-node-apps-toolkit')
+ * const {signRequest, ContentfulHeader} = require('contentful-node-apps-toolkit')
  * const {pick} = require('lodash')
  * const {server} = require('./imaginary-server')
  *
@@ -75,7 +80,7 @@ const enrichNormalizedHeadersWithMetadata = (headers: NormalizedHeaders, timesta
  *
  *   const signedHeaders = incomingSignedHeaders.split(',')
  *
- *   const computedSignature = createSignature(
+ *   const {[ContentfulHeader.Signature]: computedSignature} = signRequest(
  *     SECRET,
  *     {
  *       method: req.method,
@@ -96,25 +101,25 @@ const enrichNormalizedHeadersWithMetadata = (headers: NormalizedHeaders, timesta
  * ~~~
  * @category Requests
  */
-export const createSignature = (
+export const signRequest = (
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
-  rawTimestamp: Timestamp
-): { signature: string; signedHeaders: string } => {
+  rawTimestamp: Timestamp = Date.now()
+): SignedRequestHeaders => {
   const canonicalRequest: CanonicalRequest = CanonicalRequestValidator.check(rawCanonicalRequest)
   const timestamp: Timestamp = TimestampValidator.check(rawTimestamp)
   const secret: Secret = SecretValidator.check(rawSecret)
 
   const path = getNormalizedEncodedURI(canonicalRequest.path)
   const method = canonicalRequest.method
-  const headers = canonicalRequest.headers ? getNormalizedHeaders(canonicalRequest.headers) : []
+  const headers = canonicalRequest.headers ? normalizeHeaders(canonicalRequest.headers) : {}
   const body = canonicalRequest.body ?? ''
 
-  const normalizedHeadersWithMetadata = enrichNormalizedHeadersWithMetadata(headers, timestamp)
+  const { sortedHeaders, signedHeaders } = getSortedAndSignedHeaders(headers, timestamp)
 
   return {
-    signature: hash({ method, headers: normalizedHeadersWithMetadata, path, body }, secret),
-    // Last header is always going to be signed-headers because of `normalizedHeadersWithMetadata`
-    signedHeaders: normalizedHeadersWithMetadata[normalizedHeadersWithMetadata.length - 1][1],
+    [ContentfulHeader.Signature]: hash({ method, headers: sortedHeaders, path, body }, secret),
+    [ContentfulHeader.SignedHeaders]: signedHeaders,
+    [ContentfulHeader.Timestamp]: timestamp.toString(),
   }
 }

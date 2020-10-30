@@ -1,4 +1,13 @@
+// Remove when this eslint rule covers all the cases
+// https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
+/*eslint-disable no-unused-vars*/
 import * as runtypes from 'runtypes'
+
+export enum ContentfulHeader {
+  Timestamp = 'x-contentful-timestamp',
+  SignedHeaders = 'x-contentful-signed-headers',
+  Signature = 'x-contentful-signature',
+}
 
 const MethodValidator = runtypes.Union(
   runtypes.Literal('GET'),
@@ -29,7 +38,6 @@ export const CanonicalRequestValidator = runtypes
       body: runtypes.String,
     })
   )
-
 export type CanonicalRequest = runtypes.Static<typeof CanonicalRequestValidator>
 
 export const SecretValidator = runtypes.String.withConstraint((s) => s.length === 64, {
@@ -57,14 +65,13 @@ export type RequestMetadata = runtypes.Static<typeof RequestMetadataValidator>
 export const TimeToLiveValidator = runtypes.Number.withConstraint((n) => n >= 0, {
   name: 'PositiveNumber',
 })
-
 export type TimeToLive = runtypes.Static<typeof TimeToLiveValidator>
 
-export type NormalizedHeader = [key: string, value: string]
-export type NormalizedHeaders = NormalizedHeader[]
 export type NormalizedCanonicalRequest = {
   method: CanonicalRequest['method']
   path: CanonicalRequest['path']
-  headers: NormalizedHeaders
+  headers: [key: string, value: string][]
   body: CanonicalRequest['body']
 }
+
+export type SignedRequestHeaders = { [key in ContentfulHeader]: string }

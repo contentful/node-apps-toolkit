@@ -7,25 +7,16 @@ import {
   SecretValidator,
   Timestamp,
   TimeToLive,
+  ContentfulHeader,
 } from './typings'
-import { ContentfulHeader, CONTENTFUL_HEADERS } from './constants'
-import { getNormalizedHeaders, pickHeaders } from './utils'
-import { createSignature } from './create-signature'
+import { normalizeHeaders, pickHeaders } from './utils'
+import { signRequest } from './sign-request'
 import { ExpiredRequestException } from './exceptions'
 
-const getRequestMetadata = (canonicalRequest: CanonicalRequest): RequestMetadata => {
-  const normalizedHeaders = getNormalizedHeaders(canonicalRequest.headers ?? {})
-
-  const signingHeaders = normalizedHeaders.filter(([key]) => CONTENTFUL_HEADERS.includes(key))
-
-  // In order to not rely in order we perform a find. Array is short, not a big deal
-  const [, signature] = signingHeaders.find(([key]) => key === ContentfulHeader.Signature) ?? []
-  const [, rawSignedHeaders] =
-    signingHeaders.find(([key]) => key === ContentfulHeader.SignedHeaders) ?? []
-  const [, rawTimestamp] = signingHeaders.find(([key]) => key === ContentfulHeader.Timestamp) ?? []
-
-  const signedHeaders = rawSignedHeaders ? rawSignedHeaders.split(',') : []
-  const timestamp = Number.parseInt(rawTimestamp ?? '', 10)
+const getRequestMetadata = (normalizedHeaders: Record<string, string>): RequestMetadata => {
+  const signature = normalizedHeaders[ContentfulHeader.Signature]
+  const signedHeaders = (normalizedHeaders[ContentfulHeader.SignedHeaders] ?? '').split(',')
+  const timestamp = Number.parseInt(normalizedHeaders[ContentfulHeader.Timestamp] ?? '', 10)
 
   return RequestMetadataValidator.check({ signature, signedHeaders, timestamp })
 }
@@ -67,7 +58,9 @@ export const isVerifiedRequest = (
   const canonicalRequest = CanonicalRequestValidator.check(rawCanonicalRequest)
   const secret = SecretValidator.check(rawSecret)
 
-  const { signature, signedHeaders, timestamp } = getRequestMetadata(canonicalRequest)
+  const normalizedHeaders = normalizeHeaders(canonicalRequest.headers ?? {})
+
+  const { signature, signedHeaders, timestamp } = getRequestMetadata(normalizedHeaders)
 
   if (rawTimeToLive !== 0 && isRequestTimestampTooOld(rawTimeToLive, timestamp)) {
     throw new ExpiredRequestException(rawTimeToLive)
@@ -75,10 +68,14 @@ export const isVerifiedRequest = (
 
   const requestToValidate = {
     ...canonicalRequest,
-    headers: pickHeaders(canonicalRequest.headers, signedHeaders),
+    headers: pickHeaders(normalizedHeaders, signedHeaders),
   }
 
-  const { signature: computedSignature } = createSignature(secret, requestToValidate, timestamp)
+  const { [ContentfulHeader.Signature]: computedSignature } = signRequest(
+    secret,
+    requestToValidate,
+    timestamp
+  )
 
   return signature === computedSignature
 }

@@ -1,9 +1,8 @@
 import * as assert from 'assert'
 
 import { isVerifiedRequest } from './is-verified-request'
-import { Secret } from './typings'
-import { createSignature } from './create-signature'
-import { ContentfulHeader } from './constants'
+import { ContentfulHeader, Secret } from './typings'
+import { signRequest } from './sign-request'
 import { ExpiredRequestException } from './exceptions'
 
 const makeIncomingRequest = (
@@ -27,16 +26,15 @@ const makeIncomingRequest = (
     body,
   }
 
-  const { signature, signedHeaders } = createSignature(VALID_SECRET, request, now)
+  const signedHeaders = signRequest(VALID_SECRET, request, now)
 
-  const newHeaders = {
-    ...request.headers,
-    [ContentfulHeader.Timestamp]: now.toString(),
-    [ContentfulHeader.SignedHeaders]: signedHeaders,
-    [ContentfulHeader.Signature]: signature,
+  return {
+    ...request,
+    headers: {
+      ...request.headers,
+      ...signedHeaders,
+    } as Record<string, string>,
   }
-
-  return { ...request, headers: newHeaders }
 }
 
 const VALID_SECRET: Secret = new Array(64).fill('a').join('')
@@ -232,6 +230,17 @@ describe('isVerifiedRequest', () => {
       incomingRequest.headers['Authorization'] = 'something else'
 
       assert(!isVerifiedRequest(VALID_SECRET, incomingRequest))
+    })
+
+    it("verifies with headers sorted lower than contentful's", () => {
+      const incomingRequest = makeIncomingRequest({
+        headers: {
+          Authorization: 'Bearer Token',
+          'z-zzzzz': 'ronf ronf',
+        },
+      })
+
+      assert(isVerifiedRequest(VALID_SECRET, incomingRequest))
     })
   })
 
