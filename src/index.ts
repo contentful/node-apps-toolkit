@@ -1,2 +1,2 @@
 export { getManagementToken } from './keys'
-export { signRequest, isVerifiedRequest } from './requests'
+export { signRequest, verifyRequest } from './requests'

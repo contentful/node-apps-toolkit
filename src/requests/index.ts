@@ -1,3 +1,3 @@
 export { signRequest } from './sign-request'
-export { isVerifiedRequest } from './is-verified-request'
+export { verifyRequest } from './verify-request'
 export type { CanonicalRequest, Secret, Timestamp } from './typings'

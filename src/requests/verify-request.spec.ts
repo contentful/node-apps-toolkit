@@ -1,6 +1,6 @@
 import * as assert from 'assert'
 
-import { isVerifiedRequest } from './is-verified-request'
+import { verifyRequest } from './verify-request'
 import { ContentfulHeader, Secret } from './typings'
 import { signRequest } from './sign-request'
 import { ExpiredRequestException } from './exceptions'
@@ -51,7 +51,7 @@ describe('isVerifiedRequest', () => {
       now
     )
 
-    assert(isVerifiedRequest(VALID_SECRET, incomingRequest, 0))
+    assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
   })
 
   describe('with time to live', () => {
@@ -66,10 +66,7 @@ describe('isVerifiedRequest', () => {
         oneMinuteAgo
       )
 
-      assert.throws(
-        () => isVerifiedRequest(VALID_SECRET, incomingRequest, 1),
-        ExpiredRequestException
-      )
+      assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest, 1), ExpiredRequestException)
     })
 
     it('does not check if ttl is 0', () => {
@@ -84,7 +81,7 @@ describe('isVerifiedRequest', () => {
       )
 
       assert.doesNotThrow(
-        () => isVerifiedRequest(VALID_SECRET, incomingRequest, 0),
+        () => verifyRequest(VALID_SECRET, incomingRequest, 0),
         ExpiredRequestException
       )
     })
@@ -107,7 +104,7 @@ describe('isVerifiedRequest', () => {
       delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
       delete incomingRequest.headers[ContentfulHeader.Timestamp]
 
-      assert(isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
     it('verifies correctly with keys with whitespace', () => {
       const incomingRequest = makeIncomingRequest({})
@@ -125,21 +122,21 @@ describe('isVerifiedRequest', () => {
       delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
       delete incomingRequest.headers[ContentfulHeader.Timestamp]
 
-      assert(isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
     it('throws when missing signature', () => {
       const incomingRequest = makeIncomingRequest({})
 
       delete incomingRequest.headers[ContentfulHeader.Signature]
 
-      assert.throws(() => isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest))
     })
     it('throws when missing timestamp', () => {
       const incomingRequest = makeIncomingRequest({})
 
       delete incomingRequest.headers[ContentfulHeader.Timestamp]
 
-      assert.throws(() => isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest))
     })
     it('throws when missing signed headers', () => {
       const incomingRequest = makeIncomingRequest({
@@ -148,7 +145,7 @@ describe('isVerifiedRequest', () => {
 
       delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
 
-      assert.throws(() => isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest))
     })
   })
 
@@ -175,7 +172,7 @@ describe('isVerifiedRequest', () => {
       delete incomingRequest.headers['Authorization']
       delete incomingRequest.headers['Cache-Control']
 
-      assert(isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
     it('verifies with keys with whitespace', () => {
       const authorization = 'Bearer TOKEN'
@@ -199,7 +196,7 @@ describe('isVerifiedRequest', () => {
       delete incomingRequest.headers['Authorization']
       delete incomingRequest.headers['Cache-Control']
 
-      assert(isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
     it('verifies with different headers, if they are not signed', () => {
       const authorization = 'Bearer TOKEN'
@@ -214,7 +211,7 @@ describe('isVerifiedRequest', () => {
 
       incomingRequest.headers['Content-Type'] = 'application/json'
 
-      assert(isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
     it('does not verify with different signed headers', () => {
       const authorization = 'Bearer TOKEN'
@@ -229,7 +226,7 @@ describe('isVerifiedRequest', () => {
 
       incomingRequest.headers['Authorization'] = 'something else'
 
-      assert(!isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert(!verifyRequest(VALID_SECRET, incomingRequest))
     })
 
     it("verifies with headers sorted lower than contentful's", () => {
@@ -240,7 +237,7 @@ describe('isVerifiedRequest', () => {
         },
       })
 
-      assert(isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
   })
 
@@ -254,7 +251,7 @@ describe('isVerifiedRequest', () => {
 
       incomingRequest.path = pathWithQueryTwo
 
-      assert(!isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert(!verifyRequest(VALID_SECRET, incomingRequest))
     })
   })
 
@@ -264,7 +261,7 @@ describe('isVerifiedRequest', () => {
 
       incomingRequest.method = 'POST'
 
-      assert(!isVerifiedRequest(VALID_SECRET, incomingRequest))
+      assert(!verifyRequest(VALID_SECRET, incomingRequest))
     })
   })
 
@@ -277,7 +274,7 @@ describe('isVerifiedRequest', () => {
       })
       const differentSecret = `q${VALID_SECRET.slice(1, VALID_SECRET.length)}`
 
-      assert(!isVerifiedRequest(differentSecret, incomingRequest))
+      assert(!verifyRequest(differentSecret, incomingRequest))
     })
   })
 })
