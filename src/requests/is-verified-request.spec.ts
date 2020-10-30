@@ -3,9 +3,8 @@ import * as assert from 'assert'
 import { isVerifiedRequest } from './is-verified-request'
 import { Secret } from './typings'
 import { createSignature } from './create-signature'
-import { CONTENTFUL_HEADERS, ContentfulHeader } from './constants'
+import { ContentfulHeader } from './constants'
 import { ExpiredRequestException } from './exceptions'
-import { normalizeHeaderKey } from './utils'
 
 const makeIncomingRequest = (
   {
@@ -28,16 +27,12 @@ const makeIncomingRequest = (
     body,
   }
 
-  const signature = createSignature(VALID_SECRET, request, now)
+  const { signature, signedHeaders } = createSignature(VALID_SECRET, request, now)
 
   const newHeaders = {
     ...request.headers,
     [ContentfulHeader.Timestamp]: now.toString(),
-    [ContentfulHeader.SignedHeaders]: Object.keys(headers ?? {})
-      .map(normalizeHeaderKey)
-      .filter((i) => !CONTENTFUL_HEADERS.includes(i))
-      .concat(ContentfulHeader.SignedHeaders, ContentfulHeader.Timestamp)
-      .join(','),
+    [ContentfulHeader.SignedHeaders]: signedHeaders,
     [ContentfulHeader.Signature]: signature,
   }
 

@@ -100,7 +100,7 @@ export const createSignature = (
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
   rawTimestamp: Timestamp
-) => {
+): { signature: string; signedHeaders: string } => {
   const canonicalRequest: CanonicalRequest = CanonicalRequestValidator.check(rawCanonicalRequest)
   const timestamp: Timestamp = TimestampValidator.check(rawTimestamp)
   const secret: Secret = SecretValidator.check(rawSecret)
@@ -112,5 +112,8 @@ export const createSignature = (
 
   const normalizedHeadersWithMetadata = enrichNormalizedHeadersWithMetadata(headers, timestamp)
 
-  return hash({ method, headers: normalizedHeadersWithMetadata, path, body }, secret)
+  return {
+    signature: hash({ method, headers: normalizedHeadersWithMetadata, path, body }, secret),
+    signedHeaders: normalizedHeadersWithMetadata[normalizedHeadersWithMetadata.length - 1][1],
+  }
 }

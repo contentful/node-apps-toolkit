@@ -152,7 +152,7 @@ describe('create-signature', () => {
       const headers = { headerOne, headerTwo }
       const headersCased = { headerone: headerOne, headerTWO: headerTwo }
 
-      assert.strictEqual(
+      assert.deepStrictEqual(
         createSignature(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
         createSignature(VALID_SECRET, { ...VALID_REQUEST, headers: headersCased }, VALID_TIMESTAMP)
       )
@@ -164,7 +164,7 @@ describe('create-signature', () => {
       const headers = { headerOne, headerTwo }
       const headersSpaced = { '      headerOne': headerOne, 'headerTwo        ': headerTwo }
 
-      assert.strictEqual(
+      assert.deepStrictEqual(
         createSignature(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
         createSignature(VALID_SECRET, { ...VALID_REQUEST, headers: headersSpaced }, VALID_TIMESTAMP)
       )

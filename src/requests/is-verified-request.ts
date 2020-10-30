@@ -78,7 +78,7 @@ export const isVerifiedRequest = (
     headers: pickHeaders(canonicalRequest.headers, signedHeaders),
   }
 
-  const computedSignature = createSignature(secret, requestToValidate, timestamp)
+  const { signature: computedSignature } = createSignature(secret, requestToValidate, timestamp)
 
   return signature === computedSignature
 }
