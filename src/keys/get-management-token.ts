@@ -124,7 +124,10 @@ export const createGetManagementToken = (
  * Pass `reuseToken: false` in the options for `getManagementToken` to disable this feature.
  *
  * NodeJS Contentful Apps need a management token to interact with Contentful's APIs.
- * Creating a management token requires a key pair to be regsitered for the app, follow [this link](http://contentful./developers/docs/references/content-management-api/#/reference/app-keys/app-keys) for more information on key pairs.
+ * Creating a management token requires a key pair to be registered for the app, follow
+ * [this link](http://contentful./developers/docs/references/content-management-api/#/reference/app-keys/app-keys)
+ * for more information on key pairs.
+ *
  * Once a key pair is registered the getManagementToken function can be used to generate a valid token.
  *
  * ~~~
@@ -136,8 +139,9 @@ export const createGetManagementToken = (
  *      console.log(token)
  *    })
  * ~~~
+ * @category Keys
  */
-export const getManagementToken = (privateKey: unknown, opts: GetManagementTokenOptions) => {
+export const getManagementToken = (privateKey: string, opts: GetManagementTokenOptions) => {
   return createGetManagementToken(createLogger({ filename: __filename }), createHttpClient())(
     privateKey,
     opts

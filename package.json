@@ -23,7 +23,8 @@
     "debug": "^4.2.0",
     "got": "^11.7.0",
     "jsonwebtoken": "^8.5.1",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "runtypes": "^5.0.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",
