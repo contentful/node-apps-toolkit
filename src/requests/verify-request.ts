@@ -40,8 +40,14 @@ const isRequestTimestampTooOld = (ttl: number, timestamp: Timestamp) => {
  * server.post('/api/my-resources', (req, res) => {
  *   const canonicalRequest = makeCanonicalRequestFromImaginaryServerRequest(req)
  *
- *   if (!isVerifiedRequest(SECRET, canonicalRequest, REQUEST_TTL)) {
- *     res.send(403, 'Invalid signature')
+ *   try {
+ *     const isVerifiedRequest = verifyRequest(SECRET, canonicalRequest, REQUEST_TTL)
+ *
+ *     if (!isVerifiedRequest) {
+ *       res.send(403, 'Invalid signature')
+ *     }
+ *   } catch (_error) {
+ *     res.send(422, 'Unable to verify request')
  *   }
  *
  *   // Rest of the code

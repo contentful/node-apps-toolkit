@@ -213,7 +213,7 @@ server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <spa
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/verify-request.ts#L53">requests/verify-request.ts:53</a></li>
+									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/verify-request.ts#L59">requests/verify-request.ts:59</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -231,8 +231,14 @@ server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <spa
 server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> canonicalRequest = makeCanonicalRequestFromImaginaryServerRequest(req)
 
-  <span class="hljs-keyword">if</span> (!isVerifiedRequest(SECRET, canonicalRequest, REQUEST_TTL)) {
-    res.send(<span class="hljs-number">403</span>, <span class="hljs-string">&#x27;Invalid signature&#x27;</span>)
+  <span class="hljs-keyword">try</span> {
+    <span class="hljs-keyword">const</span> isVerifiedRequest = verifyRequest(SECRET, canonicalRequest, REQUEST_TTL)
+
+    <span class="hljs-keyword">if</span> (!isVerifiedRequest) {
+      res.send(<span class="hljs-number">403</span>, <span class="hljs-string">&#x27;Invalid signature&#x27;</span>)
+    }
+  } <span class="hljs-keyword">catch</span> (_error) {
+    res.send(<span class="hljs-number">422</span>, <span class="hljs-string">&#x27;Unable to verify request&#x27;</span>)
   }
 
   <span class="hljs-comment">// Rest of the code</span>
