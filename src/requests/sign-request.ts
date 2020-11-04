@@ -47,7 +47,7 @@ const getSortedAndSignedHeaders = (headers: Record<string, string>, timestamp: n
 
   const sortedHeaders = Object.entries(headers).sort(([keyA], [keyB]) => sortHeaderKeys(keyA, keyB))
 
-  return { sortedHeaders, signedHeaders: signedHeaders }
+  return { sortedHeaders, signedHeaders }
 }
 
 /**
@@ -64,7 +64,7 @@ const getSortedAndSignedHeaders = (headers: Record<string, string>, timestamp: n
  *
  * server.post('/api/my-resources', (req, res) => {
  *   const incomingSignature = req.headers['x-contentful-signature']
- *   const incomingTimestamp = Number(req.headers['x-contentful-timestamp'])
+ *   const incomingTimestamp = Number.parseInt(req.headers['x-contentful-timestamp'])
  *   const incomingSignedHeaders = req.headers['x-contentful-signed-headers']
  *   const now = Date.now()
  *
@@ -110,7 +110,7 @@ export const signRequest = (
 
   const path = getNormalizedEncodedURI(canonicalRequest.path)
   const method = canonicalRequest.method
-  const headers = normalizeHeaders(canonicalRequest.headers || {})
+  const headers = canonicalRequest.headers ? normalizeHeaders(canonicalRequest.headers) : {}
   const body = canonicalRequest.body ?? ''
 
   const { sortedHeaders, signedHeaders } = getSortedAndSignedHeaders(headers, timestamp)
