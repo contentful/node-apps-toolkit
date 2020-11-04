@@ -30,9 +30,9 @@ const isRequestTimestampTooOld = (ttl: number, timestamp: Timestamp) => {
  * Pass `rawTimeToLive = 0` to disable TTL checks.
  *
  * ~~~
- * const {isVerifiedRequest} = require('contentful-node-apps-toolkit')
- * const {server} = require('./imaginary-server')
- * const {makeCanonicalRequestFromImaginaryServerRequest} = require('./imaginary-utils')
+ * const { verifyRequest } = require('@contentful/node-apps-toolkit')
+ * const { server } = require('./imaginary-server')
+ * const { makeCanonicalRequestFromImaginaryServerRequest } = require('./imaginary-utils')
  *
  * const SECRET = process.env.SECRET
  * const REQUEST_TTL = Number.parseInt(process.env.REQUEST_TTL, 10)

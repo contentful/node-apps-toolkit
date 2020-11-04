@@ -14,15 +14,7 @@ const normalizeHeaderValue = (value: string) => value.trim()
 export const normalizeHeaders = (headers: Record<string, string>) =>
   map(headers, ([key, value]) => [normalizeHeaderKey(key), normalizeHeaderValue(value)])
 
-export const pickHeaders = (headers?: Record<string, string>, keys?: string[]) => {
-  if (!headers) {
-    return {}
-  }
-
-  if (!keys) {
-    return headers
-  }
-
+export const pickHeaders = (headers: Record<string, string>, keys: string[]) => {
   return filter(headers, ([key]) => keys.includes(key))
 }
 

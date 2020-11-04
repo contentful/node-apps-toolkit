@@ -40,16 +40,14 @@ const getSortedAndSignedHeaders = (headers: Record<string, string>, timestamp: n
     rawSignedHeaders.push(ContentfulHeader.Timestamp)
   }
 
-  const signedHeaders = rawSignedHeaders.sort(sortHeaderKeys)
-
-  const signedHeadersString = signedHeaders.join(',')
+  const signedHeaders = rawSignedHeaders.sort(sortHeaderKeys).join(',')
 
   headers[ContentfulHeader.Timestamp] = timestamp.toString()
-  headers[ContentfulHeader.SignedHeaders] = signedHeadersString
+  headers[ContentfulHeader.SignedHeaders] = signedHeaders
 
   const sortedHeaders = Object.entries(headers).sort(([keyA], [keyB]) => sortHeaderKeys(keyA, keyB))
 
-  return { sortedHeaders, signedHeaders: signedHeadersString }
+  return { sortedHeaders, signedHeaders: signedHeaders }
 }
 
 /**
@@ -58,7 +56,7 @@ const getSortedAndSignedHeaders = (headers: Record<string, string>, timestamp: n
  * sender and integrity of the payload.
  *
  * ~~~
- * const {signRequest, ContentfulHeader} = require('contentful-node-apps-toolkit')
+ * const {signRequest, ContentfulHeader} = require('@contentful/node-apps-toolkit')
  * const {pick} = require('lodash')
  * const {server} = require('./imaginary-server')
  *
@@ -66,7 +64,7 @@ const getSortedAndSignedHeaders = (headers: Record<string, string>, timestamp: n
  *
  * server.post('/api/my-resources', (req, res) => {
  *   const incomingSignature = req.headers['x-contentful-signature']
- *   const incomingTimestamp = req.headers['x-contentful-timestamp']
+ *   const incomingTimestamp = Number(req.headers['x-contentful-timestamp'])
  *   const incomingSignedHeaders = req.headers['x-contentful-signed-headers']
  *   const now = Date.now()
  *
@@ -112,7 +110,7 @@ export const signRequest = (
 
   const path = getNormalizedEncodedURI(canonicalRequest.path)
   const method = canonicalRequest.method
-  const headers = canonicalRequest.headers ? normalizeHeaders(canonicalRequest.headers) : {}
+  const headers = normalizeHeaders(canonicalRequest.headers || {})
   const body = canonicalRequest.body ?? ''
 
   const { sortedHeaders, signedHeaders } = getSortedAndSignedHeaders(headers, timestamp)
