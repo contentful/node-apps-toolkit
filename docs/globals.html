@@ -154,7 +154,7 @@ getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
 
 server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
   <span class="hljs-keyword">const</span> incomingSignature = req.headers[<span class="hljs-string">&#x27;x-contentful-signature&#x27;</span>]
-  <span class="hljs-keyword">const</span> incomingTimestamp = <span class="hljs-built_in">Number</span>(req.headers[<span class="hljs-string">&#x27;x-contentful-timestamp&#x27;</span>])
+  <span class="hljs-keyword">const</span> incomingTimestamp = <span class="hljs-built_in">Number</span>.parseInt(req.headers[<span class="hljs-string">&#x27;x-contentful-timestamp&#x27;</span>])
   <span class="hljs-keyword">const</span> incomingSignedHeaders = req.headers[<span class="hljs-string">&#x27;x-contentful-signed-headers&#x27;</span>]
   <span class="hljs-keyword">const</span> now = <span class="hljs-built_in">Date</span>.now()
 
