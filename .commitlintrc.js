@@ -1,4 +1,4 @@
 module.exports = {
   extends: ['@commitlint/config-conventional'],
-  defaultIgnores: true,
+  ignores: [(msg) => msg.includes('Signed-off-by: dependabot[bot]')],
 }
