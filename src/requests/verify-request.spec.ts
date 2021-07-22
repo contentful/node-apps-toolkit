@@ -1,7 +1,13 @@
 import * as assert from 'assert'
 
 import { verifyRequest } from './verify-request'
-import { ContentfulHeader, Secret, ContentfulUserIdHeader, ContentfulAppIdHeader } from './typings'
+import {
+  ContentfulHeader,
+  Secret,
+  ContentfulUserIdHeader,
+  ContentfulAppIdHeader,
+  ContextHeaders,
+} from './typings'
 import { signRequest } from './sign-request'
 import { ExpiredRequestException } from './exceptions'
 
@@ -27,11 +33,13 @@ const makeIncomingRequest = (
     body,
   }
 
-  const signedHeaders = signRequest(VALID_SECRET, request, now, {
+  const contextHeaders = {
     [ContentfulHeader.SpaceId]: 'my-space',
     [ContentfulHeader.EnvironmentId]: 'my-environment',
     ...subject,
-  })
+  }
+
+  const signedHeaders = signRequest(VALID_SECRET, request, now, contextHeaders as ContextHeaders)
 
   return {
     ...request,
