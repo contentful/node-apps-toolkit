@@ -2,11 +2,25 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 import * as runtypes from 'runtypes'
+import { XOR } from 'ts-xor'
 
 export enum ContentfulHeader {
   Timestamp = 'x-contentful-timestamp',
   SignedHeaders = 'x-contentful-signed-headers',
   Signature = 'x-contentful-signature',
+  SpaceId = 'x-contentful-space-id',
+  EnvironmentId = 'x-contentful-environment-id',
+}
+
+export const ContentfulUserIdHeader = 'x-contentful-user-id'
+export const ContentfulAppIdHeader = 'x-contentful-app-id'
+
+type ContentfulHeaderWithApp = {
+  [ContentfulAppIdHeader]: string
+}
+
+type ContentfulHeaderWithUser = {
+  [ContentfulUserIdHeader]: string
 }
 
 const MethodValidator = runtypes.Union(
@@ -74,4 +88,5 @@ export type NormalizedCanonicalRequest = {
   body: CanonicalRequest['body']
 }
 
-export type SignedRequestHeaders = { [key in ContentfulHeader]: string }
+export type SignedRequestHeaders = { [key in ContentfulHeader]: string } &
+  (XOR<ContentfulHeaderWithApp, ContentfulHeaderWithUser> | {})

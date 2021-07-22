@@ -1,7 +1,7 @@
 import * as assert from 'assert'
 
 import { verifyRequest } from './verify-request'
-import { ContentfulHeader, Secret } from './typings'
+import { ContentfulHeader, Secret, ContentfulUserIdHeader, ContentfulAppIdHeader } from './typings'
 import { signRequest } from './sign-request'
 import { ExpiredRequestException } from './exceptions'
 
@@ -17,7 +17,8 @@ const makeIncomingRequest = (
     headers?: Record<string, string>
     body?: string
   },
-  now = Date.now()
+  now = Date.now(),
+  subject: Record<string, string> = {}
 ) => {
   const request = {
     path,
@@ -26,7 +27,11 @@ const makeIncomingRequest = (
     body,
   }
 
-  const signedHeaders = signRequest(VALID_SECRET, request, now)
+  const signedHeaders = signRequest(VALID_SECRET, request, now, {
+    [ContentfulHeader.SpaceId]: 'my-space',
+    [ContentfulHeader.EnvironmentId]: 'my-environment',
+    ...subject,
+  })
 
   return {
     ...request,
@@ -49,6 +54,36 @@ describe('isVerifiedRequest', () => {
         },
       },
       now
+    )
+
+    assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
+  })
+
+  it('verifies a verified request with user-id', () => {
+    const now = Date.now()
+    const incomingRequest = makeIncomingRequest(
+      {
+        headers: {
+          Authorization: 'Bearer TOKEN',
+        },
+      },
+      now,
+      { [ContentfulUserIdHeader]: 'my-user' }
+    )
+
+    assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
+  })
+
+  it('verifies a verified request with app-id', () => {
+    const now = Date.now()
+    const incomingRequest = makeIncomingRequest(
+      {
+        headers: {
+          Authorization: 'Bearer TOKEN',
+        },
+      },
+      now,
+      { [ContentfulAppIdHeader]: 'my-app' }
     )
 
     assert(verifyRequest(VALID_SECRET, incomingRequest, 0))

@@ -6,6 +6,8 @@ import {
   SignedRequestHeaders,
   Timestamp,
   ContentfulHeader,
+  ContentfulAppIdHeader,
+  ContentfulUserIdHeader,
 } from './typings'
 import { CanonicalRequestValidator, SecretValidator, TimestampValidator } from './typings'
 import { getNormalizedEncodedURI, normalizeHeaders, sortHeaderKeys } from './utils'
@@ -102,7 +104,8 @@ const getSortedAndSignedHeaders = (headers: Record<string, string>, timestamp: n
 export const signRequest = (
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
-  rawTimestamp: Timestamp = Date.now()
+  rawTimestamp: Timestamp = Date.now(),
+  contextHeaders: Record<string, string> = {}
 ): SignedRequestHeaders => {
   const canonicalRequest: CanonicalRequest = CanonicalRequestValidator.check(rawCanonicalRequest)
   const timestamp: Timestamp = TimestampValidator.check(rawTimestamp)
@@ -113,11 +116,22 @@ export const signRequest = (
   const headers = canonicalRequest.headers ? normalizeHeaders(canonicalRequest.headers) : {}
   const body = canonicalRequest.body ?? ''
 
-  const { sortedHeaders, signedHeaders } = getSortedAndSignedHeaders(headers, timestamp)
+  const { sortedHeaders, signedHeaders } = getSortedAndSignedHeaders(
+    { ...headers, ...contextHeaders },
+    timestamp
+  )
+  const subjectId = contextHeaders[ContentfulUserIdHeader]
+    ? { [ContentfulUserIdHeader]: contextHeaders[ContentfulUserIdHeader] }
+    : contextHeaders[ContentfulAppIdHeader]
+    ? { [ContentfulAppIdHeader]: contextHeaders[ContentfulAppIdHeader] }
+    : {}
 
   return {
     [ContentfulHeader.Signature]: hash({ method, headers: sortedHeaders, path, body }, secret),
     [ContentfulHeader.SignedHeaders]: signedHeaders,
     [ContentfulHeader.Timestamp]: timestamp.toString(),
+    [ContentfulHeader.SpaceId]: contextHeaders[ContentfulHeader.SpaceId],
+    [ContentfulHeader.EnvironmentId]: contextHeaders[ContentfulHeader.EnvironmentId],
+    ...subjectId,
   }
 }
