@@ -88,7 +88,7 @@ export type NormalizedCanonicalRequest = {
   body: CanonicalRequest['body']
 }
 
-export type Subject = XOR<ContentfulHeaderWithApp, ContentfulHeaderWithUser>
+export type Subject = Partial<XOR<ContentfulHeaderWithApp, ContentfulHeaderWithUser>>
 
 export type ContextHeaders = {
   [ContentfulHeader.SpaceId]: string

@@ -132,7 +132,9 @@ describe('isVerifiedRequest', () => {
 
   describe('with contentful headers', () => {
     it('verifies correctly with keys with different casing', () => {
-      const incomingRequest = makeIncomingRequest({})
+      const incomingRequest = makeIncomingRequest({}, Date.now(), {
+        [ContentfulUserIdHeader]: 'my-user',
+      })
 
       // mess with casing
       incomingRequest.headers[ContentfulHeader.Signature.toUpperCase()] =
@@ -141,16 +143,24 @@ describe('isVerifiedRequest', () => {
         incomingRequest.headers[ContentfulHeader.SignedHeaders]
       incomingRequest.headers[ContentfulHeader.Timestamp.toUpperCase()] =
         incomingRequest.headers[ContentfulHeader.Timestamp]
+      incomingRequest.headers[ContentfulHeader.SpaceId.toUpperCase()] =
+        incomingRequest.headers[ContentfulHeader.SpaceId]
+      incomingRequest.headers[ContentfulUserIdHeader.toUpperCase()] =
+        incomingRequest.headers[ContentfulUserIdHeader]
 
       // remove correctly cased ones
       delete incomingRequest.headers[ContentfulHeader.Signature]
       delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
       delete incomingRequest.headers[ContentfulHeader.Timestamp]
+      delete incomingRequest.headers[ContentfulHeader.SpaceId]
+      delete incomingRequest.headers[ContentfulUserIdHeader]
 
       assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
     it('verifies correctly with keys with whitespace', () => {
-      const incomingRequest = makeIncomingRequest({})
+      const incomingRequest = makeIncomingRequest({}, Date.now(), {
+        [ContentfulAppIdHeader]: 'my-app',
+      })
 
       // mess with spacing
       incomingRequest.headers[`${ContentfulHeader.Signature}      `] =
@@ -159,11 +169,17 @@ describe('isVerifiedRequest', () => {
         incomingRequest.headers[ContentfulHeader.SignedHeaders]
       incomingRequest.headers[`      ${ContentfulHeader.Timestamp}`] =
         incomingRequest.headers[ContentfulHeader.Timestamp]
+      incomingRequest.headers[` ${ContentfulHeader.SpaceId} `] =
+        incomingRequest.headers[ContentfulHeader.SpaceId]
+      incomingRequest.headers[`  ${ContentfulAppIdHeader}  `] =
+        incomingRequest.headers[ContentfulAppIdHeader]
 
       // remove correctly spaced ones
       delete incomingRequest.headers[ContentfulHeader.Signature]
       delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
       delete incomingRequest.headers[ContentfulHeader.Timestamp]
+      delete incomingRequest.headers[ContentfulAppIdHeader]
+      delete incomingRequest.headers[ContentfulHeader.SpaceId]
 
       assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
