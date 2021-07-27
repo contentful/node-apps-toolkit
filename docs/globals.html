@@ -131,61 +131,20 @@ getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
 					<a name="signrequest" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> sign<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">sign<wbr>Request<span class="tsd-signature-symbol">(</span>rawSecret<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Secret</span>, rawCanonicalRequest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CanonicalRequest</span>, rawTimestamp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Timestamp</span>, contextHeaders<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ContextHeaders</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SignedRequestHeaders</span></li>
+						<li class="tsd-signature tsd-kind-icon">sign<wbr>Request<span class="tsd-signature-symbol">(</span>rawSecret<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Secret</span>, rawCanonicalRequest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CanonicalRequest</span>, rawTimestamp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Timestamp</span>, rawContextHeaders<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ContextHeaders</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SignedRequestHeaders</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/sign-request.ts#L118">requests/sign-request.ts:118</a></li>
+									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/sign-request.ts#L79">requests/sign-request.ts:79</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Given a secret, a canonical request and a timestamp, generates a signature.
-										It can be used to verify canonical requests to assess authenticity of the
-									sender and integrity of the payload.</p>
+									<p>Given a secret, a canonical request, a timestamp and context headers, generates a signature.
+									<del>~</del></p>
 								</div>
-								<pre><code><span class="hljs-keyword">const</span> {signRequest, ContentfulHeader} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@contentful/node-apps-toolkit&#x27;</span>)
-<span class="hljs-keyword">const</span> {pick} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;lodash&#x27;</span>)
-<span class="hljs-keyword">const</span> {server} = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./imaginary-server&#x27;</span>)
-
-<span class="hljs-keyword">const</span> SECRET = process.env.SECRET
-
-server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <span class="hljs-function">(<span class="hljs-params">req, res</span>) =&gt;</span> {
-  <span class="hljs-keyword">const</span> incomingSignature = req.headers[<span class="hljs-string">&#x27;x-contentful-signature&#x27;</span>]
-  <span class="hljs-keyword">const</span> incomingTimestamp = <span class="hljs-built_in">Number</span>.parseInt(req.headers[<span class="hljs-string">&#x27;x-contentful-timestamp&#x27;</span>])
-  <span class="hljs-keyword">const</span> incomingSignedHeaders = req.headers[<span class="hljs-string">&#x27;x-contentful-signed-headers&#x27;</span>]
-  <span class="hljs-keyword">const</span> now = <span class="hljs-built_in">Date</span>.now()
-
-  <span class="hljs-keyword">if</span> (!incomingSignature) {
-    res.send(<span class="hljs-number">400</span>, <span class="hljs-string">&#x27;Missing signature&#x27;</span>)
-  }
-
-  <span class="hljs-keyword">if</span> (now - incomingTimestamp &gt; <span class="hljs-number">1000</span>) {
-    res.send(<span class="hljs-number">408</span>, <span class="hljs-string">&#x27;Request too old&#x27;</span>)
-  }
-
-  <span class="hljs-keyword">const</span> signedHeaders = incomingSignedHeaders.split(<span class="hljs-string">&#x27;,&#x27;</span>)
-
-  <span class="hljs-keyword">const</span> {[ContentfulHeader.Signature]: computedSignature} = signRequest(
-    SECRET,
-    {
-      <span class="hljs-attr">method</span>: req.method,
-      <span class="hljs-attr">path</span>: req.url,
-      <span class="hljs-attr">headers</span>: pick(req.headers, signedHeaders),
-      <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify(req.body)
-    },
-    incomingTimestamp
-  )
-
-  <span class="hljs-keyword">if</span> (computedSignature !== incomingSignature) {
-     res.send(<span class="hljs-number">403</span>, <span class="hljs-string">&#x27;Invalid signature&#x27;</span>)
-  }
-
-  <span class="hljs-comment">// rest of the code</span>
-})
-</code></pre>
 							</div>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
@@ -199,7 +158,7 @@ server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <spa
 									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> rawTimestamp: <span class="tsd-signature-type">Timestamp</span><span class="tsd-signature-symbol"> = Date.now()</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> contextHeaders: <span class="tsd-signature-type">ContextHeaders</span><span class="tsd-signature-symbol"> = {} as ContextHeaders</span></h5>
+									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> rawContextHeaders: <span class="tsd-signature-type">ContextHeaders</span><span class="tsd-signature-symbol"> = {} as ContextHeaders</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SignedRequestHeaders</span></h4>
@@ -221,7 +180,7 @@ server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <spa
 							</aside>
 							<div class="tsd-comment tsd-typography">
 								<div class="lead">
-									<p>Given a secret verifies a CanonicalRequest. Throws when signature is older than <code>rawTimeToLive</code> seconds.
+									<p>Given a secret verifies a CanonicalRequest. It also throws when signature is older than <code>rawTimeToLive</code> seconds.
 									Pass <code>rawTimeToLive = 0</code> to disable TTL checks.</p>
 								</div>
 								<pre><code><span class="hljs-keyword">const</span> { verifyRequest } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@contentful/node-apps-toolkit&#x27;</span>)

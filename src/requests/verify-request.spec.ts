@@ -7,6 +7,7 @@ import {
   ContentfulUserIdHeader,
   ContentfulAppIdHeader,
   ContextHeaders,
+  Subject,
 } from './typings'
 import { signRequest } from './sign-request'
 import { ExpiredRequestException } from './exceptions'
@@ -24,7 +25,7 @@ const makeIncomingRequest = (
     body?: string
   },
   now = Date.now(),
-  subject: Record<string, string> = {}
+  subject: Subject = {}
 ) => {
   const request = {
     path,
@@ -33,9 +34,9 @@ const makeIncomingRequest = (
     body,
   }
 
-  const contextHeaders = {
-    [ContentfulHeader.SpaceId]: 'my-space',
-    [ContentfulHeader.EnvironmentId]: 'my-environment',
+  const contextHeaders: ContextHeaders = {
+    spaceId: 'my-space',
+    envId: 'my-environment',
     ...subject,
   }
 
@@ -76,7 +77,7 @@ describe('isVerifiedRequest', () => {
         },
       },
       now,
-      { [ContentfulUserIdHeader]: 'my-user' }
+      { userId: 'my-user' }
     )
 
     assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
@@ -91,7 +92,7 @@ describe('isVerifiedRequest', () => {
         },
       },
       now,
-      { [ContentfulAppIdHeader]: 'my-app' }
+      { appId: 'my-app' }
     )
 
     assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
@@ -133,7 +134,7 @@ describe('isVerifiedRequest', () => {
   describe('with contentful headers', () => {
     it('verifies correctly with keys with different casing', () => {
       const incomingRequest = makeIncomingRequest({}, Date.now(), {
-        [ContentfulUserIdHeader]: 'my-user',
+        userId: 'my-user',
       })
 
       // mess with casing
@@ -159,7 +160,7 @@ describe('isVerifiedRequest', () => {
     })
     it('verifies correctly with keys with whitespace', () => {
       const incomingRequest = makeIncomingRequest({}, Date.now(), {
-        [ContentfulAppIdHeader]: 'my-app',
+        appId: 'my-app',
       })
 
       // mess with spacing

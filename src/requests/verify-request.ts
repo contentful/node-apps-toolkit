@@ -26,7 +26,7 @@ const isRequestTimestampTooOld = (ttl: number, timestamp: Timestamp) => {
 }
 
 /**
- * Given a secret verifies a CanonicalRequest. Throws when signature is older than `rawTimeToLive` seconds.
+ * Given a secret verifies a CanonicalRequest. It also throws when signature is older than `rawTimeToLive` seconds.
  * Pass `rawTimeToLive = 0` to disable TTL checks.
  *
  * ~~~

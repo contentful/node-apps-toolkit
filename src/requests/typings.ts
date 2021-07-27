@@ -88,11 +88,12 @@ export type NormalizedCanonicalRequest = {
   body: CanonicalRequest['body']
 }
 
-export type Subject = Partial<XOR<ContentfulHeaderWithApp, ContentfulHeaderWithUser>>
+export type Subject = Partial<XOR<{ appId: string }, { userId: string }>>
+export type SubjectHeader = Partial<XOR<ContentfulHeaderWithApp, ContentfulHeaderWithUser>>
 
 export type ContextHeaders = {
-  [ContentfulHeader.SpaceId]: string
-  [ContentfulHeader.EnvironmentId]: string
+  spaceId: string
+  envId: string
 } & Subject
 
-export type SignedRequestHeaders = { [key in ContentfulHeader]: string } & (Subject | {})
+export type SignedRequestHeaders = { [key in ContentfulHeader]: string } & (SubjectHeader | {})
