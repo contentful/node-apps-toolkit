@@ -1,7 +1,14 @@
 import * as assert from 'assert'
 
 import { verifyRequest } from './verify-request'
-import { ContentfulHeader, Secret } from './typings'
+import {
+  ContentfulHeader,
+  Secret,
+  ContentfulUserIdHeader,
+  ContentfulAppIdHeader,
+  ContextHeaders,
+  Subject,
+} from './typings'
 import { signRequest } from './sign-request'
 import { ExpiredRequestException } from './exceptions'
 
@@ -17,7 +24,8 @@ const makeIncomingRequest = (
     headers?: Record<string, string>
     body?: string
   },
-  now = Date.now()
+  now = Date.now(),
+  subject: Subject = {}
 ) => {
   const request = {
     path,
@@ -26,7 +34,13 @@ const makeIncomingRequest = (
     body,
   }
 
-  const signedHeaders = signRequest(VALID_SECRET, request, now)
+  const contextHeaders: ContextHeaders = {
+    spaceId: 'my-space',
+    envId: 'my-environment',
+    ...subject,
+  }
+
+  const signedHeaders = signRequest(VALID_SECRET, request, now, contextHeaders as ContextHeaders)
 
   return {
     ...request,
@@ -49,6 +63,36 @@ describe('isVerifiedRequest', () => {
         },
       },
       now
+    )
+
+    assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
+  })
+
+  it('verifies a verified request with user-id', () => {
+    const now = Date.now()
+    const incomingRequest = makeIncomingRequest(
+      {
+        headers: {
+          Authorization: 'Bearer TOKEN',
+        },
+      },
+      now,
+      { userId: 'my-user' }
+    )
+
+    assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
+  })
+
+  it('verifies a verified request with app-id', () => {
+    const now = Date.now()
+    const incomingRequest = makeIncomingRequest(
+      {
+        headers: {
+          Authorization: 'Bearer TOKEN',
+        },
+      },
+      now,
+      { appId: 'my-app' }
     )
 
     assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
@@ -89,7 +133,9 @@ describe('isVerifiedRequest', () => {
 
   describe('with contentful headers', () => {
     it('verifies correctly with keys with different casing', () => {
-      const incomingRequest = makeIncomingRequest({})
+      const incomingRequest = makeIncomingRequest({}, Date.now(), {
+        userId: 'my-user',
+      })
 
       // mess with casing
       incomingRequest.headers[ContentfulHeader.Signature.toUpperCase()] =
@@ -98,16 +144,24 @@ describe('isVerifiedRequest', () => {
         incomingRequest.headers[ContentfulHeader.SignedHeaders]
       incomingRequest.headers[ContentfulHeader.Timestamp.toUpperCase()] =
         incomingRequest.headers[ContentfulHeader.Timestamp]
+      incomingRequest.headers[ContentfulHeader.SpaceId.toUpperCase()] =
+        incomingRequest.headers[ContentfulHeader.SpaceId]
+      incomingRequest.headers[ContentfulUserIdHeader.toUpperCase()] =
+        incomingRequest.headers[ContentfulUserIdHeader]
 
       // remove correctly cased ones
       delete incomingRequest.headers[ContentfulHeader.Signature]
       delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
       delete incomingRequest.headers[ContentfulHeader.Timestamp]
+      delete incomingRequest.headers[ContentfulHeader.SpaceId]
+      delete incomingRequest.headers[ContentfulUserIdHeader]
 
       assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
     it('verifies correctly with keys with whitespace', () => {
-      const incomingRequest = makeIncomingRequest({})
+      const incomingRequest = makeIncomingRequest({}, Date.now(), {
+        appId: 'my-app',
+      })
 
       // mess with spacing
       incomingRequest.headers[`${ContentfulHeader.Signature}      `] =
@@ -116,11 +170,17 @@ describe('isVerifiedRequest', () => {
         incomingRequest.headers[ContentfulHeader.SignedHeaders]
       incomingRequest.headers[`      ${ContentfulHeader.Timestamp}`] =
         incomingRequest.headers[ContentfulHeader.Timestamp]
+      incomingRequest.headers[` ${ContentfulHeader.SpaceId} `] =
+        incomingRequest.headers[ContentfulHeader.SpaceId]
+      incomingRequest.headers[`  ${ContentfulAppIdHeader}  `] =
+        incomingRequest.headers[ContentfulAppIdHeader]
 
       // remove correctly spaced ones
       delete incomingRequest.headers[ContentfulHeader.Signature]
       delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
       delete incomingRequest.headers[ContentfulHeader.Timestamp]
+      delete incomingRequest.headers[ContentfulAppIdHeader]
+      delete incomingRequest.headers[ContentfulHeader.SpaceId]
 
       assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
