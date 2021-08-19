@@ -64,6 +64,13 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
+							<h3>Variables</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-variable"><a href="globals.html#contentfulappidheader" class="tsd-kind-icon">Contentful<wbr>App<wbr>IdHeader</a></li>
+								<li class="tsd-kind-variable"><a href="globals.html#contentfuluseridheader" class="tsd-kind-icon">Contentful<wbr>User<wbr>IdHeader</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Keys Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function"><a href="globals.html#getmanagementtoken" class="tsd-kind-icon">get<wbr>Management<wbr>Token</a></li>
@@ -74,6 +81,43 @@
 								<li class="tsd-kind-function"><a href="globals.html#verifyrequest" class="tsd-kind-icon">verify<wbr>Request</a></li>
 							</ul>
 						</section>
+					</div>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Variables</h2>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="contentfulappidheader" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Contentful<wbr>App<wbr>IdHeader</h3>
+					<div class="tsd-signature tsd-kind-icon">Contentful<wbr>App<wbr>IdHeader<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"x-contentful-app-id"</span><span class="tsd-signature-symbol"> = &quot;x-contentful-app-id&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/typings.ts#L16">requests/typings.ts:16</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>deprecated</dt>
+							<dd><p>Use object</p>
+							</dd>
+						</dl>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable">
+					<a name="contentfuluseridheader" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Contentful<wbr>User<wbr>IdHeader</h3>
+					<div class="tsd-signature tsd-kind-icon">Contentful<wbr>User<wbr>IdHeader<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">"x-contentful-user-id"</span><span class="tsd-signature-symbol"> = &quot;x-contentful-user-id&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/typings.ts#L20">requests/typings.ts:20</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-comment tsd-typography">
+						<dl class="tsd-comment-tags">
+							<dt>deprecated</dt>
+							<dd><p>Use object</p>
+							</dd>
+						</dl>
 					</div>
 				</section>
 			</section>
@@ -129,15 +173,15 @@ getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
 				<h2>Requests Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function">
 					<a name="signrequest" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> sign<wbr>Request</h3>
+					<h3>sign<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">sign<wbr>Request<span class="tsd-signature-symbol">(</span>rawSecret<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Secret</span>, rawCanonicalRequest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CanonicalRequest</span>, rawTimestamp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Timestamp</span>, rawContextHeaders<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ContextHeaders</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SignedRequestHeaders</span></li>
+						<li class="tsd-signature tsd-kind-icon">sign<wbr>Request<span class="tsd-signature-symbol">(</span>rawSecret<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Secret</span>, rawCanonicalRequest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CanonicalRequest</span>, rawTimestamp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Timestamp</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SignedRequestWithoutContextHeaders</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/sign-request.ts#L79">requests/sign-request.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/sign-request.ts#L71">requests/sign-request.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -155,13 +199,10 @@ getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
 									<h5>rawCanonicalRequest: <span class="tsd-signature-type">CanonicalRequest</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> rawTimestamp: <span class="tsd-signature-type">Timestamp</span><span class="tsd-signature-symbol"> = Date.now()</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> rawContextHeaders: <span class="tsd-signature-type">ContextHeaders</span><span class="tsd-signature-symbol"> = {} as ContextHeaders</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> rawTimestamp: <span class="tsd-signature-type">Timestamp</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SignedRequestHeaders</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SignedRequestWithoutContextHeaders</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -235,6 +276,12 @@ server.post(<span class="hljs-string">&#x27;/api/my-resources&#x27;</span>, <spa
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#contentfulappidheader" class="tsd-kind-icon">Contentful<wbr>App<wbr>IdHeader</a>
+					</li>
+					<li class=" tsd-kind-variable">
+						<a href="globals.html#contentfuluseridheader" class="tsd-kind-icon">Contentful<wbr>User<wbr>IdHeader</a>
+					</li>
 					<li class=" tsd-kind-function">
 						<a href="globals.html#getmanagementtoken" class="tsd-kind-icon">get<wbr>Management<wbr>Token</a>
 					</li>

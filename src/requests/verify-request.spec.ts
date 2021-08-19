@@ -1,32 +1,15 @@
 import * as assert from 'assert'
 
 import { verifyRequest } from './verify-request'
-import {
-  ContentfulHeader,
-  Secret,
-  ContentfulUserIdHeader,
-  ContentfulAppIdHeader,
-  ContextHeaders,
-  Subject,
-} from './typings'
+import { ContentfulHeader, Secret, CanonicalRequest, ContentfulContextHeader } from './typings'
 import { signRequest } from './sign-request'
 import { ExpiredRequestException } from './exceptions'
 
 const makeIncomingRequest = (
-  {
-    path = '/api/v1/resources/1',
-    method = 'GET',
-    headers,
-    body,
-  }: {
-    path?: string
-    method?: 'GET' | 'POST'
-    headers?: Record<string, string>
-    body?: string
-  },
+  { path = '/api/v1/resources/1', method = 'GET', headers, body }: Partial<CanonicalRequest>,
   now = Date.now(),
-  subject: Subject = {}
-) => {
+  subject = {}
+): CanonicalRequest & { headers: Record<string, string> } => {
   const request = {
     path,
     method,
@@ -34,20 +17,20 @@ const makeIncomingRequest = (
     body,
   }
 
-  const contextHeaders: ContextHeaders = {
+  const contextHeaders = {
     spaceId: 'my-space',
     envId: 'my-environment',
     ...subject,
   }
 
-  const signedHeaders = signRequest(VALID_SECRET, request, now, contextHeaders as ContextHeaders)
+  const signedHeaders = signRequest(VALID_SECRET, request, now, contextHeaders as any)
 
   return {
     ...request,
     headers: {
-      ...request.headers,
-      ...signedHeaders,
-    } as Record<string, string>,
+      ...(request.headers ?? {}),
+      ...(signedHeaders ?? {}),
+    },
   }
 }
 
@@ -144,17 +127,17 @@ describe('isVerifiedRequest', () => {
         incomingRequest.headers[ContentfulHeader.SignedHeaders]
       incomingRequest.headers[ContentfulHeader.Timestamp.toUpperCase()] =
         incomingRequest.headers[ContentfulHeader.Timestamp]
-      incomingRequest.headers[ContentfulHeader.SpaceId.toUpperCase()] =
-        incomingRequest.headers[ContentfulHeader.SpaceId]
-      incomingRequest.headers[ContentfulUserIdHeader.toUpperCase()] =
-        incomingRequest.headers[ContentfulUserIdHeader]
+      incomingRequest.headers[ContentfulContextHeader.SpaceId.toUpperCase()] =
+        incomingRequest.headers[ContentfulContextHeader.SpaceId]
+      incomingRequest.headers[ContentfulContextHeader.UserId.toUpperCase()] =
+        incomingRequest.headers[ContentfulContextHeader.UserId]
 
       // remove correctly cased ones
       delete incomingRequest.headers[ContentfulHeader.Signature]
       delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
       delete incomingRequest.headers[ContentfulHeader.Timestamp]
-      delete incomingRequest.headers[ContentfulHeader.SpaceId]
-      delete incomingRequest.headers[ContentfulUserIdHeader]
+      delete incomingRequest.headers[ContentfulContextHeader.SpaceId]
+      delete incomingRequest.headers[ContentfulContextHeader.UserId]
 
       assert(verifyRequest(VALID_SECRET, incomingRequest))
     })
@@ -170,17 +153,17 @@ describe('isVerifiedRequest', () => {
         incomingRequest.headers[ContentfulHeader.SignedHeaders]
       incomingRequest.headers[`      ${ContentfulHeader.Timestamp}`] =
         incomingRequest.headers[ContentfulHeader.Timestamp]
-      incomingRequest.headers[` ${ContentfulHeader.SpaceId} `] =
-        incomingRequest.headers[ContentfulHeader.SpaceId]
-      incomingRequest.headers[`  ${ContentfulAppIdHeader}  `] =
-        incomingRequest.headers[ContentfulAppIdHeader]
+      incomingRequest.headers[` ${ContentfulContextHeader.SpaceId} `] =
+        incomingRequest.headers[ContentfulContextHeader.SpaceId]
+      incomingRequest.headers[`  ${ContentfulContextHeader.AppId}  `] =
+        incomingRequest.headers[ContentfulContextHeader.AppId]
 
       // remove correctly spaced ones
       delete incomingRequest.headers[ContentfulHeader.Signature]
       delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
       delete incomingRequest.headers[ContentfulHeader.Timestamp]
-      delete incomingRequest.headers[ContentfulAppIdHeader]
-      delete incomingRequest.headers[ContentfulHeader.SpaceId]
+      delete incomingRequest.headers[ContentfulContextHeader.AppId]
+      delete incomingRequest.headers[ContentfulContextHeader.SpaceId]
 
       assert(verifyRequest(VALID_SECRET, incomingRequest))
     })

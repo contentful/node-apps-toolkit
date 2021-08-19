@@ -2,26 +2,29 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 import * as runtypes from 'runtypes'
-import { XOR } from 'ts-xor'
+import { ValueOf } from '../utils/types'
 
-export enum ContentfulHeader {
-  Timestamp = 'x-contentful-timestamp',
-  SignedHeaders = 'x-contentful-signed-headers',
-  Signature = 'x-contentful-signature',
-  SpaceId = 'x-contentful-space-id',
-  EnvironmentId = 'x-contentful-environment-id',
-}
+export const ContentfulHeader = {
+  Timestamp: 'x-contentful-timestamp',
+  SignedHeaders: 'x-contentful-signed-headers',
+  Signature: 'x-contentful-signature',
+} as const
 
-export const ContentfulUserIdHeader = 'x-contentful-user-id'
+/**
+ * @deprecated Use object
+ */
 export const ContentfulAppIdHeader = 'x-contentful-app-id'
+/**
+ * @deprecated Use object
+ */
+export const ContentfulUserIdHeader = 'x-contentful-user-id'
 
-type ContentfulHeaderWithApp = {
-  [ContentfulAppIdHeader]: string
-}
-
-type ContentfulHeaderWithUser = {
-  [ContentfulUserIdHeader]: string
-}
+export const ContentfulContextHeader = {
+  SpaceId: 'x-contentful-space-id',
+  EnvironmentId: 'x-contentful-environment-id',
+  UserId: 'x-contentful-user-id',
+  AppId: 'x-contentful-app-id',
+} as const
 
 const MethodValidator = runtypes.Union(
   runtypes.Literal('GET'),
@@ -88,12 +91,32 @@ export type NormalizedCanonicalRequest = {
   body: CanonicalRequest['body']
 }
 
-export type Subject = Partial<XOR<{ appId: string }, { userId: string }>>
-export type SubjectHeader = Partial<XOR<ContentfulHeaderWithApp, ContentfulHeaderWithUser>>
+export type SubjectHeadersApp = { appId: string }
+export type AppContextSignedHeaders = { [ContentfulContextHeader.AppId]: string }
+export type SubjectHeadersUser = { userId: string }
+export type UserContextSignedHeaders = { [ContentfulContextHeader.UserId]: string }
 
-export type ContextHeaders = {
+export type ContextHeaders<T> = {
   spaceId: string
   envId: string
-} & Subject
+} & T
 
-export type SignedRequestHeaders = { [key in ContentfulHeader]: string } & (SubjectHeader | {})
+type ContextSignedHeaders = {
+  [ContentfulContextHeader.SpaceId]: string
+  [ContentfulContextHeader.EnvironmentId]: string
+}
+
+export type SignedContextHeaders<T> = ContextSignedHeaders & T
+
+export type SignedRequestWithoutContextHeaders = {
+  [key in ValueOf<typeof ContentfulHeader>]: string
+}
+export type SignedRequestWithContextHeadersWithUser = SignedRequestWithoutContextHeaders &
+  SignedContextHeaders<UserContextSignedHeaders>
+export type SignedRequestWithContextHeadersWithApp = SignedRequestWithoutContextHeaders &
+  SignedContextHeaders<AppContextSignedHeaders>
+
+export type SignedRequestHeaders =
+  | SignedRequestWithContextHeadersWithUser
+  | SignedRequestWithContextHeadersWithApp
+  | SignedRequestWithoutContextHeaders

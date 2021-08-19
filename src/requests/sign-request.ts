@@ -3,13 +3,14 @@ import {
   CanonicalRequest,
   NormalizedCanonicalRequest,
   Secret,
-  SignedRequestHeaders,
   Timestamp,
   ContentfulHeader,
-  ContentfulAppIdHeader,
-  ContentfulUserIdHeader,
   ContextHeaders,
-  SubjectHeader,
+  SignedRequestWithoutContextHeaders,
+  SubjectHeadersApp,
+  SubjectHeadersUser,
+  SignedRequestWithContextHeadersWithApp,
+  SignedRequestWithContextHeadersWithUser,
 } from './typings'
 import { CanonicalRequestValidator, SecretValidator, TimestampValidator } from './typings'
 import {
@@ -59,51 +60,58 @@ const getSortedAndSignedHeaders = (headers: Record<string, string>, timestamp: n
   return { sortedHeaders, signedHeaders }
 }
 
-const getSubjectHeaders = (contextHeaders: any): SubjectHeader => {
-  let headers: SubjectHeader = {}
-
-  if (contextHeaders[ContentfulUserIdHeader]) {
-    headers[ContentfulUserIdHeader] = contextHeaders[ContentfulUserIdHeader]
-  } else if (contextHeaders[ContentfulAppIdHeader]) {
-    headers[ContentfulAppIdHeader] = contextHeaders[ContentfulAppIdHeader]
-  }
-
-  return headers
-}
-
 /**
  * Given a secret, a canonical request, a timestamp and context headers, generates a signature.
  * ~~~
  * @category Requests
  */
-export const signRequest = (
+// Remove when this eslint rule covers all the cases
+// https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
+/*eslint-disable no-unused-vars, no-redeclare*/
+export function signRequest(
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
-  rawTimestamp: Timestamp = Date.now(),
-  rawContextHeaders: ContextHeaders = {} as ContextHeaders
-): SignedRequestHeaders => {
+  rawTimestamp?: Timestamp
+): SignedRequestWithoutContextHeaders
+export function signRequest(
+  rawSecret: Secret,
+  rawCanonicalRequest: CanonicalRequest,
+  rawTimestamp?: Timestamp,
+  rawContext?: ContextHeaders<SubjectHeadersApp>
+): SignedRequestWithContextHeadersWithApp
+export function signRequest(
+  rawSecret: Secret,
+  rawCanonicalRequest: CanonicalRequest,
+  rawTimestamp?: Timestamp,
+  rawContext?: ContextHeaders<SubjectHeadersUser>
+): SignedRequestWithContextHeadersWithUser
+export function signRequest(
+  rawSecret: Secret,
+  rawCanonicalRequest: CanonicalRequest,
+  rawTimestamp?: Timestamp,
+  rawContext?: any
+) {
+  const maybeDefaultTimestamp = rawTimestamp ?? Date.now()
   const canonicalRequest: CanonicalRequest = CanonicalRequestValidator.check(rawCanonicalRequest)
-  const timestamp: Timestamp = TimestampValidator.check(rawTimestamp)
+  const timestamp: Timestamp = TimestampValidator.check(maybeDefaultTimestamp)
   const secret: Secret = SecretValidator.check(rawSecret)
 
   const path = getNormalizedEncodedURI(canonicalRequest.path)
   const method = canonicalRequest.method
   const headers = canonicalRequest.headers ? normalizeHeaders(canonicalRequest.headers) : {}
   const body = canonicalRequest.body ?? ''
-  const contextHeaders = normalizeContextHeaders(rawContextHeaders)
-  const subject = getSubjectHeaders(contextHeaders)
 
-  const { sortedHeaders, signedHeaders } = getSortedAndSignedHeaders(
-    { ...headers, ...(contextHeaders as Record<string, string>) },
-    timestamp
-  )
+  const contextHeaders = rawContext ? normalizeContextHeaders(rawContext) : {}
+
+  const { sortedHeaders, signedHeaders } = contextHeaders
+    ? getSortedAndSignedHeaders({ ...headers, ...contextHeaders }, timestamp)
+    : getSortedAndSignedHeaders(headers, timestamp)
 
   return {
     [ContentfulHeader.Signature]: hash({ method, headers: sortedHeaders, path, body }, secret),
     [ContentfulHeader.SignedHeaders]: signedHeaders,
     [ContentfulHeader.Timestamp]: timestamp.toString(),
-    [ContentfulHeader.SpaceId]: rawContextHeaders.spaceId,
-    [ContentfulHeader.EnvironmentId]: rawContextHeaders.envId,
-    ...subject,
+    ...contextHeaders,
   }
 }
+/*eslint-enable no-unused-vars,no-redeclare */
