@@ -5,7 +5,7 @@ import {
   Secret,
   Timestamp,
   ContentfulHeader,
-  ContextHeaders,
+  Context,
   SignedRequestWithoutContextHeaders,
   SubjectHeadersApp,
   SubjectHeadersUser,
@@ -77,13 +77,13 @@ export function signRequest(
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
   rawTimestamp?: Timestamp,
-  rawContext?: ContextHeaders<SubjectHeadersApp>
+  rawContext?: Context<SubjectHeadersApp>
 ): SignedRequestWithContextHeadersWithApp
 export function signRequest(
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
   rawTimestamp?: Timestamp,
-  rawContext?: ContextHeaders<SubjectHeadersUser>
+  rawContext?: Context<SubjectHeadersUser>
 ): SignedRequestWithContextHeadersWithUser
 export function signRequest(
   rawSecret: Secret,

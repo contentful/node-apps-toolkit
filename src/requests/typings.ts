@@ -86,17 +86,18 @@ export type AppContextSignedHeaders = { [ContentfulContextHeader.AppId]: string 
 export type SubjectHeadersUser = { userId: string }
 export type UserContextSignedHeaders = { [ContentfulContextHeader.UserId]: string }
 
-export type ContextHeaders<T> = {
+export type Context<SubjectContext> = {
   spaceId: string
   envId: string
-} & T
+} & SubjectContext
 
-type ContextSignedHeaders = {
+type SignedHeadersWithoutSubject = {
   [ContentfulContextHeader.SpaceId]: string
   [ContentfulContextHeader.EnvironmentId]: string
 }
 
-export type SignedContextHeaders<T> = ContextSignedHeaders & T
+export type SignedContextHeaders<SubjectSignedHeaders> = SignedHeadersWithoutSubject &
+  SubjectSignedHeaders
 
 export type SignedRequestWithoutContextHeaders = {
   [key in ContentfulHeader]: string

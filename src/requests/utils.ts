@@ -2,7 +2,7 @@ import * as querystring from 'querystring'
 import {
   AppContextSignedHeaders,
   ContentfulContextHeader,
-  ContextHeaders,
+  Context,
   SignedContextHeaders,
   SubjectHeadersApp,
   SubjectHeadersUser,
@@ -46,22 +46,20 @@ const contextHeadersMap: Record<string, ContentfulContextHeader> = {
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars, no-redeclare*/
 export function normalizeContextHeaders(
-  rawContext: ContextHeaders<SubjectHeadersApp>
+  rawContext: Context<SubjectHeadersApp>
 ): SignedContextHeaders<AppContextSignedHeaders>
 export function normalizeContextHeaders(
-  rawContext: ContextHeaders<SubjectHeadersUser>
+  rawContext: Context<SubjectHeadersUser>
 ): SignedContextHeaders<UserContextSignedHeaders>
 export function normalizeContextHeaders(
-  rawContext: ContextHeaders<SubjectHeadersApp> | ContextHeaders<SubjectHeadersUser>
+  rawContext: Context<SubjectHeadersApp> | Context<SubjectHeadersUser>
 ) {
   return Object.keys(rawContext).reduce((acc, header) => {
     if (contextHeadersMap[header]) {
       const key = normalizeHeaderKey(contextHeadersMap[header]) as ContentfulContextHeader
       acc[key] = normalizeHeaderValue(
         acc[key] ??
-          rawContext[
-            header as keyof (ContextHeaders<SubjectHeadersUser> | ContextHeaders<SubjectHeadersApp>)
-          ]
+          rawContext[header as keyof (Context<SubjectHeadersUser> | Context<SubjectHeadersApp>)]
       )
     }
     return acc

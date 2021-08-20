@@ -6,7 +6,7 @@ import {
   Secret,
   CanonicalRequest,
   ContentfulContextHeader,
-  ContextHeaders,
+  Context,
 } from './typings'
 import { signRequest } from './sign-request'
 import { ExpiredRequestException } from './exceptions'
@@ -23,7 +23,7 @@ const makeContextHeaders = (subject?: { appId: string } | { userId: string }) =>
 
 const makeIncomingRequest = (
   { path = '/api/v1/resources/1', method = 'GET', headers, body }: Partial<CanonicalRequest>,
-  contextHeaders: undefined | ContextHeaders<any>,
+  contextHeaders: undefined | Context<any>,
   now = Date.now()
 ): CanonicalRequest & { headers: Record<string, string> } => {
   const request = {
