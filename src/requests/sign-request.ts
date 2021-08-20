@@ -111,7 +111,7 @@ export function signRequest(
     [ContentfulHeader.Signature]: hash({ method, headers: sortedHeaders, path, body }, secret),
     [ContentfulHeader.SignedHeaders]: signedHeaders,
     [ContentfulHeader.Timestamp]: timestamp.toString(),
-    ...contextHeaders,
+    ...(contextHeaders ?? {}),
   }
 }
 /*eslint-enable no-unused-vars,no-redeclare */
