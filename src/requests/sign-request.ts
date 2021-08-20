@@ -101,7 +101,7 @@ export function signRequest(
   const headers = canonicalRequest.headers ? normalizeHeaders(canonicalRequest.headers) : {}
   const body = canonicalRequest.body ?? ''
 
-  const contextHeaders = rawContext ? normalizeContextHeaders(rawContext) : {}
+  const contextHeaders = rawContext ? normalizeContextHeaders(rawContext) : undefined
 
   const { sortedHeaders, signedHeaders } = contextHeaders
     ? getSortedAndSignedHeaders({ ...headers, ...contextHeaders }, timestamp)

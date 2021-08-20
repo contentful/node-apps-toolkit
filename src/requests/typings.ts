@@ -2,29 +2,19 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 import * as runtypes from 'runtypes'
-import { ValueOf } from '../utils/types'
 
-export const ContentfulHeader = {
-  Timestamp: 'x-contentful-timestamp',
-  SignedHeaders: 'x-contentful-signed-headers',
-  Signature: 'x-contentful-signature',
-} as const
+export const enum ContentfulHeader {
+  Timestamp = 'x-contentful-timestamp',
+  SignedHeaders = 'x-contentful-signed-headers',
+  Signature = 'x-contentful-signature',
+}
 
-/**
- * @deprecated Use object
- */
-export const ContentfulAppIdHeader = 'x-contentful-app-id'
-/**
- * @deprecated Use object
- */
-export const ContentfulUserIdHeader = 'x-contentful-user-id'
-
-export const ContentfulContextHeader = {
-  SpaceId: 'x-contentful-space-id',
-  EnvironmentId: 'x-contentful-environment-id',
-  UserId: 'x-contentful-user-id',
-  AppId: 'x-contentful-app-id',
-} as const
+export const enum ContentfulContextHeader {
+  SpaceId = 'x-contentful-space-id',
+  EnvironmentId = 'x-contentful-environment-id',
+  UserId = 'x-contentful-user-id',
+  AppId = 'x-contentful-app-id',
+}
 
 const MethodValidator = runtypes.Union(
   runtypes.Literal('GET'),
@@ -109,7 +99,7 @@ type ContextSignedHeaders = {
 export type SignedContextHeaders<T> = ContextSignedHeaders & T
 
 export type SignedRequestWithoutContextHeaders = {
-  [key in ValueOf<typeof ContentfulHeader>]: string
+  [key in ContentfulHeader]: string
 }
 export type SignedRequestWithContextHeadersWithUser = SignedRequestWithoutContextHeaders &
   SignedContextHeaders<UserContextSignedHeaders>
