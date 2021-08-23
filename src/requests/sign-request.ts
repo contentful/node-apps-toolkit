@@ -101,17 +101,18 @@ export function signRequest(
   const headers = canonicalRequest.headers ? normalizeHeaders(canonicalRequest.headers) : {}
   const body = canonicalRequest.body ?? ''
 
-  const contextHeaders = rawContext ? normalizeContextHeaders(rawContext) : undefined
+  const contextHeaders = rawContext ? normalizeContextHeaders(rawContext) : {}
 
-  const { sortedHeaders, signedHeaders } = contextHeaders
-    ? getSortedAndSignedHeaders({ ...headers, ...contextHeaders }, timestamp)
-    : getSortedAndSignedHeaders(headers, timestamp)
+  const { sortedHeaders, signedHeaders } = getSortedAndSignedHeaders(
+    { ...headers, ...contextHeaders },
+    timestamp
+  )
 
   return {
     [ContentfulHeader.Signature]: hash({ method, headers: sortedHeaders, path, body }, secret),
     [ContentfulHeader.SignedHeaders]: signedHeaders,
     [ContentfulHeader.Timestamp]: timestamp.toString(),
-    ...(contextHeaders ?? {}),
+    ...contextHeaders,
   }
 }
 /*eslint-enable no-unused-vars,no-redeclare */
