@@ -129,15 +129,15 @@ getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
 				<h2>Requests Functions</h2>
 				<section class="tsd-panel tsd-member tsd-kind-function">
 					<a name="signrequest" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagConst">Const</span> sign<wbr>Request</h3>
+					<h3>sign<wbr>Request</h3>
 					<ul class="tsd-signatures tsd-kind-function">
-						<li class="tsd-signature tsd-kind-icon">sign<wbr>Request<span class="tsd-signature-symbol">(</span>rawSecret<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Secret</span>, rawCanonicalRequest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CanonicalRequest</span>, rawTimestamp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Timestamp</span>, rawContextHeaders<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">ContextHeaders</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SignedRequestHeaders</span></li>
+						<li class="tsd-signature tsd-kind-icon">sign<wbr>Request<span class="tsd-signature-symbol">(</span>rawSecret<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Secret</span>, rawCanonicalRequest<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">CanonicalRequest</span>, rawTimestamp<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Timestamp</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">SignedRequestWithoutContextHeaders</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/sign-request.ts#L79">requests/sign-request.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/contentful/node-apps-toolkit/blob/master/src/requests/sign-request.ts#L71">requests/sign-request.ts:71</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -155,13 +155,10 @@ getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
 									<h5>rawCanonicalRequest: <span class="tsd-signature-type">CanonicalRequest</span></h5>
 								</li>
 								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> rawTimestamp: <span class="tsd-signature-type">Timestamp</span><span class="tsd-signature-symbol"> = Date.now()</span></h5>
-								</li>
-								<li>
-									<h5><span class="tsd-flag ts-flagDefault value">Default value</span> rawContextHeaders: <span class="tsd-signature-type">ContextHeaders</span><span class="tsd-signature-symbol"> = {} as ContextHeaders</span></h5>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> rawTimestamp: <span class="tsd-signature-type">Timestamp</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SignedRequestHeaders</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">SignedRequestWithoutContextHeaders</span></h4>
 						</li>
 					</ul>
 				</section>

@@ -1,10 +1,12 @@
 import * as querystring from 'querystring'
 import {
-  ContextHeaders,
-  ContentfulHeader,
-  ContentfulUserIdHeader,
-  ContentfulAppIdHeader,
-  SignedRequestHeaders,
+  AppContextSignedHeaders,
+  ContentfulContextHeader,
+  Context,
+  SignedContextHeaders,
+  SubjectHeadersApp,
+  SubjectHeadersUser,
+  UserContextSignedHeaders,
 } from './typings'
 
 export const getNormalizedEncodedURI = (uri: string) => {
@@ -33,23 +35,37 @@ export const pickHeaders = (headers?: Record<string, string>, keys?: string[]) =
   return filter(headers, ([key]) => keys.includes(key))
 }
 
-const contextHeadersMap: Record<string, string> = {
-  spaceId: ContentfulHeader.SpaceId as const,
-  envId: ContentfulHeader.EnvironmentId as const,
-  appId: ContentfulAppIdHeader,
-  userId: ContentfulUserIdHeader,
+const contextHeadersMap: Record<string, ContentfulContextHeader> = {
+  spaceId: ContentfulContextHeader.SpaceId,
+  envId: ContentfulContextHeader.EnvironmentId,
+  appId: ContentfulContextHeader.AppId,
+  userId: ContentfulContextHeader.UserId,
 }
-export const normalizeContextHeaders = (
-  rawContextHeaders: ContextHeaders
-): Partial<SignedRequestHeaders> => {
-  return Object.keys(rawContextHeaders).reduce((acc, curr) => {
-    if (contextHeadersMap[curr]) {
-      let key = contextHeadersMap[curr]
-      acc[key] = acc[key] ?? rawContextHeaders[curr as keyof ContextHeaders]
+
+// Remove when this eslint rule covers all the cases
+// https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
+/*eslint-disable no-unused-vars, no-redeclare*/
+export function normalizeContextHeaders(
+  rawContext: Context<SubjectHeadersApp>
+): SignedContextHeaders<AppContextSignedHeaders>
+export function normalizeContextHeaders(
+  rawContext: Context<SubjectHeadersUser>
+): SignedContextHeaders<UserContextSignedHeaders>
+export function normalizeContextHeaders(
+  rawContext: Context<SubjectHeadersApp> | Context<SubjectHeadersUser>
+) {
+  return Object.keys(rawContext).reduce((acc, header) => {
+    if (contextHeadersMap[header]) {
+      const key = normalizeHeaderKey(contextHeadersMap[header]) as ContentfulContextHeader
+      acc[key] = normalizeHeaderValue(
+        acc[key] ??
+          rawContext[header as keyof (Context<SubjectHeadersUser> | Context<SubjectHeadersApp>)]
+      )
     }
     return acc
-  }, {} as Record<string, string>)
+  }, {} as Record<ContentfulContextHeader, string>)
 }
+/*eslint-enable no-unused-vars, no-redeclare*/
 
 // Remove when this eslint rule covers all the cases
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md

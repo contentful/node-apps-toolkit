@@ -176,5 +176,11 @@ describe('create-signature', () => {
         signRequest(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP)
       )
     })
+
+    it('does not return undefined headers', () => {
+      const result = signRequest(VALID_SECRET, VALID_REQUEST, undefined)
+
+      assert.ok(Object.values(result).every((h) => typeof h !== 'undefined'))
+    })
   })
 })

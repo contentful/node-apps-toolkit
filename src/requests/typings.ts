@@ -2,25 +2,18 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 import * as runtypes from 'runtypes'
-import { XOR } from 'ts-xor'
 
-export enum ContentfulHeader {
+export const enum ContentfulHeader {
   Timestamp = 'x-contentful-timestamp',
   SignedHeaders = 'x-contentful-signed-headers',
   Signature = 'x-contentful-signature',
+}
+
+export const enum ContentfulContextHeader {
   SpaceId = 'x-contentful-space-id',
   EnvironmentId = 'x-contentful-environment-id',
-}
-
-export const ContentfulUserIdHeader = 'x-contentful-user-id'
-export const ContentfulAppIdHeader = 'x-contentful-app-id'
-
-type ContentfulHeaderWithApp = {
-  [ContentfulAppIdHeader]: string
-}
-
-type ContentfulHeaderWithUser = {
-  [ContentfulUserIdHeader]: string
+  UserId = 'x-contentful-user-id',
+  AppId = 'x-contentful-app-id',
 }
 
 const MethodValidator = runtypes.Union(
@@ -88,12 +81,33 @@ export type NormalizedCanonicalRequest = {
   body: CanonicalRequest['body']
 }
 
-export type Subject = Partial<XOR<{ appId: string }, { userId: string }>>
-export type SubjectHeader = Partial<XOR<ContentfulHeaderWithApp, ContentfulHeaderWithUser>>
+export type SubjectHeadersApp = { appId: string }
+export type AppContextSignedHeaders = { [ContentfulContextHeader.AppId]: string }
+export type SubjectHeadersUser = { userId: string }
+export type UserContextSignedHeaders = { [ContentfulContextHeader.UserId]: string }
 
-export type ContextHeaders = {
+export type Context<SubjectContext> = {
   spaceId: string
   envId: string
-} & Subject
+} & SubjectContext
 
-export type SignedRequestHeaders = { [key in ContentfulHeader]: string } & (SubjectHeader | {})
+type SignedHeadersWithoutSubject = {
+  [ContentfulContextHeader.SpaceId]: string
+  [ContentfulContextHeader.EnvironmentId]: string
+}
+
+export type SignedContextHeaders<SubjectSignedHeaders> = SignedHeadersWithoutSubject &
+  SubjectSignedHeaders
+
+export type SignedRequestWithoutContextHeaders = {
+  [key in ContentfulHeader]: string
+}
+export type SignedRequestWithContextHeadersWithUser = SignedRequestWithoutContextHeaders &
+  SignedContextHeaders<UserContextSignedHeaders>
+export type SignedRequestWithContextHeadersWithApp = SignedRequestWithoutContextHeaders &
+  SignedContextHeaders<AppContextSignedHeaders>
+
+export type SignedRequestHeaders =
+  | SignedRequestWithContextHeadersWithUser
+  | SignedRequestWithContextHeadersWithApp
+  | SignedRequestWithoutContextHeaders
