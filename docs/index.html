@@ -1,131 +1,29 @@
-<!doctype html>
-<html class="default no-js">
-<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>contentful-node-apps-toolkit</title>
-	<meta name="description" content="Documentation for contentful-node-apps-toolkit">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="assets/css/main.css">
-</head>
-<body>
-<header>
-	<div class="tsd-page-toolbar">
-		<div class="container">
-			<div class="table-wrap">
-				<div class="table-cell" id="tsd-search" data-index="assets/js/search.json" data-base=".">
-					<div class="field">
-						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
-						<input id="tsd-search-field" type="text" />
-					</div>
-					<ul class="results">
-						<li class="state loading">Preparing search index...</li>
-						<li class="state failure">The search index is not available</li>
-					</ul>
-					<a href="index.html" class="title">contentful-node-apps-toolkit</a>
-				</div>
-				<div class="table-cell" id="tsd-widgets">
-					<div id="tsd-filter">
-						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
-						<div class="tsd-filter-group">
-							<div class="tsd-select" id="tsd-filter-visibility">
-								<span class="tsd-select-label">All</span>
-								<ul class="tsd-select-list">
-									<li data-value="public">Public</li>
-									<li data-value="protected">Public/Protected</li>
-									<li data-value="private" class="selected">All</li>
-								</ul>
-							</div>
-							<input type="checkbox" id="tsd-filter-inherited" checked />
-							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
-						</div>
-					</div>
-					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="tsd-page-title">
-		<div class="container">
-			<ul class="tsd-breadcrumb">
-				<li>
-					<a href="globals.html">Globals</a>
-				</li>
-			</ul>
-			<h1>contentful-node-apps-toolkit</h1>
-		</div>
-	</div>
-</header>
-<div class="container container-main">
-	<div class="row">
-		<div class="col-8 col-content">
-			<div class="tsd-panel tsd-typography">
-				<a href="#node-toolkit-for-contentful-apps" id="node-toolkit-for-contentful-apps" style="color: inherit; text-decoration: none;">
-					<h1>Node Toolkit for Contentful Apps</h1>
-				</a>
-				<p>The <code>node-apps-toolkit</code> is a growing collection of helpers and utilities for building <a href="https://www.contentful.com/developers/docs/extensibility/app-framework/">Contentful Apps</a> with Node.js.</p>
-				<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
-					<h2>Installation</h2>
-				</a>
-				<pre><code class="language-shell">npm install --save @contentful/node-apps-toolkit
-<span class="hljs-meta">#</span><span class="bash"> or</span>
-yarn add @contentful/node-apps-toolkit</code></pre>
-				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
-					<h2>Usage</h2>
-				</a>
-				<pre><code class="language-js"><span class="hljs-keyword">const</span> { getManagementToken } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;@contentful/node-apps-toolkit&#x27;</span>);
-<span class="hljs-keyword">const</span> { appInstallationId, spaceId, privateKey } = <span class="hljs-built_in">require</span>(<span class="hljs-string">&#x27;./some-constants&#x27;</span>);
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>contentful-node-apps-toolkit</title><meta name="description" content="Documentation for contentful-node-apps-toolkit"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">contentful-node-apps-toolkit</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1> contentful-node-apps-toolkit</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography">
+<a href="#node-toolkit-for-contentful-apps" id="node-toolkit-for-contentful-apps" style="color: inherit; text-decoration: none;">
+  <h1>Node Toolkit for Contentful Apps</h1>
+</a>
+<p>The <code>node-apps-toolkit</code> is a growing collection of helpers and utilities for building <a href="https://www.contentful.com/developers/docs/extensibility/app-framework/">Contentful Apps</a> with Node.js.</p>
 
-getManagementToken(privateKey, {appInstallationId, spaceId})
-    .then(<span class="hljs-function">(<span class="hljs-params">token</span>) =&gt;</span> {
-      <span class="hljs-built_in">console</span>.log(<span class="hljs-string">&#x27;Here is your app token:&#x27;</span>, token)
-    })</code></pre>
-				<p>For more information, check out the full <a href="https://contentful.github.io/node-apps-toolkit/">API documentation</a>.</p>
-				<a href="#more-coming-soon" id="more-coming-soon" style="color: inherit; text-decoration: none;">
-					<h2>More coming soon</h2>
-				</a>
-				<p>We&#39;re excited to expand this toolkit with new features. If you have any suggestions or requests for features you&#39;d like to see, please <a href="https://github.com/contentful/node-apps-toolkit/issues/new">create an issue</a> in this repo.</p>
-				<a href="#contributing-and-local-development" id="contributing-and-local-development" style="color: inherit; text-decoration: none;">
-					<h2>Contributing and local development</h2>
-				</a>
-				<p>Please see <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> for more information on how to contribute to this project.</p>
-			</div>
-		</div>
-		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
-			<nav class="tsd-navigation primary">
-				<ul>
-					<li class="globals  ">
-						<a href="globals.html"><em>Globals</em></a>
-					</li>
-				</ul>
-			</nav>
-			<nav class="tsd-navigation secondary menu-sticky">
-				<ul class="before-current">
-					<li class=" tsd-kind-function">
-						<a href="globals.html#getmanagementtoken" class="tsd-kind-icon">get<wbr>Management<wbr>Token</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#signrequest" class="tsd-kind-icon">sign<wbr>Request</a>
-					</li>
-					<li class=" tsd-kind-function">
-						<a href="globals.html#verifyrequest" class="tsd-kind-icon">verify<wbr>Request</a>
-					</li>
-				</ul>
-			</nav>
-		</div>
-	</div>
-</div>
-<footer class="with-border-bottom">
-	<div class="container">
-		<h2>Legend</h2>
-		<div class="tsd-legend-group">
-		</div>
-	</div>
-</footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
-<div class="overlay"></div>
-<script src="assets/js/main.js"></script>
-</body>
-</html>
+<a href="#installation" id="installation" style="color: inherit; text-decoration: none;">
+  <h2>Installation</h2>
+</a>
+<pre><code class="language-shell"><span class="hl-0">npm install --save @contentful/node-apps-toolkit</span><br/><span class="hl-1"># or</span><br/><span class="hl-0">yarn add @contentful/node-apps-toolkit</span>
+</code></pre>
+
+<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
+  <h2>Usage</h2>
+</a>
+<pre><code class="language-js"><span class="hl-2">const</span><span class="hl-0"> { </span><span class="hl-3">getManagementToken</span><span class="hl-0"> } = </span><span class="hl-4">require</span><span class="hl-0">(</span><span class="hl-5">&#39;@contentful/node-apps-toolkit&#39;</span><span class="hl-0">);</span><br/><span class="hl-2">const</span><span class="hl-0"> { </span><span class="hl-3">appInstallationId</span><span class="hl-0">, </span><span class="hl-3">spaceId</span><span class="hl-0">, </span><span class="hl-3">privateKey</span><span class="hl-0"> } = </span><span class="hl-4">require</span><span class="hl-0">(</span><span class="hl-5">&#39;./some-constants&#39;</span><span class="hl-0">);</span><br/><br/><span class="hl-4">getManagementToken</span><span class="hl-0">(</span><span class="hl-6">privateKey</span><span class="hl-0">, {</span><span class="hl-6">appInstallationId</span><span class="hl-0">, </span><span class="hl-6">spaceId</span><span class="hl-0">})</span><br/><span class="hl-0">    .</span><span class="hl-4">then</span><span class="hl-0">((</span><span class="hl-6">token</span><span class="hl-0">) </span><span class="hl-2">=&gt;</span><span class="hl-0"> {</span><br/><span class="hl-0">      </span><span class="hl-6">console</span><span class="hl-0">.</span><span class="hl-4">log</span><span class="hl-0">(</span><span class="hl-5">&#39;Here is your app token:&#39;</span><span class="hl-0">, </span><span class="hl-6">token</span><span class="hl-0">)</span><br/><span class="hl-0">    })</span>
+</code></pre>
+<p>For more information, check out the full <a href="https://contentful.github.io/node-apps-toolkit/">API documentation</a>.</p>
+
+<a href="#more-coming-soon" id="more-coming-soon" style="color: inherit; text-decoration: none;">
+  <h2>More coming soon</h2>
+</a>
+<p>We&#39;re excited to expand this toolkit with new features. If you have any suggestions or requests for features you&#39;d like to see, please <a href="https://github.com/contentful/node-apps-toolkit/issues/new">create an issue</a> in this repo.</p>
+
+<a href="#contributing-and-local-development" id="contributing-and-local-development" style="color: inherit; text-decoration: none;">
+  <h2>Contributing and local development</h2>
+</a>
+<p>Please see <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> for more information on how to contribute to this project.</p>
+</div></div><div class="col-4 col-menu menu-sticky-wrap menu-highlight"><nav class="tsd-navigation primary"><ul><li class="current"><a href="modules.html">Modules</a></li><li class=" tsd-kind-module"><a href="modules/keys_get_management_token.html">keys/get-<wbr/>management-<wbr/>token</a></li><li class=" tsd-kind-module"><a href="modules/requests_sign_request.html">requests/sign-<wbr/>request</a></li><li class=" tsd-kind-module"><a href="modules/requests_verify_request.html">requests/verify-<wbr/>request</a></li></ul></nav></div></div></div><footer class="with-border-bottom"><div class="container"><h2>Legend</h2><div class="tsd-legend-group"><ul class="tsd-legend"><li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li></ul></div><h2>Settings</h2><p>Theme <select id="theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></p></div></footer><div class="container tsd-generator"><p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></div><div class="overlay"></div><script src="assets/main.js"></script></body></html>
