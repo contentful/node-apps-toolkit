@@ -29,10 +29,10 @@ const noop = () => {}
 describe('getManagementToken', () => {
   it('fetches a token', async () => {
     const mockToken = 'token'
-    const logger = (noop as unknown) as Logger
+    const logger = noop as unknown as Logger
     const post = sinon.stub()
     post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
-    const httpClient = ({ post } as unknown) as HttpClient
+    const httpClient = { post } as unknown as HttpClient
     const getManagementToken = createGetManagementToken(logger, httpClient)
 
     const result = await getManagementToken(PRIVATE_KEY, DEFAULT_OPTIONS)
@@ -47,14 +47,14 @@ describe('getManagementToken', () => {
   })
 
   it('caches token while valid', async () => {
-    const logger = (noop as unknown) as Logger
+    const logger = noop as unknown as Logger
     const post = sinon.stub()
     const mockToken = sign({ a: 'b' }, 'a-secret-key', {
       expiresIn: '10 minutes',
     })
 
     post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
-    const httpClient = ({ post } as unknown) as HttpClient
+    const httpClient = { post } as unknown as HttpClient
     const getManagementToken = createGetManagementToken(logger, httpClient)
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
@@ -67,14 +67,14 @@ describe('getManagementToken', () => {
   })
 
   it('does not cache expired token', async () => {
-    const logger = (noop as unknown) as Logger
+    const logger = noop as unknown as Logger
     const post = sinon.stub()
     const mockToken = sign({ a: 'b' }, 'a-secret-key', {
       expiresIn: '5 minutes',
     })
 
     post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
-    const httpClient = ({ post } as unknown) as HttpClient
+    const httpClient = { post } as unknown as HttpClient
     const cache = new NodeCache()
     const getManagementToken = createGetManagementToken(logger, httpClient, cache)
 
@@ -99,10 +99,10 @@ describe('getManagementToken', () => {
   describe('when using a keyId', () => {
     it('fetches a token', async () => {
       const mockToken = 'token'
-      const logger = (noop as unknown) as Logger
+      const logger = noop as unknown as Logger
       const post = sinon.stub()
       post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
-      const httpClient = ({ post } as unknown) as HttpClient
+      const httpClient = { post } as unknown as HttpClient
       const getManagementToken = createGetManagementToken(logger, httpClient)
 
       const result = await getManagementToken(PRIVATE_KEY, { ...DEFAULT_OPTIONS, keyId: 'keyId' })
@@ -133,9 +133,9 @@ describe('getManagementToken', () => {
 
   describe('when having API problems', () => {
     it(`throws when API returns an error`, async () => {
-      const logger = (noop as unknown) as Logger
-      const post = sinon.stub().rejects(new HttpError(({ statusCode: 500 } as unknown) as Response))
-      const httpClient = ({ post } as unknown) as HttpClient
+      const logger = noop as unknown as Logger
+      const post = sinon.stub().rejects(new HttpError({ statusCode: 500 } as unknown as Response))
+      const httpClient = { post } as unknown as HttpClient
       const getManagementToken = createGetManagementToken(logger, httpClient)
 
       await assert.rejects(async () => {

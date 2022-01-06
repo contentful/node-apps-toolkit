@@ -1,7 +1,8 @@
 {
   "name": "contentful-node-apps-toolkit",
-  "includeDeclarations": true,
   "excludeExternals": true,
+  "excludeInternal": true,
+  "entryPointStrategy": "expand",
   "excludeNotDocumented": true,
   "exclude": [
     "**/*.spec.ts",
@@ -10,8 +11,5 @@
     "test/**/*"
   ],
   "out": "docs",
-  "stripInternal": true,
-  "excludeNotExported": true,
-  "gitRevision": "master",
-  "mode": "file"
+  "gitRevision": "master"
 }

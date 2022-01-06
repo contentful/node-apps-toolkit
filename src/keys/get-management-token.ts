@@ -106,7 +106,7 @@ export const createGetManagementToken = (
     const ott = await getTokenFromOneTimeToken(appToken, opts, { log, http })
     if (opts.reuseToken) {
       const decoded = decode(ott)
-      if (decoded && typeof decoded === 'object') {
+      if (decoded && typeof decoded === 'object' && decoded.exp) {
         // Internally expire cached tokens a bit earlier to make sure token isn't expired on arrival
         const safetyMargin = 10
         const ttlSeconds = decoded.exp - Math.floor(Date.now() / 1000) - safetyMargin

@@ -10,7 +10,15 @@ npm install --save @contentful/node-apps-toolkit
 yarn add @contentful/node-apps-toolkit
 ```
 
-## Usage
+## Available features
+
+ - :lock: Request Verification
+ - :writing_hand: Request Signing
+ - :bust_in_silhouette:	CMA Token generation for App Identities
+
+For more details, check out the [API documentation](https://contentful.github.io/node-apps-toolkit/).
+
+## Example Usage
 
 ```js
 const { getManagementToken } = require('@contentful/node-apps-toolkit');
