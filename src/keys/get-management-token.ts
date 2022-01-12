@@ -133,7 +133,7 @@ export const createGetManagementToken = (
  * ~~~
  * const {getManagementToken} = require('contentful-node-apps-toolkit')
  *
- * getManagementToken(PRIVATE_KEY, {appId, spaceId, environmentId})
+ * getManagementToken(PRIVATE_KEY, {appInstallationId, spaceId, environmentId})
  *    .then( (token) => {
  *      console.log('Here is your token')
  *      console.log(token)
