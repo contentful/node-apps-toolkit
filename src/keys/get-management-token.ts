@@ -16,6 +16,8 @@ export interface GetManagementTokenOptions {
   reuseToken?: boolean
 }
 
+const defaultCache = new NodeCache()
+
 /**
  * Synchronously sign the given privateKey into a JSON Web Token string
  * @internal
@@ -142,8 +144,9 @@ export const createGetManagementToken = (
  * @category Keys
  */
 export const getManagementToken = (privateKey: string, opts: GetManagementTokenOptions) => {
-  return createGetManagementToken(createLogger({ filename: __filename }), createHttpClient())(
-    privateKey,
-    opts
-  )
+  return createGetManagementToken(
+    createLogger({ filename: __filename }),
+    createHttpClient(),
+    defaultCache
+  )(privateKey, opts)
 }
