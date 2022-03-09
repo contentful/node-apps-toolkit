@@ -16,7 +16,7 @@ export interface GetManagementTokenOptions {
   reuseToken?: boolean
 }
 
-const defaultCache = new NodeCache()
+let defaultCache: NodeCache
 
 /**
  * Synchronously sign the given privateKey into a JSON Web Token string
@@ -77,12 +77,7 @@ const getTokenFromOneTimeToken = async (
  * Factory method for GetManagementToken
  * @internal
  */
-export const createGetManagementToken = (
-  log: Logger,
-  http: HttpClient,
-  existingCache?: NodeCache
-) => {
-  const cache = existingCache || new NodeCache()
+export const createGetManagementToken = (log: Logger, http: HttpClient, cache: NodeCache) => {
   return async (privateKey: unknown, opts: GetManagementTokenOptions): Promise<string> => {
     if (!(typeof privateKey === 'string')) {
       throw new ReferenceError('Invalid privateKey: expected a string representing a private key')
@@ -144,6 +139,9 @@ export const createGetManagementToken = (
  * @category Keys
  */
 export const getManagementToken = (privateKey: string, opts: GetManagementTokenOptions) => {
+  if (opts.reuseToken || opts.reuseToken === undefined) {
+    defaultCache = new NodeCache()
+  }
   return createGetManagementToken(
     createLogger({ filename: __filename }),
     createHttpClient(),
