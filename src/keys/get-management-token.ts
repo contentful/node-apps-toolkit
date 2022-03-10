@@ -139,7 +139,7 @@ export const createGetManagementToken = (log: Logger, http: HttpClient, cache: N
  * @category Keys
  */
 export const getManagementToken = (privateKey: string, opts: GetManagementTokenOptions) => {
-  if (opts.reuseToken || opts.reuseToken === undefined) {
+  if ((opts.reuseToken || opts.reuseToken === undefined) && !defaultCache) {
     defaultCache = new NodeCache()
   }
   return createGetManagementToken(
