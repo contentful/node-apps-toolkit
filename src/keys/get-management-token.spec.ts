@@ -26,6 +26,8 @@ const DEFAULT_OPTIONS: GetManagementTokenOptions = {
 }
 const noop = () => {}
 
+const defaultCache = new NodeCache()
+
 describe('getManagementToken', () => {
   it('fetches a token', async () => {
     const mockToken = 'token'
@@ -33,7 +35,7 @@ describe('getManagementToken', () => {
     const post = sinon.stub()
     post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
     const httpClient = { post } as unknown as HttpClient
-    const getManagementToken = createGetManagementToken(logger, httpClient)
+    const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
 
     const result = await getManagementToken(PRIVATE_KEY, DEFAULT_OPTIONS)
 
@@ -55,7 +57,7 @@ describe('getManagementToken', () => {
 
     post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
     const httpClient = { post } as unknown as HttpClient
-    const getManagementToken = createGetManagementToken(logger, httpClient)
+    const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
@@ -103,7 +105,7 @@ describe('getManagementToken', () => {
       const post = sinon.stub()
       post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
       const httpClient = { post } as unknown as HttpClient
-      const getManagementToken = createGetManagementToken(logger, httpClient)
+      const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
 
       const result = await getManagementToken(PRIVATE_KEY, { ...DEFAULT_OPTIONS, keyId: 'keyId' })
 
@@ -136,7 +138,7 @@ describe('getManagementToken', () => {
       const logger = noop as unknown as Logger
       const post = sinon.stub().rejects(new HttpError({ statusCode: 500 } as unknown as Response))
       const httpClient = { post } as unknown as HttpClient
-      const getManagementToken = createGetManagementToken(logger, httpClient)
+      const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
 
       await assert.rejects(async () => {
         await getManagementToken(PRIVATE_KEY, DEFAULT_OPTIONS)
