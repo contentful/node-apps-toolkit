@@ -85,7 +85,7 @@ describe('getManagementToken', () => {
     assert.strictEqual(result, mockToken)
 
     // Overwrite TTL expiry to 5ms
-    const cacheKey = APP_ID + ENVIRONMENT_ID + PRIVATE_KEY.slice(32, 132)
+    const cacheKey = APP_ID + SPACE_ID + ENVIRONMENT_ID + PRIVATE_KEY.slice(32, 132)
     cache.set(cacheKey, result, 0.005)
 
     // Sleep 10ms

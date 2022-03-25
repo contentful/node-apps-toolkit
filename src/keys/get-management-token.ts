@@ -87,7 +87,8 @@ export const createGetManagementToken = (log: Logger, http: HttpClient, cache: N
       opts.reuseToken = true
     }
 
-    const cacheKey = opts.appInstallationId + opts.environmentId + privateKey.slice(32, 132)
+    const cacheKey =
+      opts.appInstallationId + opts.spaceId + opts.environmentId + privateKey.slice(32, 132)
     if (opts.reuseToken) {
       const existing = cache.get(cacheKey) as string
       if (existing) {
