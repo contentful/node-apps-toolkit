@@ -16,7 +16,8 @@
     "skipLibCheck": true,
     "strict": true,
     "pretty": true,
-    "declaration": true
+    "declaration": true,
+    "isolatedModules": true
   },
   "include": ["./src/**/*"],
   "exclude": ["./src/**/*.spec.ts"]
