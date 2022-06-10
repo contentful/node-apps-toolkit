@@ -1,3 +1,10 @@
+## [2.0.3](https://github.com/contentful/node-apps-toolkit/compare/v2.0.2...v2.0.3) (2022-06-10)
+
+
+### Bug Fixes
+
+* [] do not export const enums for headers ([#51](https://github.com/contentful/node-apps-toolkit/issues/51)) ([6858557](https://github.com/contentful/node-apps-toolkit/commit/685855743a4bbf00b94067267efb7290ea96f308))
+
 ## [2.0.2](https://github.com/contentful/node-apps-toolkit/compare/v2.0.1...v2.0.2) (2022-03-25)
 
 
