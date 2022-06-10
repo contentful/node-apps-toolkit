@@ -3,13 +3,13 @@
 /*eslint-disable no-unused-vars*/
 import * as runtypes from 'runtypes'
 
-export const enum ContentfulHeader {
+export enum ContentfulHeader {
   Timestamp = 'x-contentful-timestamp',
   SignedHeaders = 'x-contentful-signed-headers',
   Signature = 'x-contentful-signature',
 }
 
-export const enum ContentfulContextHeader {
+export enum ContentfulContextHeader {
   SpaceId = 'x-contentful-space-id',
   EnvironmentId = 'x-contentful-environment-id',
   UserId = 'x-contentful-user-id',
