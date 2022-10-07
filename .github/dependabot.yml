@@ -9,3 +9,5 @@ updates:
   commit-message:
     prefix: chore
     include: scope
+  allow:
+  - dependency-type: "development"
