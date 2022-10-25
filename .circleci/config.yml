@@ -4,6 +4,9 @@ executors:
     docker:
       - image: circleci/node:14
 
+orbs:
+  vault: contentful/vault@1
+
 setup-npm:
   &setup-npm
   run:
@@ -22,8 +25,10 @@ jobs:
   lint-and-test:
     executor: node
     steps:
-      - *setup-npm
       - checkout
+      - vault/get-secrets:
+          template-preset: "npm-read"
+      - *setup-npm
       - *npm-install
       - run:
           name: Run linter
@@ -34,8 +39,10 @@ jobs:
   lint-commits:
     executor: node
     steps:
-      - *setup-npm
       - checkout
+      - vault/get-secrets:
+          template-preset: "npm-read"
+      - *setup-npm
       - *npm-install
       - run:
           name: Linting commits
@@ -44,6 +51,8 @@ jobs:
     executor: node
     steps:
       - checkout
+      - vault/get-secrets:
+          template-preset: "semantic-release"
       - *setup-npm
       - run:
           name: npm ci
@@ -55,9 +64,15 @@ workflows:
   version: 2.1
   build:
     jobs:
-      - lint-and-test
-      - lint-commits
+      - lint-and-test:
+          context:
+            - vault
+      - lint-commits:
+          context:
+            - vault
       - semantic-release:
+          context:
+            - vault
           filters:
             branches:
               only: master
