@@ -15,7 +15,8 @@
     "build:docs": "typedoc --options .typedocrc.json src",
     "start:docs": "serve ./docs",
     "prepublish": "npm run build",
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "prepare": "husky install"
   },
   "author": "Contentful GmbH",
   "license": "MIT",
