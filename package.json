@@ -48,7 +48,7 @@
     "mocha": "10.1.0",
     "prettier": "2.7.1",
     "semantic-release": "19.0.5",
-    "serve": "14.0.1",
+    "serve": "14.1.1",
     "sinon": "14.0.2",
     "ts-node": "10.9.1",
     "typedoc": "0.23.20",
