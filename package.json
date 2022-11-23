@@ -46,7 +46,7 @@
     "husky": "4.3.8",
     "lint-staged": "13.0.3",
     "mocha": "10.1.0",
-    "prettier": "2.7.1",
+    "prettier": "2.8.0",
     "semantic-release": "19.0.5",
     "serve": "14.1.2",
     "sinon": "14.0.2",
