@@ -3,6 +3,9 @@
   "version": "2.0.3",
   "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
   "main": "lib/index.js",
+  "engines": {
+    "node": ">=14.15.0"
+  },
   "scripts": {
     "lint": "eslint --ext .ts ./src",
     "lint:fix": "npm run lint -- --fix",
