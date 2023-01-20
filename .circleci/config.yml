@@ -78,11 +78,6 @@ workflows:
       - semantic-release:
           context:
             - vault
-          filters:
-            branches:
-              only: 
-                - master
-                - next
           requires:
             - lint-and-test
             - lint-commits
