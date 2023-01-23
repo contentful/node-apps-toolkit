@@ -50,7 +50,7 @@ jobs:
     steps:
       - checkout
       - vault/get-secrets:
-          template-preset: "semantic-release"
+          template-preset: "semantic-release-ecosystem"
       - node/install:
           node-version: "18"
       - setup-npm
