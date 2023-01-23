@@ -63,14 +63,10 @@ workflows:
   build:
     jobs:
       - lint-and-test:
-          context:
-            - vault
           matrix:
             parameters:
               node-version: ["14.15.0", "16.13.0", "18.12.0"]
-      - lint-commits:
-          context:
-            - vault
+      - lint-commits
       - semantic-release:
           context:
             - vault
