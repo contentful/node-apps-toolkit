@@ -24,9 +24,6 @@ jobs:
       - checkout
       - node/install:
           node-version: << parameters.node-version >>
-      - vault/get-secrets:
-          template-preset: "npm-read"
-      - setup-npm
       - run: npm ci
       - run:
           name: Run linter
@@ -42,7 +39,6 @@ jobs:
       - checkout
       - node/install:
           node-version: "18"
-      - setup-npm
       - run: npm ci
       - run:
           name: Linting commits
