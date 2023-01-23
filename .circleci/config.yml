@@ -1,81 +1,79 @@
 version: 2.1
-executors:
-  node:
-    docker:
-      - image: circleci/node:14
 
 orbs:
+  node: circleci/node@5.1.0
   vault: contentful/vault@1
 
-setup-npm:
-  &setup-npm
-  run:
-    name: Provide NPM Token
-    command: |-
-      echo $'@contentful:registry=https://registry.npmjs.org/
-      //registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
-
-install-node-modules:
-  &npm-install
-  run:
-    name: Install dependencies
-    command: npm ci
+commands:
+  setup-npm:
+    steps:
+      - run:
+          name: Provide NPM Token
+          command: |-
+            echo $'@contentful:registry=https://registry.npmjs.org/
+            //registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
 
 jobs:
   lint-and-test:
-    executor: node
+    docker:
+      - image: "cimg/base:stable"
+    parameters:
+      node-version:
+        type: string
     steps:
       - checkout
-      - vault/get-secrets:
-          template-preset: "npm-read"
-      - *setup-npm
-      - *npm-install
+      - node/install:
+          node-version: << parameters.node-version >>
+      - run: npm ci
       - run:
           name: Run linter
           command: npm run lint
       - run:
           name: Run tests
           command: npm run test
+
   lint-commits:
-    executor: node
+    docker:
+      - image: "cimg/base:stable"
     steps:
       - checkout
-      - vault/get-secrets:
-          template-preset: "npm-read"
-      - *setup-npm
-      - *npm-install
+      - node/install:
+          node-version: "18"
+      - run: npm ci
       - run:
           name: Linting commits
           command: npx commitlint --to $(git rev-parse HEAD) -V
+
   semantic-release:
-    executor: node
+    docker:
+      - image: "cimg/base:stable"
     steps:
       - checkout
       - vault/get-secrets:
           template-preset: "semantic-release"
-      - *setup-npm
-      - run:
-          name: npm ci
-          command: npm ci
+      - node/install:
+          node-version: "18"
+      - setup-npm
+      - run: npm ci
       - run:
           name: Releasing
           command: npm run semantic-release
+
 workflows:
-  version: 2.1
   build:
     jobs:
       - lint-and-test:
           context:
             - vault
+          matrix:
+            parameters:
+              node-version: ["14.15.0", "16.13.0", "18.12.0"]
       - lint-commits:
           context:
             - vault
       - semantic-release:
           context:
             - vault
-          filters:
-            branches:
-              only: master
           requires:
             - lint-and-test
             - lint-commits

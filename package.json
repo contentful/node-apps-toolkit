@@ -3,6 +3,9 @@
   "version": "2.0.3",
   "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
   "main": "lib/index.js",
+  "engines": {
+    "node": ">=14.15.0"
+  },
   "scripts": {
     "lint": "eslint --ext .ts ./src",
     "lint:fix": "npm run lint -- --fix",
@@ -47,7 +50,7 @@
     "lint-staged": "13.1.0",
     "mocha": "10.2.0",
     "prettier": "2.8.3",
-    "semantic-release": "19.0.5",
+    "semantic-release": "20.0.2",
     "serve": "14.1.2",
     "sinon": "15.0.1",
     "ts-node": "10.9.1",

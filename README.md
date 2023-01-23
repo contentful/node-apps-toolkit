@@ -2,6 +2,10 @@
 
 The `node-apps-toolkit` is a growing collection of helpers and utilities for building [Contentful Apps](https://www.contentful.com/developers/docs/extensibility/app-framework/) with Node.js.
 
+## Compatibiltiy
+
+Requires an [Node.js LTS version](https://github.com/nodejs/Release). Odd-numbered and not-yet LTS major versions are not supported.
+
 ## Installation
  
 ```shell
