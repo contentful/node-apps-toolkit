@@ -1,3 +1,11 @@
+## [2.0.4-next.1](https://github.com/contentful/node-apps-toolkit/compare/v2.0.3...v2.0.4-next.1) (2023-01-23)
+
+
+### Bug Fixes
+
+* enforce compatible node versions (v14.15+) ([#132](https://github.com/contentful/node-apps-toolkit/issues/132)) ([566a17e](https://github.com/contentful/node-apps-toolkit/commit/566a17e668df669dc955e739fcaa251abfec127a))
+* update jsonwebtoken ([#133](https://github.com/contentful/node-apps-toolkit/issues/133)) ([fc24220](https://github.com/contentful/node-apps-toolkit/commit/fc24220b60fa382c85a6bb62fb5de62e4de75a17))
+
 ## [2.0.3](https://github.com/contentful/node-apps-toolkit/compare/v2.0.2...v2.0.3) (2022-06-10)
 
 
