@@ -14,6 +14,7 @@ export interface GetManagementTokenOptions {
   environmentId: string
   keyId?: string
   reuseToken?: boolean
+  host?: string
 }
 
 let defaultCache: NodeCache
@@ -145,7 +146,7 @@ export const getManagementToken = (privateKey: string, opts: GetManagementTokenO
   }
   return createGetManagementToken(
     createLogger({ filename: __filename }),
-    createHttpClient(),
+    createHttpClient({ prefixUrl: opts.host }),
     defaultCache
   )(privateKey, opts)
 }
