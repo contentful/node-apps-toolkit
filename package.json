@@ -13,11 +13,10 @@
     "test:unit": "mocha -r dotenv/config -r ts-node/register ./src/**/*.spec.ts",
     "test:integration": "mocha -r dotenv/config -r ts-node/register --timeout 10000 ./test/**/*.test.ts",
     "test": "npm run test:unit && npm run test:integration",
-    "build": "npm run build:lib && npm run build:docs",
-    "build:lib": "rm -rf lib && tsc",
+    "build": "rm -rf lib && tsc",
     "build:docs": "typedoc --options .typedocrc.json src",
     "start:docs": "serve ./docs",
-    "prepublish": "npm run build",
+    "prepublish": "npm run build && npm run build:docs",
     "semantic-release": "semantic-release"
   },
   "author": "Contentful GmbH",
@@ -66,8 +65,7 @@
   },
   "lint-staged": {
     "*.ts": [
-      "npm run lint:fix",
-      "npm run build:docs"
+      "npm run lint:fix"
     ]
   }
 }

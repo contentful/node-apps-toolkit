@@ -14,6 +14,7 @@ commands:
             //registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
 
 jobs:
+
   lint-and-test:
     docker:
       - image: "cimg/base:stable"
@@ -31,6 +32,17 @@ jobs:
       - run:
           name: Run tests
           command: npm run test
+
+  build:
+    docker:
+      - image: "cimg/base:stable"
+    steps:
+      - checkout
+      - node/install:
+          node-version: "18"
+      - run: npm ci
+      - run: npm run build
+      - run: npm run build:docs
 
   lint-commits:
     docker:
@@ -60,16 +72,18 @@ jobs:
           command: npm run semantic-release
 
 workflows:
-  build:
+  lint-build-release:
     jobs:
       - lint-and-test:
           matrix:
             parameters:
               node-version: ["14.15.0", "16.13.0", "18.12.0"]
       - lint-commits
+      - build
       - semantic-release:
           context:
             - vault
           requires:
             - lint-and-test
             - lint-commits
+            - build
