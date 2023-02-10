@@ -86,3 +86,4 @@ workflows:
           requires:
             - lint-and-test
             - lint-commits
+            - build
