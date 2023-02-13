@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/contentful/node-apps-toolkit/compare/v2.0.4...v2.1.0) (2023-02-13)
+
+
+### Features
+
+* set host from opt [] ([#139](https://github.com/contentful/node-apps-toolkit/issues/139)) ([4353c2b](https://github.com/contentful/node-apps-toolkit/commit/4353c2b66777e7d5f33da563a78f24f1ac3849c7))
+
 ## [2.0.4](https://github.com/contentful/node-apps-toolkit/compare/v2.0.3...v2.0.4) (2023-01-23)
 
 
