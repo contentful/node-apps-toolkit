@@ -144,9 +144,11 @@ export const getManagementToken = (privateKey: string, opts: GetManagementTokenO
   if ((opts.reuseToken || opts.reuseToken === undefined) && !defaultCache) {
     defaultCache = new NodeCache()
   }
+  const httpClientOpts = typeof opts.host !== 'undefined' ? { prefixUrl: opts.host } : {}
+
   return createGetManagementToken(
     createLogger({ filename: __filename }),
-    createHttpClient({ prefixUrl: opts.host }),
+    createHttpClient(httpClientOpts),
     defaultCache
   )(privateKey, opts)
 }
