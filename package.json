@@ -7,6 +7,7 @@
     "node": ">=14.15.0"
   },
   "scripts": {
+    "prepare": "husky install",
     "lint": "eslint --ext .ts ./src",
     "lint:fix": "npm run lint -- --fix",
     "pretest": "echo ' 🔑 Creating valid keypair for testing' && sh test/make-private-keys.sh &> /dev/null",
@@ -16,7 +17,7 @@
     "build": "rm -rf lib && tsc",
     "build:docs": "typedoc --options .typedocrc.json src",
     "start:docs": "serve ./docs",
-    "prepublish": "npm run build && npm run build:docs",
+    "prepublishOnly": "npm run build && npm run build:docs",
     "semantic-release": "semantic-release"
   },
   "author": "Contentful GmbH",
@@ -45,7 +46,7 @@
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-prettier": "4.2.1",
-    "husky": "4.3.8",
+    "husky": "8.0.3",
     "lint-staged": "13.2.2",
     "mocha": "10.2.0",
     "prettier": "2.8.8",
@@ -55,13 +56,6 @@
     "ts-node": "10.9.1",
     "typedoc": "0.24.7",
     "typescript": "5.0.4"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "sh ./scripts/ensure-includes-docs.sh",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
-    }
   },
   "lint-staged": {
     "*.ts": [

@@ -5,7 +5,7 @@ Please take a moment to review this document in order to make the contribution p
 
 ### Requirements
 
-- Node.js: `>=12.18.3`
+- Node.js: `>=14.15.0`
 
 To install all dependencies and build all packages run the following commands from the root of the project.
 
