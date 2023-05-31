@@ -2,6 +2,7 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 import * as runtypes from 'runtypes'
+import { PlainClientAPI } from 'contentful-management'
 
 export enum ContentfulHeader {
   Timestamp = 'x-contentful-timestamp',
@@ -111,3 +112,13 @@ export type SignedRequestHeaders =
   | SignedRequestWithContextHeadersWithUser
   | SignedRequestWithContextHeadersWithApp
   | SignedRequestWithoutContextHeaders
+
+export type AppActionCallContext = {
+  cma: PlainClientAPI
+  appActionCallContext: {
+    spaceId: string
+    environmentId: string
+    appInstallationId: string
+    userId: string
+  }
+}

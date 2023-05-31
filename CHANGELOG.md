@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/contentful/node-apps-toolkit/compare/v2.1.0...v2.2.0) (2023-05-26)
+
+
+### Features
+
+* add new action call context ([#240](https://github.com/contentful/node-apps-toolkit/issues/240)) ([2fa69ea](https://github.com/contentful/node-apps-toolkit/commit/2fa69ea4949194085c1bade22dee4eb4d969060c))
+
 # [2.1.0](https://github.com/contentful/node-apps-toolkit/compare/v2.0.4...v2.1.0) (2023-02-13)
 
 
