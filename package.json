@@ -55,7 +55,7 @@
     "serve": "14.2.0",
     "sinon": "15.1.0",
     "ts-node": "10.9.1",
-    "typedoc": "0.24.7",
+    "typedoc": "0.24.8",
     "typescript": "5.0.4"
   },
   "lint-staged": {
