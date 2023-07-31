@@ -24,7 +24,7 @@ const MethodValidator = runtypes.Union(
   runtypes.Literal('POST'),
   runtypes.Literal('DELETE'),
   runtypes.Literal('OPTIONS'),
-  runtypes.Literal('PUT')
+  runtypes.Literal('PUT'),
 )
 
 const PathValidator = runtypes.String.withConstraint((s) => s.startsWith('/'), {
@@ -44,7 +44,7 @@ export const CanonicalRequestValidator = runtypes
     runtypes.Partial({
       headers: runtypes.Dictionary(runtypes.String, 'string'),
       body: runtypes.String,
-    })
+    }),
   )
 export type CanonicalRequest = runtypes.Static<typeof CanonicalRequestValidator>
 

@@ -15,13 +15,13 @@ export const cleanOldKeys = async () => {
   const appDefinitionId = process.env.APP_ID
 
   const { body } = await http.get(
-    `organizations/${organizationId}/app_definitions/${appDefinitionId}/keys`
+    `organizations/${organizationId}/app_definitions/${appDefinitionId}/keys`,
   )
   const fingerprints = JSON.parse(body).items.map((i: any) => i.jwk.x5t)
 
   const deleteKeysRequests = fingerprints.map((fingerprint: string) => {
     return http.delete(
-      `organizations/${organizationId}/app_definitions/${appDefinitionId}/keys/${fingerprint}`
+      `organizations/${organizationId}/app_definitions/${appDefinitionId}/keys/${fingerprint}`,
     )
   })
 

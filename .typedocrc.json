@@ -4,12 +4,7 @@
   "excludeInternal": true,
   "entryPointStrategy": "expand",
   "excludeNotDocumented": true,
-  "exclude": [
-    "**/*.spec.ts",
-    "**/*/index.ts",
-    "src/utils/**/*",
-    "test/**/*"
-  ],
+  "exclude": ["**/*.spec.ts", "**/*/index.ts", "src/utils/**/*", "test/**/*"],
   "out": "docs",
   "gitRevision": "master"
 }

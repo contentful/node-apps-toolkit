@@ -1,4 +1,5 @@
 # Contributing to node apps toolkit
+
 Please take a moment to review this document in order to make the contribution process easy and effective for everyone involved.
 
 ## Getting started
@@ -22,14 +23,14 @@ Please ask first if somebody else is already working on this or the Contentful d
 
 ## Folder structure
 
-Source code and associated unit tests can be found in the `src/` directory. 
+Source code and associated unit tests can be found in the `src/` directory.
 Integration tests can be found in the `test/` directory.
 
 ## Quality & Code Style
 
 ### Commit messages
 
-All commit messages should meet the [conventional commit format](https://github.com/conventional-changelog/commitlint). 
+All commit messages should meet the [conventional commit format](https://github.com/conventional-changelog/commitlint).
 
 ### Code formatting
 
@@ -46,6 +47,7 @@ All modern editors should automatically pick up configuration and show errors an
 We use [Mocha](https://mochajs.org/) for writing tests.
 
 #### Setup tests
+
 Before running tests please run the `preTest` command. It will generate a keypair to enable testing of the related functionality.
 
 ```bash
@@ -59,10 +61,11 @@ npm run test:unit
 ```
 
 #### Run integration tests
+
 > **:warning: Please Note**
-> 
-> In order to run integration tests all the environment variables present in 
-[`.env.tpl`](./.env.tpl) must be provided.
+>
+> In order to run integration tests all the environment variables present in
+> [`.env.tpl`](./.env.tpl) must be provided.
 
 ```bash
 npm run test:integration
