@@ -44,7 +44,7 @@
     "@typescript-eslint/parser": "5.62.0",
     "base64url": "3.0.1",
     "dotenv": "16.3.1",
-    "eslint": "8.45.0",
+    "eslint": "8.46.0",
     "eslint-config-prettier": "8.9.0",
     "eslint-plugin-prettier": "4.2.1",
     "husky": "8.0.3",
