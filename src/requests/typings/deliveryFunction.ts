@@ -36,7 +36,7 @@ export type GraphQLQueryRequest = {
  * @see https://spec.graphql.org/October2021/#sec-Response
  */
 export type GraphQLQueryResponse = {
-  data?: Record<string, any>
+  data?: Record<string, any> | null
   errors?: readonly Record<string, any>[]
   extensions?: Record<string, unknown>
 }
@@ -48,9 +48,6 @@ export type DeliveryFunctionEventContext = {
   spaceId: string
   environmentId: string
   appInstallationParameters: Record<string, any>
-  originalRequest: {
-    headers: Record<string, string>
-  }
 }
 
 export type DeliveryFunctionEventHandlers = {
