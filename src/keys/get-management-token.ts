@@ -26,7 +26,7 @@ let defaultCache: NodeCache
 const generateOneTimeToken = (
   privateKey: string,
   { appId, keyId }: { appId: string; keyId?: string },
-  { log }: { log: Logger }
+  { log }: { log: Logger },
 ): string => {
   log('Signing a JWT token with private key')
   try {
@@ -49,7 +49,7 @@ const getTokenFromOneTimeToken = async (
     spaceId,
     environmentId,
   }: { appInstallationId: string; spaceId: string; environmentId: string },
-  { log, http }: { log: Logger; http: HttpClient }
+  { log, http }: { log: Logger; http: HttpClient },
 ): Promise<string> => {
   const validateStatusCode = createValidateStatusCode([201])
 
@@ -64,11 +64,11 @@ const getTokenFromOneTimeToken = async (
       hooks: {
         afterResponse: [validateStatusCode],
       },
-    }
+    },
   )
 
   log(
-    `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`
+    `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`,
   )
 
   return JSON.parse(response.body).token
@@ -100,7 +100,7 @@ export const createGetManagementToken = (log: Logger, http: HttpClient, cache: N
     const appToken = generateOneTimeToken(
       privateKey,
       { appId: opts.appInstallationId, keyId: opts.keyId },
-      { log }
+      { log },
     )
     const ott = await getTokenFromOneTimeToken(appToken, opts, { log, http })
     if (opts.reuseToken) {
@@ -149,6 +149,6 @@ export const getManagementToken = (privateKey: string, opts: GetManagementTokenO
   return createGetManagementToken(
     createLogger({ filename: __filename }),
     createHttpClient(httpClientOpts),
-    defaultCache
+    defaultCache,
   )(privateKey, opts)
 }

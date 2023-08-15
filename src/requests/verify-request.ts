@@ -59,7 +59,7 @@ const isRequestTimestampTooOld = (ttl: number, timestamp: Timestamp) => {
 export const verifyRequest = (
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
-  rawTimeToLive: TimeToLive = 30
+  rawTimeToLive: TimeToLive = 30,
 ): boolean => {
   const canonicalRequest = CanonicalRequestValidator.check(rawCanonicalRequest)
   const secret = SecretValidator.check(rawSecret)
@@ -80,7 +80,7 @@ export const verifyRequest = (
   const { [ContentfulHeader.Signature]: computedSignature } = signRequest(
     secret,
     requestToValidate,
-    timestamp
+    timestamp,
   )
 
   return signature === computedSignature

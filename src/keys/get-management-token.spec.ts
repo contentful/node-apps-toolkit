@@ -43,8 +43,8 @@ describe('getManagementToken', () => {
     assert(
       post.calledWith(
         `spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
-        sinon.match({ headers: { Authorization: sinon.match.string } })
-      )
+        sinon.match({ headers: { Authorization: sinon.match.string } }),
+      ),
     )
   })
 
@@ -113,8 +113,8 @@ describe('getManagementToken', () => {
       assert(
         post.calledWith(
           `spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
-          sinon.match({ headers: { Authorization: sinon.match.string } })
-        )
+          sinon.match({ headers: { Authorization: sinon.match.string } }),
+        ),
       )
     })
   })
