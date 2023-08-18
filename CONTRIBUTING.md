@@ -29,7 +29,7 @@ Integration tests can be found in the `test/` directory.
 
 ### Commit messages
 
-All commit messages should meet the [conventional commit format](https://github.com/conventional-changelog/commitlint). 
+All commit messages should meet the [conventional commit format](https://conventionalcommits.org). 
 
 ### Code formatting
 

@@ -52,9 +52,6 @@ jobs:
       - node/install:
           node-version: "18"
       - run: npm ci
-      - run:
-          name: Linting commits
-          command: npx commitlint --to $(git rev-parse HEAD) -V
 
   semantic-release:
     docker:
