@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/contentful/node-apps-toolkit/compare/v2.2.0...v2.3.0) (2023-08-18)
+
+
+### Features
+
+* add types for deliveryFunction implementation ([#316](https://github.com/contentful/node-apps-toolkit/issues/316)) ([b807a25](https://github.com/contentful/node-apps-toolkit/commit/b807a251d649725ca67d8554c7ac2c9d20ef6c84))
+
 # [2.2.0](https://github.com/contentful/node-apps-toolkit/compare/v2.1.0...v2.2.0) (2023-05-26)
 
 
