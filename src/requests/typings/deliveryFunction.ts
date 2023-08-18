@@ -16,6 +16,8 @@ type Field = {
   type: string
 }
 
+export type GraphQLFieldTypeMappingResponse = GraphQLFieldTypeMapping[]
+
 export type GraphQLFieldTypeMapping = {
   contentTypeId: string
   fieldId: string
@@ -23,8 +25,6 @@ export type GraphQLFieldTypeMapping = {
   graphQLQueryField: string
   graphQLQueryArgument: string
 }
-
-export type GraphQLFieldTypeMappingResponse = GraphQLFieldTypeMapping[]
 
 export type GraphQLQueryRequest = {
   query: string
@@ -44,10 +44,10 @@ export type GraphQLQueryResponse = {
 /**
  * P: Possibility to type app installation parameters
  */
-export type DeliveryFunctionEventContext = {
+export type DeliveryFunctionEventContext<P extends Record<string, any> = Record<string, any>> = {
   spaceId: string
   environmentId: string
-  appInstallationParameters: Record<string, any>
+  appInstallationParameters: P
 }
 
 export type DeliveryFunctionEventHandlers = {
