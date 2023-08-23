@@ -10,6 +10,7 @@ export enum ContentfulHeader {
 }
 
 export enum ContentfulContextHeader {
+  CRN = 'x-contentful-crn',
   SpaceId = 'x-contentful-space-id',
   EnvironmentId = 'x-contentful-environment-id',
   UserId = 'x-contentful-user-id',
@@ -29,11 +30,13 @@ export type SubjectHeadersUser = { userId: string }
 export type UserContextSignedHeaders = { [ContentfulContextHeader.UserId]: string }
 
 export type Context<SubjectContext> = {
+  crn: string
   spaceId: string
   envId: string
 } & SubjectContext
 
 type SignedHeadersWithoutSubject = {
+  [ContentfulContextHeader.CRN]: string
   [ContentfulContextHeader.SpaceId]: string
   [ContentfulContextHeader.EnvironmentId]: string
 }
