@@ -8,6 +8,7 @@ export enum DeliveryFunctionRequestEventType {
 }
 
 export type GraphQLFieldTypeMappingRequest = {
+  type: DeliveryFunctionRequestEventType.GRAPHQL_FIELD_MAPPING
   fields: { contentTypeId: string; field: Field }[]
 }
 
@@ -27,7 +28,9 @@ export type GraphQLFieldTypeMapping = {
 }
 
 export type GraphQLQueryRequest = {
+  type: DeliveryFunctionRequestEventType.GRAPHQL_QUERY
   query: string
+  isIntrospectionQuery: boolean
   variables: Record<string, unknown>
   operationName?: string
 }
@@ -51,12 +54,22 @@ export type DeliveryFunctionEventContext<P extends Record<string, any> = Record<
 }
 
 export type DeliveryFunctionEventHandlers = {
-  [DeliveryFunctionRequestEventType.GRAPHQL_FIELD_MAPPING]: (
-    event: GraphQLFieldTypeMappingRequest,
-    context: DeliveryFunctionEventContext
-  ) => Promise<GraphQLFieldTypeMappingResponse>
-  [DeliveryFunctionRequestEventType.GRAPHQL_QUERY]: (
-    event: GraphQLQueryRequest,
-    context: DeliveryFunctionEventContext
-  ) => Promise<GraphQLQueryResponse>
+  [DeliveryFunctionRequestEventType.GRAPHQL_FIELD_MAPPING]: {
+    event: GraphQLFieldTypeMappingRequest
+    response: GraphQLFieldTypeMappingResponse
+  }
+  [DeliveryFunctionRequestEventType.GRAPHQL_QUERY]: {
+    event: GraphQLQueryRequest
+    response: GraphQLQueryResponse
+  }
 }
+
+export type DeliveryFunctionEventHandler<
+  K extends keyof DeliveryFunctionEventHandlers = keyof DeliveryFunctionEventHandlers,
+  P extends Record<string, any> = Record<string, any>
+> = (
+  event: DeliveryFunctionEventHandlers[K]['event'],
+  context: DeliveryFunctionEventContext<P>
+) =>
+  | Promise<DeliveryFunctionEventHandlers[K]['response']>
+  | DeliveryFunctionEventHandlers[K]['response']
