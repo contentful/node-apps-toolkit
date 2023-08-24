@@ -24,7 +24,7 @@ export type GraphQLFieldTypeMapping = {
   fieldId: string
   graphQLOutputType: string
   graphQLQueryField: string
-  graphQLQueryArgument: string
+  graphQLQueryArgument: string | Record<string, string>
 }
 
 export type GraphQLQueryRequest = {
