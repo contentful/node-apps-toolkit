@@ -30,13 +30,13 @@ export type SubjectHeadersUser = { userId: string }
 export type UserContextSignedHeaders = { [ContentfulContextHeader.UserId]: string }
 
 export type Context<SubjectContext> = {
-  crn: string
+  crn?: string
   spaceId: string
   envId: string
 } & SubjectContext
 
 type SignedHeadersWithoutSubject = {
-  [ContentfulContextHeader.CRN]: string
+  [ContentfulContextHeader.CRN]?: string
   [ContentfulContextHeader.SpaceId]: string
   [ContentfulContextHeader.EnvironmentId]: string
 }
