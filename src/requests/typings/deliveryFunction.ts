@@ -2,13 +2,13 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 
-export enum DeliveryFunctionRequestEventType {
+export enum DeliveryFunctionEventType {
   GRAPHQL_FIELD_MAPPING = 'graphql.field.mapping',
   GRAPHQL_QUERY = 'graphql.query',
 }
 
-export type GraphQLFieldTypeMappingRequest = {
-  type: DeliveryFunctionRequestEventType.GRAPHQL_FIELD_MAPPING
+type GraphQLFieldTypeMappingRequest = {
+  type: DeliveryFunctionEventType.GRAPHQL_FIELD_MAPPING
   fields: { contentTypeId: string; field: Field }[]
 }
 
@@ -17,18 +17,21 @@ type Field = {
   type: string
 }
 
-export type GraphQLFieldTypeMappingResponse = GraphQLFieldTypeMapping[]
+export type GraphQLFieldTypeMappingResponse = {
+  namespace: string
+  fields: GraphQLFieldTypeMapping[]
+}
 
 export type GraphQLFieldTypeMapping = {
   contentTypeId: string
   fieldId: string
   graphQLOutputType: string
   graphQLQueryField: string
-  graphQLQueryArgument: string | Record<string, string>
+  graphQLQueryArguments: Record<string, string>
 }
 
-export type GraphQLQueryRequest = {
-  type: DeliveryFunctionRequestEventType.GRAPHQL_QUERY
+type GraphQLQueryRequest = {
+  type: DeliveryFunctionEventType.GRAPHQL_QUERY
   query: string
   isIntrospectionQuery: boolean
   variables: Record<string, unknown>
@@ -53,17 +56,24 @@ export type DeliveryFunctionEventContext<P extends Record<string, any> = Record<
   appInstallationParameters: P
 }
 
-export type DeliveryFunctionEventHandlers = {
-  [DeliveryFunctionRequestEventType.GRAPHQL_FIELD_MAPPING]: {
+type DeliveryFunctionEventHandlers = {
+  [DeliveryFunctionEventType.GRAPHQL_FIELD_MAPPING]: {
     event: GraphQLFieldTypeMappingRequest
     response: GraphQLFieldTypeMappingResponse
   }
-  [DeliveryFunctionRequestEventType.GRAPHQL_QUERY]: {
+  [DeliveryFunctionEventType.GRAPHQL_QUERY]: {
     event: GraphQLQueryRequest
     response: GraphQLQueryResponse
   }
 }
 
+/**
+ * Event handler type that needs to be exported as `handler` from your delivery function.
+ * e.g. `const handler: DeliveryFunctionEventHandler = (event, context) => { ... }`
+ *
+ * This type can also be used to construct helper functions for specific events
+ * e.g. `const queryHandler: DeliveryFunctionEventHandler<'graphql.query'> = (event, context) => { ... }
+ */
 export type DeliveryFunctionEventHandler<
   K extends keyof DeliveryFunctionEventHandlers = keyof DeliveryFunctionEventHandlers,
   P extends Record<string, any> = Record<string, any>
