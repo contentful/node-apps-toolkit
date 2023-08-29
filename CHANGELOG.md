@@ -1,3 +1,10 @@
+# [2.4.0](https://github.com/contentful/node-apps-toolkit/compare/v2.3.0...v2.4.0) (2023-08-28)
+
+
+### Features
+
+* update delivery function handler interface ([#327](https://github.com/contentful/node-apps-toolkit/issues/327)) ([c31c30b](https://github.com/contentful/node-apps-toolkit/commit/c31c30b90681b022a0f88dde1b5bfa6b64250e82))
+
 # [2.3.0](https://github.com/contentful/node-apps-toolkit/compare/v2.2.0...v2.3.0) (2023-08-18)
 
 
