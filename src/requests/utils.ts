@@ -36,6 +36,7 @@ export const pickHeaders = (headers?: Record<string, string>, keys?: string[]) =
 }
 
 const contextHeadersMap: Record<string, ContentfulContextHeader> = {
+  crn: ContentfulContextHeader.CRN,
   spaceId: ContentfulContextHeader.SpaceId,
   envId: ContentfulContextHeader.EnvironmentId,
   appId: ContentfulContextHeader.AppId,

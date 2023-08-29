@@ -182,5 +182,28 @@ describe('create-signature', () => {
 
       assert.ok(Object.values(result).every((h) => typeof h !== 'undefined'))
     })
+
+    it('CRN header is optional', () => {
+      const result = signRequest(VALID_SECRET, VALID_REQUEST, undefined, {
+        appId: 'appId',
+        spaceId: 'spaceId',
+        envId: 'envId',
+      })
+
+      assert.ok(!result['x-contentful-signed-headers'].includes('x-contentful-crn'))
+      assert.equal(result['x-contentful-crn'], undefined)
+    })
+
+    it('includes CRN header', () => {
+      const result = signRequest(VALID_SECRET, VALID_REQUEST, undefined, {
+        crn: 'this-is-a-crn',
+        appId: 'appId',
+        spaceId: 'spaceId',
+        envId: 'envId',
+      })
+
+      assert.ok(result['x-contentful-signed-headers'].includes('x-contentful-crn'))
+      assert.equal(result['x-contentful-crn'], 'this-is-a-crn')
+    })
   })
 })
