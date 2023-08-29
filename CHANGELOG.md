@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/contentful/node-apps-toolkit/compare/v2.4.0...v2.5.0) (2023-08-29)
+
+
+### Features
+
+* add CRN to request signature ([#324](https://github.com/contentful/node-apps-toolkit/issues/324)) ([01e9d09](https://github.com/contentful/node-apps-toolkit/commit/01e9d095703491bcb8ad60de41b6a1f3e7bddf3a))
+
 # [2.4.0](https://github.com/contentful/node-apps-toolkit/compare/v2.3.0...v2.4.0) (2023-08-28)
 
 
