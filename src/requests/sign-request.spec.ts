@@ -190,6 +190,7 @@ describe('create-signature', () => {
         envId: 'envId',
       })
 
+      assert.ok(!result['x-contentful-signed-headers'].includes('x-contentful-crn'))
       assert.equal(result['x-contentful-crn'], undefined)
     })
 
@@ -201,6 +202,7 @@ describe('create-signature', () => {
         envId: 'envId',
       })
 
+      assert.ok(result['x-contentful-signed-headers'].includes('x-contentful-crn'))
       assert.equal(result['x-contentful-crn'], 'this-is-a-crn')
     })
   })
