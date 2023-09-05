@@ -35,6 +35,7 @@
   "devDependencies": {
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
+    "@tsconfig/esm": "^1.0.4",
     "@types/jsonwebtoken": "9.0.2",
     "@types/mocha": "10.0.1",
     "@types/node": "20.5.9",

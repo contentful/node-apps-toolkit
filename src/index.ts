@@ -1,5 +1,10 @@
-export { getManagementToken } from './keys'
-export { signRequest, verifyRequest, ContentfulHeader, DeliveryFunctionEventType } from './requests'
+export { getManagementToken } from './keys/index.js'
+export {
+  signRequest,
+  verifyRequest,
+  ContentfulHeader,
+  DeliveryFunctionEventType,
+} from './requests/index.js'
 
 export type {
   AppActionCallContext,
@@ -7,4 +12,4 @@ export type {
   SignedRequestHeaders,
   DeliveryFunctionEventContext,
   DeliveryFunctionEventHandler,
-} from './requests'
+} from './requests/index.js'

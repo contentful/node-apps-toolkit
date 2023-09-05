@@ -6,7 +6,7 @@ import {
   createHttpClient,
   createValidateStatusCode,
   HttpClient,
-} from '../utils'
+} from '../utils/index.js'
 
 export interface GetManagementTokenOptions {
   appInstallationId: string

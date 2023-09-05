@@ -7,7 +7,7 @@ import {
   SubjectHeadersApp,
   SubjectHeadersUser,
   UserContextSignedHeaders,
-} from './typings'
+} from './typings/index.js'
 
 export const getNormalizedEncodedURI = (uri: string) => {
   const [pathname, search] = uri.split('?')

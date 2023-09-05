@@ -1,6 +1,10 @@
-export { signRequest } from './sign-request'
-export { verifyRequest } from './verify-request'
-export { ContentfulHeader, ContentfulContextHeader, DeliveryFunctionEventType } from './typings'
+export { signRequest } from './sign-request.js'
+export { verifyRequest } from './verify-request.js'
+export {
+  ContentfulHeader,
+  ContentfulContextHeader,
+  DeliveryFunctionEventType,
+} from './typings/index.js'
 export type {
   AppActionCallContext,
   CanonicalRequest,
