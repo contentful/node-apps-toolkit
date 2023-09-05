@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./lib/cjs",
+    "outDir": "./lib",
     "target": "es2019",
     "module": "commonjs",
     "lib": ["es2020", "esnext"],
