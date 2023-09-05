@@ -2,8 +2,8 @@
   "name": "@contentful/node-apps-toolkit",
   "version": "2.5.2",
   "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
-  "main": "lib/index.js",
-  "module": "lib-esm/index.js",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
   "engines": {
     "node": ">=14.15.0"
   },
