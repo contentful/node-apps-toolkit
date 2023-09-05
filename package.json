@@ -53,7 +53,7 @@
     "serve": "14.2.1",
     "sinon": "15.2.0",
     "ts-node": "10.9.1",
-    "typedoc": "0.25.0",
+    "typedoc": "0.25.1",
     "typescript": "5.2.2"
   },
   "lint-staged": {
