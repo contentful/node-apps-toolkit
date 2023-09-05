@@ -1,23 +1,9 @@
 {
+  "extends": "./tsconfig",
   "compilerOptions": {
     "outDir": "./lib/esm",
     "target": "ESNext",
     "module": "ESNext",
-    "lib": ["es2020", "esnext"],
-    "typeRoots": ["./node_modules/@types"],
-    "moduleResolution": "node",
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
-    "noImplicitAny": true,
-    "noEmitOnError": true,
-    "noErrorTruncation": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "pretty": true,
-    "declaration": true,
-    "isolatedModules": true
   },
   "include": ["./src/**/*"],
   "exclude": ["./src/**/*.spec.ts"]
