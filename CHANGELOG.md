@@ -1,3 +1,10 @@
+## [2.5.2](https://github.com/contentful/node-apps-toolkit/compare/v2.5.1...v2.5.2) (2023-09-05)
+
+
+### Bug Fixes
+
+* export as value and not type ([#338](https://github.com/contentful/node-apps-toolkit/issues/338)) ([eed29ee](https://github.com/contentful/node-apps-toolkit/commit/eed29ee4b7779ce6f8aaff820d2be0db47909e4e))
+
 ## [2.5.1](https://github.com/contentful/node-apps-toolkit/compare/v2.5.0...v2.5.1) (2023-09-04)
 
 
