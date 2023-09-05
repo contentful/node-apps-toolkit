@@ -2,7 +2,8 @@
   "name": "@contentful/node-apps-toolkit",
   "version": "2.5.2",
   "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
-  "main": "lib/index.js",
+  "main": "lib/cjs/index.js",
+  "module": "lib/esm/index.js",
   "engines": {
     "node": ">=14.15.0"
   },
@@ -14,7 +15,7 @@
     "test:unit": "mocha -r dotenv/config -r ts-node/register ./src/**/*.spec.ts",
     "test:integration": "mocha -r dotenv/config -r ts-node/register --timeout 10000 ./test/**/*.test.ts",
     "test": "npm run test:unit && npm run test:integration",
-    "build": "rm -rf lib && tsc",
+    "build": "rm -rf lib && tsc --project tsconfig.json && tsc --project tsconfig.esm.json",
     "build:docs": "typedoc --options .typedocrc.json src",
     "start:docs": "serve ./docs",
     "prepublishOnly": "npm run build && npm run build:docs",
