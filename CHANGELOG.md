@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/contentful/node-apps-toolkit/compare/v2.5.2...v2.6.0) (2023-09-21)
+
+
+### Features
+
+* update AppActionCallContext type to reflect cmaHost ([#351](https://github.com/contentful/node-apps-toolkit/issues/351)) ([1c6a623](https://github.com/contentful/node-apps-toolkit/commit/1c6a6237591339690e608ffcc0a8aa0aa7772ed7))
+
 ## [2.5.2](https://github.com/contentful/node-apps-toolkit/compare/v2.5.1...v2.5.2) (2023-09-05)
 
 
