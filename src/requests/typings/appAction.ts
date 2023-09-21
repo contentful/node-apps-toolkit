@@ -7,5 +7,6 @@ export type AppActionCallContext = {
     environmentId: string
     appInstallationId: string
     userId: string
+    cmaHost: string
   }
 }
