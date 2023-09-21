@@ -1,3 +1,10 @@
+## [2.6.1](https://github.com/contentful/node-apps-toolkit/compare/v2.6.0...v2.6.1) (2023-09-21)
+
+
+### Bug Fixes
+
+* adds uploadHost to appActionCallContext type ([#353](https://github.com/contentful/node-apps-toolkit/issues/353)) ([a918331](https://github.com/contentful/node-apps-toolkit/commit/a918331fdfd8157c98d5c38ff96366919c885683))
+
 # [2.6.0](https://github.com/contentful/node-apps-toolkit/compare/v2.5.2...v2.6.0) (2023-09-21)
 
 
