@@ -8,5 +8,6 @@ export type AppActionCallContext = {
     appInstallationId: string
     userId: string
     cmaHost: string
+    uploadHost: string
   }
 }
