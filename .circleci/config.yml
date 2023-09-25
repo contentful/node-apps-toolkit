@@ -39,7 +39,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "18"
+          node-version: "20"
       - run: npm ci
       - run: npm run build
       - run: npm run build:docs
@@ -50,7 +50,7 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "18"
+          node-version: "20"
       - run: npm ci
 
   semantic-release:
@@ -61,7 +61,7 @@ jobs:
       - vault/get-secrets:
           template-preset: "semantic-release-ecosystem"
       - node/install:
-          node-version: "18"
+          node-version: "20"
       - setup-npm
       - run: npm ci
       - run:
@@ -74,7 +74,7 @@ workflows:
       - lint-and-test:
           matrix:
             parameters:
-              node-version: ["14.15.0", "16.13.0", "18.12.0"]
+              node-version: ["18.12.0", "20.6.1"]
       - lint-commits
       - build
       - semantic-release:
