@@ -65,6 +65,7 @@ type DeliveryFunctionEventHandlers = {
   }
 }
 
+export type DeliveryFunctionEvent = GraphQLFieldTypeMappingRequest | GraphQLQueryRequest
 export type DeliveryFunctionEventType = keyof DeliveryFunctionEventHandlers
 
 /**

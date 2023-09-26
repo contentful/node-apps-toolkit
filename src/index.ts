@@ -8,4 +8,5 @@ export type {
   DeliveryFunctionEventContext,
   DeliveryFunctionEventHandler,
   DeliveryFunctionEventType,
+  DeliveryFunctionEvent,
 } from './requests'

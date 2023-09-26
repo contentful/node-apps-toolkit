@@ -4,6 +4,7 @@ export { ContentfulHeader, ContentfulContextHeader } from './typings'
 export type {
   AppActionCallContext,
   CanonicalRequest,
+  DeliveryFunctionEvent,
   DeliveryFunctionEventContext,
   DeliveryFunctionEventHandler,
   DeliveryFunctionEventType,
