@@ -1,3 +1,10 @@
+## [2.6.2](https://github.com/contentful/node-apps-toolkit/compare/v2.6.1...v2.6.2) (2023-09-26)
+
+
+### Bug Fixes
+
+* clean up types by avoiding enums [MONET-1476] ([#362](https://github.com/contentful/node-apps-toolkit/issues/362)) ([866424e](https://github.com/contentful/node-apps-toolkit/commit/866424ec74659d134f961ec02c1a9c9886337d0b))
+
 ## [2.6.1](https://github.com/contentful/node-apps-toolkit/compare/v2.6.0...v2.6.1) (2023-09-21)
 
 
