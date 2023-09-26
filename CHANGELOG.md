@@ -1,3 +1,11 @@
+## [2.7.1](https://github.com/contentful/node-apps-toolkit/compare/v2.7.0...v2.7.1) (2023-09-26)
+
+
+### Bug Fixes
+
+* npm update after node upgrade ([#366](https://github.com/contentful/node-apps-toolkit/issues/366)) ([9269a3e](https://github.com/contentful/node-apps-toolkit/commit/9269a3e40bb68accc45f64bb0c84a77ce8735ec5))
+* set repository url to allow CONTRIBUTING.md link to work from npm page ([#354](https://github.com/contentful/node-apps-toolkit/issues/354)) ([a0b7dcc](https://github.com/contentful/node-apps-toolkit/commit/a0b7dcc7b1f0de31c8d84bba2b991559219a7190))
+
 # [2.7.0](https://github.com/contentful/node-apps-toolkit/compare/v2.6.2...v2.7.0) (2023-09-26)
 
 
