@@ -1,5 +1,5 @@
 export { getManagementToken } from './keys'
-export { signRequest, verifyRequest, ContentfulHeader, DeliveryFunctionEventType } from './requests'
+export { signRequest, verifyRequest, ContentfulHeader } from './requests'
 
 export type {
   AppActionCallContext,
@@ -7,4 +7,5 @@ export type {
   SignedRequestHeaders,
   DeliveryFunctionEventContext,
   DeliveryFunctionEventHandler,
+  DeliveryFunctionEventType,
 } from './requests'
