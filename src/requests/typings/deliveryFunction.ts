@@ -2,13 +2,11 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 
-export enum DeliveryFunctionEventType {
-  GRAPHQL_FIELD_MAPPING = 'graphql.field.mapping',
-  GRAPHQL_QUERY = 'graphql.query',
-}
+const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
+const GRAPHQL_QUERY_EVENT = 'graphql.query'
 
 type GraphQLFieldTypeMappingRequest = {
-  type: DeliveryFunctionEventType.GRAPHQL_FIELD_MAPPING
+  type: typeof GRAPHQL_FIELD_MAPPING_EVENT
   fields: { contentTypeId: string; field: Field }[]
 }
 
@@ -31,7 +29,7 @@ export type GraphQLFieldTypeMapping = {
 }
 
 type GraphQLQueryRequest = {
-  type: DeliveryFunctionEventType.GRAPHQL_QUERY
+  type: typeof GRAPHQL_QUERY_EVENT
   query: string
   isIntrospectionQuery: boolean
   variables: Record<string, unknown>
@@ -57,15 +55,17 @@ export type DeliveryFunctionEventContext<P extends Record<string, any> = Record<
 }
 
 type DeliveryFunctionEventHandlers = {
-  [DeliveryFunctionEventType.GRAPHQL_FIELD_MAPPING]: {
+  [GRAPHQL_FIELD_MAPPING_EVENT]: {
     event: GraphQLFieldTypeMappingRequest
     response: GraphQLFieldTypeMappingResponse
   }
-  [DeliveryFunctionEventType.GRAPHQL_QUERY]: {
+  [GRAPHQL_QUERY_EVENT]: {
     event: GraphQLQueryRequest
     response: GraphQLQueryResponse
   }
 }
+
+export type DeliveryFunctionEventType = keyof DeliveryFunctionEventHandlers
 
 /**
  * Event handler type that needs to be exported as `handler` from your delivery function.
@@ -75,7 +75,7 @@ type DeliveryFunctionEventHandlers = {
  * e.g. `const queryHandler: DeliveryFunctionEventHandler<'graphql.query'> = (event, context) => { ... }
  */
 export type DeliveryFunctionEventHandler<
-  K extends keyof DeliveryFunctionEventHandlers = keyof DeliveryFunctionEventHandlers,
+  K extends DeliveryFunctionEventType = DeliveryFunctionEventType,
   P extends Record<string, any> = Record<string, any>
 > = (
   event: DeliveryFunctionEventHandlers[K]['event'],
