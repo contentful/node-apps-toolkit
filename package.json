@@ -1,6 +1,6 @@
 {
   "name": "@contentful/node-apps-toolkit",
-  "version": "2.6.2",
+  "version": "2.7.0",
   "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
   "main": "lib/index.js",
   "engines": {

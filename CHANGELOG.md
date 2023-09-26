@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/contentful/node-apps-toolkit/compare/v2.6.2...v2.7.0) (2023-09-26)
+
+
+### Features
+
+* export a barrel type to combine all delivery function events ([#365](https://github.com/contentful/node-apps-toolkit/issues/365)) ([1248f73](https://github.com/contentful/node-apps-toolkit/commit/1248f73ee83e9a161ae8919bcaa7019713ad083e))
+
 ## [2.6.2](https://github.com/contentful/node-apps-toolkit/compare/v2.6.1...v2.6.2) (2023-09-26)
 
 
