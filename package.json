@@ -60,5 +60,9 @@
     "*.ts": [
       "npm run lint:fix"
     ]
+  },
+  "repository": {
+    "url": "github:contentful/node-apps-toolkit",
+    "type": "git"
   }
 }
