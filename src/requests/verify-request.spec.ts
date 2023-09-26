@@ -24,7 +24,7 @@ const makeContextHeaders = (subject?: { appId: string } | { userId: string }) =>
 const makeIncomingRequest = (
   { path = '/api/v1/resources/1', method = 'GET', headers, body }: Partial<CanonicalRequest>,
   contextHeaders: undefined | Context<any>,
-  now = Date.now()
+  now = Date.now(),
 ): CanonicalRequest & { headers: Record<string, string> } => {
   const request = {
     path,
@@ -66,7 +66,7 @@ describe('verifyRequest', () => {
               Authorization: 'Bearer TOKEN',
             },
           },
-          now
+          now,
         )
 
         assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
@@ -81,7 +81,7 @@ describe('verifyRequest', () => {
             },
           },
           makeContextHeaders(contextHeaders),
-          now
+          now,
         )
 
         assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
@@ -97,12 +97,12 @@ describe('verifyRequest', () => {
               },
             },
             makeContextHeaders(contextHeaders),
-            oneMinuteAgo
+            oneMinuteAgo,
           )
 
           assert.throws(
             () => verifyRequest(VALID_SECRET, incomingRequest, 1),
-            ExpiredRequestException
+            ExpiredRequestException,
           )
         })
 
@@ -115,12 +115,12 @@ describe('verifyRequest', () => {
               },
             },
             makeContextHeaders(contextHeaders),
-            oneMinuteAgo
+            oneMinuteAgo,
           )
 
           assert.doesNotThrow(
             () => verifyRequest(VALID_SECRET, incomingRequest, 0),
-            ExpiredRequestException
+            ExpiredRequestException,
           )
         })
       })
@@ -217,7 +217,7 @@ describe('verifyRequest', () => {
             {
               headers: { Authorization: 'Bearer TOKEN' },
             },
-            makeContextHeaders(contextHeaders)
+            makeContextHeaders(contextHeaders),
           )
 
           delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
@@ -238,7 +238,7 @@ describe('verifyRequest', () => {
                 'Cache-Control': cacheControl,
               },
             },
-            makeContextHeaders(contextHeaders)
+            makeContextHeaders(contextHeaders),
           )
 
           // mess with casing
@@ -265,7 +265,7 @@ describe('verifyRequest', () => {
                 'Cache-Control': cacheControl,
               },
             },
-            makeContextHeaders(contextHeaders)
+            makeContextHeaders(contextHeaders),
           )
 
           // mess with spacing
@@ -292,7 +292,7 @@ describe('verifyRequest', () => {
                 'Cache-Control': cacheControl,
               },
             },
-            makeContextHeaders(contextHeaders)
+            makeContextHeaders(contextHeaders),
           )
 
           incomingRequest.headers['Content-Type'] = 'application/json'
@@ -310,7 +310,7 @@ describe('verifyRequest', () => {
                 'Cache-Control': cacheControl,
               },
             },
-            makeContextHeaders(contextHeaders)
+            makeContextHeaders(contextHeaders),
           )
 
           incomingRequest.headers['Authorization'] = 'something else'
@@ -326,7 +326,7 @@ describe('verifyRequest', () => {
                 'z-zzzzz': 'ronf ronf',
               },
             },
-            makeContextHeaders(contextHeaders)
+            makeContextHeaders(contextHeaders),
           )
 
           assert(verifyRequest(VALID_SECRET, incomingRequest))
@@ -341,7 +341,7 @@ describe('verifyRequest', () => {
 
           const incomingRequest = makeIncomingRequest(
             { path: pathWithQueryOne },
-            makeContextHeaders(contextHeaders)
+            makeContextHeaders(contextHeaders),
           )
 
           incomingRequest.path = pathWithQueryTwo
@@ -354,7 +354,7 @@ describe('verifyRequest', () => {
         it('does not verify with different methods', () => {
           const incomingRequest = makeIncomingRequest(
             { method: 'GET' },
-            makeContextHeaders(contextHeaders)
+            makeContextHeaders(contextHeaders),
           )
 
           incomingRequest.method = 'POST'
@@ -371,7 +371,7 @@ describe('verifyRequest', () => {
                 Authorization: 'Bearer TOKEN',
               },
             },
-            makeContextHeaders(contextHeaders)
+            makeContextHeaders(contextHeaders),
           )
           const differentSecret = `q${VALID_SECRET.slice(1, VALID_SECRET.length)}`
 

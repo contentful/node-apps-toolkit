@@ -19,7 +19,7 @@ const assertThrowsForFieldInValues = (field: keyof CanonicalRequest, values: any
           // @ts-ignore
           [field]: value,
         },
-        VALID_TIMESTAMP
+        VALID_TIMESTAMP,
       )
     }, `Did not throw for ${field.toString()}:${value}`)
   }
@@ -99,13 +99,13 @@ describe('create-signature', () => {
         signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers },
-          VALID_TIMESTAMP
+          VALID_TIMESTAMP,
         ),
         signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?w=2&q=1', headers },
-          VALID_TIMESTAMP
-        )
+          VALID_TIMESTAMP,
+        ),
       )
     })
 
@@ -118,13 +118,13 @@ describe('create-signature', () => {
         signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers },
-          VALID_TIMESTAMP
+          VALID_TIMESTAMP,
         ),
         signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?q=12', headers },
-          VALID_TIMESTAMP
-        )
+          VALID_TIMESTAMP,
+        ),
       )
     })
 
@@ -140,8 +140,8 @@ describe('create-signature', () => {
             ...VALID_REQUEST,
             headers,
           },
-          VALID_TIMESTAMP
-        )
+          VALID_TIMESTAMP,
+        ),
       )
     })
 
@@ -154,7 +154,7 @@ describe('create-signature', () => {
 
       assert.deepStrictEqual(
         signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
-        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers: headersCased }, VALID_TIMESTAMP)
+        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers: headersCased }, VALID_TIMESTAMP),
       )
     })
     it('generates same signature if headers values are provided with different ending/starting spacing (trimming)', () => {
@@ -166,14 +166,14 @@ describe('create-signature', () => {
 
       assert.deepStrictEqual(
         signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
-        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers: headersSpaced }, VALID_TIMESTAMP)
+        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers: headersSpaced }, VALID_TIMESTAMP),
       )
     })
     it('generates different signatures with different secrets', () => {
       const newSecret = `q${VALID_SECRET.slice(1, VALID_SECRET.length)}`
       assert.notStrictEqual(
         signRequest(newSecret, VALID_REQUEST, VALID_TIMESTAMP),
-        signRequest(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP)
+        signRequest(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP),
       )
     })
 

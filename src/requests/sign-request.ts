@@ -71,25 +71,25 @@ const getSortedAndSignedHeaders = (headers: Record<string, string>, timestamp: n
 export function signRequest(
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
-  rawTimestamp?: Timestamp
+  rawTimestamp?: Timestamp,
 ): SignedRequestWithoutContextHeaders
 export function signRequest(
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
   rawTimestamp?: Timestamp,
-  rawContext?: Context<SubjectHeadersApp>
+  rawContext?: Context<SubjectHeadersApp>,
 ): SignedRequestWithContextHeadersWithApp
 export function signRequest(
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
   rawTimestamp?: Timestamp,
-  rawContext?: Context<SubjectHeadersUser>
+  rawContext?: Context<SubjectHeadersUser>,
 ): SignedRequestWithContextHeadersWithUser
 export function signRequest(
   rawSecret: Secret,
   rawCanonicalRequest: CanonicalRequest,
   rawTimestamp?: Timestamp,
-  rawContext?: any
+  rawContext?: any,
 ) {
   const maybeDefaultTimestamp = rawTimestamp ?? Date.now()
   const canonicalRequest: CanonicalRequest = CanonicalRequestValidator.check(rawCanonicalRequest)
@@ -105,7 +105,7 @@ export function signRequest(
 
   const { sortedHeaders, signedHeaders } = getSortedAndSignedHeaders(
     { ...headers, ...contextHeaders },
-    timestamp
+    timestamp,
   )
 
   return {

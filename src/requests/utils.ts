@@ -47,24 +47,27 @@ const contextHeadersMap: Record<string, ContentfulContextHeader> = {
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars, no-redeclare*/
 export function normalizeContextHeaders(
-  rawContext: Context<SubjectHeadersApp>
+  rawContext: Context<SubjectHeadersApp>,
 ): SignedContextHeaders<AppContextSignedHeaders>
 export function normalizeContextHeaders(
-  rawContext: Context<SubjectHeadersUser>
+  rawContext: Context<SubjectHeadersUser>,
 ): SignedContextHeaders<UserContextSignedHeaders>
 export function normalizeContextHeaders(
-  rawContext: Context<SubjectHeadersApp> | Context<SubjectHeadersUser>
+  rawContext: Context<SubjectHeadersApp> | Context<SubjectHeadersUser>,
 ) {
-  return Object.keys(rawContext).reduce((acc, header) => {
-    if (contextHeadersMap[header]) {
-      const key = normalizeHeaderKey(contextHeadersMap[header]) as ContentfulContextHeader
-      acc[key] = normalizeHeaderValue(
-        acc[key] ??
-          rawContext[header as keyof (Context<SubjectHeadersUser> | Context<SubjectHeadersApp>)]
-      )
-    }
-    return acc
-  }, {} as Record<ContentfulContextHeader, string>)
+  return Object.keys(rawContext).reduce(
+    (acc, header) => {
+      if (contextHeadersMap[header]) {
+        const key = normalizeHeaderKey(contextHeadersMap[header]) as ContentfulContextHeader
+        acc[key] = normalizeHeaderValue(
+          acc[key] ??
+            rawContext[header as keyof (Context<SubjectHeadersUser> | Context<SubjectHeadersApp>)],
+        )
+      }
+      return acc
+    },
+    {} as Record<ContentfulContextHeader, string>,
+  )
 }
 /*eslint-enable no-unused-vars, no-redeclare*/
 
@@ -73,14 +76,14 @@ export function normalizeContextHeaders(
 /*eslint-disable no-unused-vars*/
 export const filter = <T = string>(
   obj: Record<string, any>,
-  callback: (entry: [string, T]) => boolean
+  callback: (entry: [string, T]) => boolean,
 ) => {
   return Object.fromEntries(Object.entries(obj).filter(callback))
 }
 
 export const map = <T = string>(
   obj: Record<string, any>,
-  callback: (entry: [string, T]) => [string, T]
+  callback: (entry: [string, T]) => [string, T],
 ) => {
   return Object.fromEntries(Object.entries(obj).map(callback))
 }
