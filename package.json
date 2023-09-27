@@ -4,7 +4,7 @@
   "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
   "main": "lib/index.js",
   "engines": {
-    "node": ">=20.6.1"
+    "node": ">=18"
   },
   "scripts": {
     "prepare": "husky install",
