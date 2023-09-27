@@ -1,3 +1,10 @@
+## [2.7.2](https://github.com/contentful/node-apps-toolkit/compare/v2.7.1...v2.7.2) (2023-09-27)
+
+
+### Bug Fixes
+
+* set node engine >=18 ([#368](https://github.com/contentful/node-apps-toolkit/issues/368)) ([1c36b0d](https://github.com/contentful/node-apps-toolkit/commit/1c36b0dde4afb21df38565ea1f3706528547fffa))
+
 ## [2.7.1](https://github.com/contentful/node-apps-toolkit/compare/v2.7.0...v2.7.1) (2023-09-26)
 
 
