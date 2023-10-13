@@ -4,7 +4,10 @@ The `node-apps-toolkit` is a growing collection of helpers and utilities for bui
 
 ## Compatibiltiy
 
-Requires an [Node.js LTS version](https://github.com/nodejs/Release). Odd-numbered and not-yet LTS major versions are not supported.
+Requires an [Node.js LTS version](https://github.com/nodejs/Release). Currently supported node versions:
+ - v18
+ - v20
+Odd-numbered and not-yet LTS major versions are not supported.
 
 ## Installation
  
