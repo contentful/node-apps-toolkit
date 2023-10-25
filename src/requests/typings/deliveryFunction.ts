@@ -23,7 +23,7 @@ export type GraphQLFieldTypeMappingResponse = {
 export type GraphQLFieldTypeMapping = {
   contentTypeId: string
   fieldId: string
-  graphQLOutputType: string
+  graphQLOutputType?: string
   graphQLQueryField: string
   graphQLQueryArguments: Record<string, string>
 }
@@ -77,10 +77,10 @@ export type DeliveryFunctionEventType = keyof DeliveryFunctionEventHandlers
  */
 export type DeliveryFunctionEventHandler<
   K extends DeliveryFunctionEventType = DeliveryFunctionEventType,
-  P extends Record<string, any> = Record<string, any>,
+  P extends Record<string, any> = Record<string, any>
 > = (
   event: DeliveryFunctionEventHandlers[K]['event'],
-  context: DeliveryFunctionEventContext<P>,
+  context: DeliveryFunctionEventContext<P>
 ) =>
   | Promise<DeliveryFunctionEventHandlers[K]['response']>
   | DeliveryFunctionEventHandlers[K]['response']
