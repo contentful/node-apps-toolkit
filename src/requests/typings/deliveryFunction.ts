@@ -77,10 +77,10 @@ export type DeliveryFunctionEventType = keyof DeliveryFunctionEventHandlers
  */
 export type DeliveryFunctionEventHandler<
   K extends DeliveryFunctionEventType = DeliveryFunctionEventType,
-  P extends Record<string, any> = Record<string, any>
+  P extends Record<string, any> = Record<string, any>,
 > = (
   event: DeliveryFunctionEventHandlers[K]['event'],
-  context: DeliveryFunctionEventContext<P>
+  context: DeliveryFunctionEventContext<P>,
 ) =>
   | Promise<DeliveryFunctionEventHandlers[K]['response']>
   | DeliveryFunctionEventHandlers[K]['response']
