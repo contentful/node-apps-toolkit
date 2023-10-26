@@ -23,7 +23,7 @@ export type GraphQLFieldTypeMappingResponse = {
 export type GraphQLFieldTypeMapping = {
   contentTypeId: string
   fieldId: string
-  graphQLOutputType: string
+  graphQLOutputType?: string
   graphQLQueryField: string
   graphQLQueryArguments: Record<string, string>
 }
