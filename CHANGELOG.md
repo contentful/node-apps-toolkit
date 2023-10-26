@@ -1,3 +1,16 @@
+# [2.8.0](https://github.com/contentful/node-apps-toolkit/compare/v2.7.2...v2.8.0) (2023-10-26)
+
+
+### Bug Fixes
+
+* explicit support for node 18 ([#386](https://github.com/contentful/node-apps-toolkit/issues/386)) ([b861f8a](https://github.com/contentful/node-apps-toolkit/commit/b861f8ae09a05d2257ec67a1e1c087abd6e3ce27))
+* trigger new build ([951153d](https://github.com/contentful/node-apps-toolkit/commit/951153d7ae9fe2f307db8df2c1c8a1d3cdf3a0f2))
+
+
+### Features
+
+* make graphQLOutputType optional ([#402](https://github.com/contentful/node-apps-toolkit/issues/402)) ([b45ec75](https://github.com/contentful/node-apps-toolkit/commit/b45ec753e660add3ee26dd1e56b2849fe1d336bb))
+
 ## [2.7.2](https://github.com/contentful/node-apps-toolkit/compare/v2.7.1...v2.7.2) (2023-09-27)
 
 
