@@ -7,8 +7,8 @@ apiVersion: backstage.io/v1alpha1
 # Component, API, Template, Group, User, Resource, System, Domain, Location
 kind: unknown
 metadata:
-  name: node-apps-toolkit 
-  description: unknown
+  name: node-apps-toolkit
+  description: The node-apps-toolkit is a growing collection of helpers and utilities for building Contentful Apps with Node.js.
   annotations:
     github.com/project-slug: contentful/node-apps-toolkit 
     contentful.com/service-tier: "unknown" #1, 2, 3, 4
@@ -22,9 +22,9 @@ metadata:
     - tier-unknown
 spec:
   #cli, component, contentful.com/template, documentation, function, library, service, template, website
-  type: unknown 
+  type: library
   #deprecated, experimental, production, unknown
-  lifecycle: unknown  
+  lifecycle: production
   system: unknown #optional
   # your team name as it appears in github when tagging them for reviews
-  owner: group:team-unknown 
+  owner: group:team-developer-experience
