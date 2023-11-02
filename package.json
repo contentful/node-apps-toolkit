@@ -51,7 +51,7 @@
     "prettier": "3.0.3",
     "semantic-release": "22.0.6",
     "serve": "14.2.1",
-    "sinon": "17.0.0",
+    "sinon": "17.0.1",
     "ts-node": "10.9.1",
     "typedoc": "0.25.3",
     "typescript": "5.2.2"
