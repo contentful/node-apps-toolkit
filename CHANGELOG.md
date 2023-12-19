@@ -1,3 +1,10 @@
+## [2.8.1](https://github.com/contentful/node-apps-toolkit/compare/v2.8.0...v2.8.1) (2023-12-19)
+
+
+### Bug Fixes
+
+* upgrade to latest contentful-management.js ([#461](https://github.com/contentful/node-apps-toolkit/issues/461)) ([4e25691](https://github.com/contentful/node-apps-toolkit/commit/4e25691aa8156ee72f45806fc7cff2b24f9826e5))
+
 # [2.8.0](https://github.com/contentful/node-apps-toolkit/compare/v2.7.2...v2.8.0) (2023-10-26)
 
 
