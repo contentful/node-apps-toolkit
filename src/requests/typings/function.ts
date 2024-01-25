@@ -81,6 +81,4 @@ export type FunctionEventHandler<
 > = (
   event: FunctionEventHandlers[K]['event'],
   context: FunctionEventContext<P>,
-) =>
-  | Promise<FunctionEventHandlers[K]['response']>
-  | FunctionEventHandlers[K]['response']
+) => Promise<FunctionEventHandlers[K]['response']> | FunctionEventHandlers[K]['response']
