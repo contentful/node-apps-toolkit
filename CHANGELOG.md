@@ -1,3 +1,10 @@
+## [2.8.2](https://github.com/contentful/node-apps-toolkit/compare/v2.8.1...v2.8.2) (2024-01-25)
+
+
+### Bug Fixes
+
+* revert upgrade of semantic-release [] ([5b73f5c](https://github.com/contentful/node-apps-toolkit/commit/5b73f5c8d1c5ef055818466d73eff6db01345429))
+
 ## [2.8.1](https://github.com/contentful/node-apps-toolkit/compare/v2.8.0...v2.8.1) (2023-12-19)
 
 
