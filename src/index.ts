@@ -5,8 +5,8 @@ export type {
   AppActionCallContext,
   CanonicalRequest,
   SignedRequestHeaders,
-  DeliveryFunctionEventContext,
-  DeliveryFunctionEventHandler,
-  DeliveryFunctionEventType,
-  DeliveryFunctionEvent,
+  FunctionEventContext,
+  FunctionEventHandler,
+  FunctionEventType,
+  FunctionEvent,
 } from './requests'

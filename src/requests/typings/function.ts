@@ -48,13 +48,13 @@ export type GraphQLQueryResponse = {
 /**
  * P: Possibility to type app installation parameters
  */
-export type DeliveryFunctionEventContext<P extends Record<string, any> = Record<string, any>> = {
+export type FunctionEventContext<P extends Record<string, any> = Record<string, any>> = {
   spaceId: string
   environmentId: string
   appInstallationParameters: P
 }
 
-type DeliveryFunctionEventHandlers = {
+type FunctionEventHandlers = {
   [GRAPHQL_FIELD_MAPPING_EVENT]: {
     event: GraphQLFieldTypeMappingRequest
     response: GraphQLFieldTypeMappingResponse
@@ -65,22 +65,22 @@ type DeliveryFunctionEventHandlers = {
   }
 }
 
-export type DeliveryFunctionEvent = GraphQLFieldTypeMappingRequest | GraphQLQueryRequest
-export type DeliveryFunctionEventType = keyof DeliveryFunctionEventHandlers
+export type FunctionEvent = GraphQLFieldTypeMappingRequest | GraphQLQueryRequest
+export type FunctionEventType = keyof FunctionEventHandlers
 
 /**
- * Event handler type that needs to be exported as `handler` from your delivery function.
- * e.g. `const handler: DeliveryFunctionEventHandler = (event, context) => { ... }`
+ * Event handler type that needs to be exported as `handler` from your function.
+ * e.g. `const handler: FunctionEventHandler = (event, context) => { ... }`
  *
  * This type can also be used to construct helper functions for specific events
- * e.g. `const queryHandler: DeliveryFunctionEventHandler<'graphql.query'> = (event, context) => { ... }
+ * e.g. `const queryHandler: FunctionEventHandler<'graphql.query'> = (event, context) => { ... }
  */
-export type DeliveryFunctionEventHandler<
-  K extends DeliveryFunctionEventType = DeliveryFunctionEventType,
+export type FunctionEventHandler<
+  K extends FunctionEventType = FunctionEventType,
   P extends Record<string, any> = Record<string, any>,
 > = (
-  event: DeliveryFunctionEventHandlers[K]['event'],
-  context: DeliveryFunctionEventContext<P>,
+  event: FunctionEventHandlers[K]['event'],
+  context: FunctionEventContext<P>,
 ) =>
-  | Promise<DeliveryFunctionEventHandlers[K]['response']>
-  | DeliveryFunctionEventHandlers[K]['response']
+  | Promise<FunctionEventHandlers[K]['response']>
+  | FunctionEventHandlers[K]['response']
