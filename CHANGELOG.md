@@ -1,3 +1,17 @@
+# [3.0.0](https://github.com/contentful/node-apps-toolkit/compare/v2.8.2...v3.0.0) (2024-01-29)
+
+
+* BREAKING CHANGE: update typings for Functions (#500) ([fcf4535](https://github.com/contentful/node-apps-toolkit/commit/fcf45356680ab54db0f0ec37e6ccb2711a0514e1)), closes [#500](https://github.com/contentful/node-apps-toolkit/issues/500)
+
+
+### BREAKING CHANGES
+
+* update typings
+
+* fix: lint
+
+* revert: semantic release package to make the build pass
+
 ## [2.8.2](https://github.com/contentful/node-apps-toolkit/compare/v2.8.1...v2.8.2) (2024-01-25)
 
 
