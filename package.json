@@ -41,7 +41,7 @@
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
     "base64url": "3.0.1",
-    "dotenv": "16.4.2",
+    "dotenv": "16.4.3",
     "eslint": "8.56.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "^5.0.0",
