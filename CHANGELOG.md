@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/contentful/node-apps-toolkit/compare/v3.0.0...v3.0.1) (2024-02-27)
+
+
+### Bug Fixes
+
+* use node 20.8.1 for semantic-release [] ([#544](https://github.com/contentful/node-apps-toolkit/issues/544)) ([02f2cf6](https://github.com/contentful/node-apps-toolkit/commit/02f2cf6ebc4af724e56372147ece3f39bcf1dafe))
+
 # [3.0.0](https://github.com/contentful/node-apps-toolkit/compare/v2.8.2...v3.0.0) (2024-01-29)
 
 
