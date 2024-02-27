@@ -61,7 +61,7 @@ jobs:
       - vault/get-secrets:
           template-preset: "semantic-release-ecosystem"
       - node/install:
-          node-version: "18"
+          node-version: "20.8.1"
       - setup-npm
       - run: npm ci
       - run:
