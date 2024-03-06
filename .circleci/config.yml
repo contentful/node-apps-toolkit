@@ -7,11 +7,10 @@ orbs:
 commands:
   setup-npm:
     steps:
-      - run:
-          name: Provide NPM Token
-          command: |-
-            echo $'@contentful:registry=https://registry.npmjs.org/
-            //registry.npmjs.org/:_authToken=${NPM_TOKEN}' >> ~/.npmrc
+      - vault/get-secrets:
+        template-preset: "packages-read"
+      - run: echo "//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_READ_TOKEN}" > ~/.npmrc
+      - run: echo "@contentful:registry=https://npm.pkg.github.com" >> ~/.npmrc
 
 jobs:
 
@@ -25,6 +24,7 @@ jobs:
       - checkout
       - node/install:
           node-version: << parameters.node-version >>
+      - setup-npm
       - run: npm ci
       - run:
           name: Run linter
@@ -40,6 +40,7 @@ jobs:
       - checkout
       - node/install:
           node-version: "18"
+      - setup-npm
       - run: npm ci
       - run: npm run build
       - run: npm run build:docs
