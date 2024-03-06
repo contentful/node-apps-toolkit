@@ -1,3 +1,10 @@
+# [3.1.0](https://github.com/contentful/node-apps-toolkit/compare/v3.0.1...v3.1.0) (2024-03-06)
+
+
+### Features
+
+* github migration [EXT-5011] ([#552](https://github.com/contentful/node-apps-toolkit/issues/552)) ([f38dbc1](https://github.com/contentful/node-apps-toolkit/commit/f38dbc12d3eb737bc69fc9712a622cf26639b3ae))
+
 ## [3.0.1](https://github.com/contentful/node-apps-toolkit/compare/v3.0.0...v3.0.1) (2024-02-27)
 
 
