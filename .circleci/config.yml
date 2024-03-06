@@ -73,11 +73,17 @@ workflows:
   lint-build-release:
     jobs:
       - lint-and-test:
+          context: 
+            - vault
           matrix:
             parameters:
               node-version: ["18.12.0", "20.6.1"]
       - lint-commits
+        context:
+          - vault
       - build
+        context:
+          - vault
       - semantic-release:
           context:
             - vault
