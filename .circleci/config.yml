@@ -52,6 +52,7 @@ jobs:
       - checkout
       - node/install:
           node-version: "18"
+      - setup-npm
       - run: npm ci
 
   semantic-release:
