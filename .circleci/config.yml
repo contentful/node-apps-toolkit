@@ -8,7 +8,7 @@ commands:
   setup-npm:
     steps:
       - vault/get-secrets:
-        template-preset: "packages-read"
+          template-preset: "packages-read"
       - run: echo "//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_READ_TOKEN}" > ~/.npmrc
       - run: echo "@contentful:registry=https://npm.pkg.github.com" >> ~/.npmrc
 
@@ -61,9 +61,10 @@ jobs:
       - checkout
       - vault/get-secrets:
           template-preset: "semantic-release-ecosystem"
+      - run: echo "//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_WRITE_TOKEN}" > ~/.npmrc
+      - run: echo "@contentful:registry=https://npm.pkg.github.com" >> ~/.npmrc
       - node/install:
           node-version: "20.8.1"
-      - setup-npm
       - run: npm ci
       - run:
           name: Releasing
