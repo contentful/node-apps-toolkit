@@ -1,3 +1,15 @@
+# [3.2.0](https://github.com/contentful/node-apps-toolkit/compare/v3.1.0...v3.2.0) (2024-03-08)
+
+
+### Features
+
+* github migration [EXT-5011] ([#553](https://github.com/contentful/node-apps-toolkit/issues/553)) ([c473ad7](https://github.com/contentful/node-apps-toolkit/commit/c473ad7f08de91cee30e81535104b1fd8b48c529))
+
+
+### Reverts
+
+* Revert "chore(deps-dev): bump typescript from 5.3.3 to 5.4.2 (#555)" (#557) ([7d5388a](https://github.com/contentful/node-apps-toolkit/commit/7d5388a19df69b84a6f32459ebe7b518ea65c427)), closes [#555](https://github.com/contentful/node-apps-toolkit/issues/555) [#557](https://github.com/contentful/node-apps-toolkit/issues/557)
+
 # [3.1.0](https://github.com/contentful/node-apps-toolkit/compare/v3.0.1...v3.1.0) (2024-03-06)
 
 
