@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/contentful/node-apps-toolkit/compare/v3.2.0...v3.2.1) (2024-03-08)
+
+
+### Reverts
+
+* Revert "chore(deps-dev): bump typescript from 5.3.3 to 5.4.2 (#558)" (#559) ([53480fc](https://github.com/contentful/node-apps-toolkit/commit/53480fca2fee3e58757d59a247415becc22f8030)), closes [#558](https://github.com/contentful/node-apps-toolkit/issues/558) [#559](https://github.com/contentful/node-apps-toolkit/issues/559)
+
 # [3.2.0](https://github.com/contentful/node-apps-toolkit/compare/v3.1.0...v3.2.0) (2024-03-08)
 
 
