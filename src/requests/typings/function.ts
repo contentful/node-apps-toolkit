@@ -2,7 +2,7 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 
-import { Asset, AssetProps, Entry, EntryProps } from 'contentful-management'
+import { AssetProps, EntryProps } from 'contentful-management'
 
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
