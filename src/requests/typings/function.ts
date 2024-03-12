@@ -2,6 +2,8 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 
+import { Asset, AssetProps, Entry, EntryProps } from 'contentful-management'
+
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
 const APP_EVENT_FILTER = 'appevent.filter'
@@ -46,6 +48,25 @@ export type GraphQLQueryResponse = {
   extensions?: Record<string, unknown>
 }
 
+export type AppEventEntryFilter = {
+  entityType: 'Entry'
+  entityProps: EntryProps
+  entityAction: 'create' | 'publish' // etc etc.
+}
+// TODO: use generic to DRY this up?
+export type AppEventAssetFilter = {
+  entityType: 'Asset'
+  entityProps: AssetProps
+  entityAction: 'create' | 'publish' // etc etc.
+}
+// TODO: add all of the other app event subscription topics/actions
+export type AppEventFilterRequest = AppEventEntryFilter | AppEventAssetFilter
+
+export type AppEventFilterResponse = {
+  result: boolean
+  errors?: readonly Record<string, any>[]
+}
+
 /**
  * P: Possibility to type app installation parameters
  */
@@ -65,8 +86,8 @@ type FunctionEventHandlers = {
     response: GraphQLQueryResponse
   }
   [APP_EVENT_FILTER]: {
-    event: any
-    response: boolean
+    event: AppEventFilterRequest
+    response: AppEventFilterResponse
   }
 }
 
