@@ -4,6 +4,7 @@
 
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
+const APP_EVENT_FILTER = 'appevent.filter'
 
 type GraphQLFieldTypeMappingRequest = {
   type: typeof GRAPHQL_FIELD_MAPPING_EVENT
@@ -62,6 +63,10 @@ type FunctionEventHandlers = {
   [GRAPHQL_QUERY_EVENT]: {
     event: GraphQLQueryRequest
     response: GraphQLQueryResponse
+  }
+  [APP_EVENT_FILTER]: {
+    event: any
+    response: boolean
   }
 }
 
