@@ -48,17 +48,18 @@ export type GraphQLQueryResponse = {
   extensions?: Record<string, unknown>
 }
 
-export type AppEventEntryFilter = {
-  entityType: 'Entry'
-  entityProps: EntryProps
-  entityAction: 'create' | 'publish' // etc etc.
+type AppEventFilter<T> = {
+  type: typeof APP_EVENT_FILTER
+  entityProps: T
+  entityAction: string // 'create' | 'publish' etc etc.
 }
 // TODO: use generic to DRY this up?
+export type AppEventEntryFilter = {
+  entityType: 'Entry'
+} & AppEventFilter<EntryProps>
 export type AppEventAssetFilter = {
   entityType: 'Asset'
-  entityProps: AssetProps
-  entityAction: 'create' | 'publish' // etc etc.
-}
+} & AppEventFilter<AssetProps>
 // TODO: add all of the other app event subscription topics/actions
 export type AppEventFilterRequest = AppEventEntryFilter | AppEventAssetFilter
 
@@ -91,7 +92,10 @@ type FunctionEventHandlers = {
   }
 }
 
-export type FunctionEvent = GraphQLFieldTypeMappingRequest | GraphQLQueryRequest
+export type FunctionEvent =
+  | GraphQLFieldTypeMappingRequest
+  | GraphQLQueryRequest
+  | AppEventFilterRequest
 export type FunctionEventType = keyof FunctionEventHandlers
 
 /**
