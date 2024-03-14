@@ -53,14 +53,13 @@ type AppEventFilter<T> = {
   entityProps: T
   entityAction: string // 'create' | 'publish' etc etc.
 }
-// TODO: use generic to DRY this up?
+// TODO: add all of the other app event subscription entities and topics/actions
 export type AppEventEntryFilter = {
   entityType: 'Entry'
 } & AppEventFilter<EntryProps>
 export type AppEventAssetFilter = {
   entityType: 'Asset'
 } & AppEventFilter<AssetProps>
-// TODO: add all of the other app event subscription topics/actions
 export type AppEventFilterRequest = AppEventEntryFilter | AppEventAssetFilter
 
 export type AppEventFilterResponse = {
