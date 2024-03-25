@@ -2,7 +2,19 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 
-import { AssetProps, EntryProps } from 'contentful-management'
+import {
+  AppInstallationProps,
+  AssetProps,
+  BulkActionProps,
+  CommentProps,
+  ContentTypeProps,
+  EntryProps,
+  EnvironmentTemplateInstallationProps,
+  ReleaseActionProps,
+  ReleaseProps,
+  ScheduledActionProps,
+  TaskProps,
+} from 'contentful-management'
 
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
@@ -48,23 +60,87 @@ export type GraphQLQueryResponse = {
   extensions?: Record<string, unknown>
 }
 
-type AppEventFilter<T> = {
+type ContentTypeActions = 'create' | 'save' | 'publish' | 'unpublish' | 'delete'
+type EntryActions =
+  | 'create'
+  | 'save'
+  | 'autoSave'
+  | 'publish'
+  | 'unpublish'
+  | 'archive'
+  | 'unarchive'
+  | 'delete'
+type AssetActions =
+  | 'create'
+  | 'save'
+  | 'autoSave'
+  | 'publish'
+  | 'unpublish'
+  | 'archive'
+  | 'unarchive'
+  | 'delete'
+type AppInstallationActions = 'create' | 'save' | 'delete'
+type TaskActions = 'create' | 'save' | 'delete'
+type CommentActions = 'create' | 'delete'
+type ReleaseActions = 'create' | 'save' | 'delete'
+type ReleaseActionActions = 'create' | 'execute'
+type ScheduledActionActions = 'create' | 'save' | 'delete' | 'execute'
+type BulkActionActions = 'create' | 'execute'
+type TemplateInstallationActions = 'complete'
+
+type AppEventFilter<EntityProps, EntityActions> = {
   type: typeof APP_EVENT_FILTER
-  entityProps: T
-  entityAction: string // 'create' | 'publish' etc etc.
+  entityProps: EntityProps
+  entityAction: EntityActions // 'create' | 'publish' etc etc.
 }
-// TODO: add all of the other app event subscription entities and topics/actions
+export type AppEventContentTypeFilter = {
+  entityType: 'ContentType'
+} & AppEventFilter<ContentTypeProps, ContentTypeActions>
 export type AppEventEntryFilter = {
   entityType: 'Entry'
-} & AppEventFilter<EntryProps>
+} & AppEventFilter<EntryProps, EntryActions>
 export type AppEventAssetFilter = {
   entityType: 'Asset'
-} & AppEventFilter<AssetProps>
-export type AppEventFilterRequest = AppEventEntryFilter | AppEventAssetFilter
+} & AppEventFilter<AssetProps, AssetActions>
+export type AppEventAppInstallationFilter = {
+  entityType: 'AppInstallation' // is this AppInstallation or App Installation?
+} & AppEventFilter<AppInstallationProps, AppInstallationActions>
+export type AppEventTaskFilter = {
+  entityType: 'Task'
+} & AppEventFilter<TaskProps, TaskActions>
+export type AppEventCommentFilter = {
+  entityType: 'Comment'
+} & AppEventFilter<CommentProps, CommentActions>
+export type AppEventReleaseFilter = {
+  entityType: 'Release'
+} & AppEventFilter<ReleaseProps, ReleaseActions>
+export type AppEventReleaseActionFilter = {
+  entityType: 'ReleaseAction' // is this ReleaseAction or Release action?
+} & AppEventFilter<ReleaseActionProps, ReleaseActionActions>
+export type AppEventScheduledActionFilter = {
+  entityType: 'ScheduledAction' // is this ScheduledAction or Scheduled action?
+} & AppEventFilter<ScheduledActionProps, ScheduledActionActions>
+export type AppEventBulkActionFilter = {
+  entityType: 'BulkAction' // is this ScheduledAction or Scheduled action?
+} & AppEventFilter<BulkActionProps, BulkActionActions>
+export type AppEventTemplateInstallationFilter = {
+  entityType: 'TemplateInstallation' // is this ScheduledAction or Scheduled action?
+} & AppEventFilter<EnvironmentTemplateInstallationProps, TemplateInstallationActions>
+export type AppEventFilterRequest =
+  | AppEventEntryFilter
+  | AppEventAssetFilter
+  | AppEventContentTypeFilter
+  | AppEventAppInstallationFilter
+  | AppEventTaskFilter
+  | AppEventCommentFilter
+  | AppEventReleaseFilter
+  | AppEventReleaseActionFilter
+  | AppEventScheduledActionFilter
+  | AppEventBulkActionFilter
+  | AppEventTemplateInstallationFilter
 
 export type AppEventFilterResponse = {
   result: boolean
-  errors?: readonly Record<string, any>[]
 }
 
 /**
