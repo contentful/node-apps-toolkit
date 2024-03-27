@@ -64,7 +64,7 @@ type ContentTypeActions = 'create' | 'save' | 'publish' | 'unpublish' | 'delete'
 type EntryActions =
   | 'create'
   | 'save'
-  | 'autoSave'
+  | 'auto_save'
   | 'publish'
   | 'unpublish'
   | 'archive'
