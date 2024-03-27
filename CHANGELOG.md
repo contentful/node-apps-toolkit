@@ -1,3 +1,10 @@
+# [3.3.0](https://github.com/contentful/node-apps-toolkit/compare/v3.2.1...v3.3.0) (2024-03-27)
+
+
+### Features
+
+* add app event filter type to functions [EXT-5089] ([#566](https://github.com/contentful/node-apps-toolkit/issues/566)) ([f8ea2cb](https://github.com/contentful/node-apps-toolkit/commit/f8ea2cbd4223607c23133c0fe602fa471c33481b))
+
 ## [3.2.1](https://github.com/contentful/node-apps-toolkit/compare/v3.2.0...v3.2.1) (2024-03-08)
 
 
