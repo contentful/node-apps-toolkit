@@ -73,7 +73,7 @@ type EntryActions =
 type AssetActions =
   | 'create'
   | 'save'
-  | 'autoSave'
+  | 'auto_save'
   | 'publish'
   | 'unpublish'
   | 'archive'
