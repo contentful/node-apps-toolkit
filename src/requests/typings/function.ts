@@ -103,7 +103,7 @@ export type AppEventAssetFilter = {
   entityType: 'Asset'
 } & AppEventFilter<AssetProps, AssetActions>
 export type AppEventAppInstallationFilter = {
-  entityType: 'AppInstallation' // is this AppInstallation or App Installation?
+  entityType: 'AppInstallation'
 } & AppEventFilter<AppInstallationProps, AppInstallationActions>
 export type AppEventTaskFilter = {
   entityType: 'Task'
@@ -115,16 +115,16 @@ export type AppEventReleaseFilter = {
   entityType: 'Release'
 } & AppEventFilter<ReleaseProps, ReleaseActions>
 export type AppEventReleaseActionFilter = {
-  entityType: 'ReleaseAction' // is this ReleaseAction or Release action?
+  entityType: 'ReleaseAction'
 } & AppEventFilter<ReleaseActionProps, ReleaseActionActions>
 export type AppEventScheduledActionFilter = {
-  entityType: 'ScheduledAction' // is this ScheduledAction or Scheduled action?
+  entityType: 'ScheduledAction'
 } & AppEventFilter<ScheduledActionProps, ScheduledActionActions>
 export type AppEventBulkActionFilter = {
-  entityType: 'BulkAction' // is this ScheduledAction or Scheduled action?
+  entityType: 'BulkAction'
 } & AppEventFilter<BulkActionProps, BulkActionActions>
 export type AppEventTemplateInstallationFilter = {
-  entityType: 'TemplateInstallation' // is this ScheduledAction or Scheduled action?
+  entityType: 'TemplateInstallation'
 } & AppEventFilter<EnvironmentTemplateInstallationProps, TemplateInstallationActions>
 export type AppEventFilterRequest =
   | AppEventEntryFilter
