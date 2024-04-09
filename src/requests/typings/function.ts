@@ -19,6 +19,8 @@ import {
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
 const APP_EVENT_FILTER = 'appevent.filter'
+const APP_EVENT_HANDLER = 'appevent.handler'
+const APP_EVENT_TRANSFORMATION = 'appevent.transformation'
 
 type GraphQLFieldTypeMappingRequest = {
   type: typeof GRAPHQL_FIELD_MAPPING_EVENT
@@ -88,60 +90,63 @@ type ScheduledActionActions = 'create' | 'save' | 'delete' | 'execute'
 type BulkActionActions = 'create' | 'execute'
 type TemplateInstallationActions = 'complete'
 
-type AppEventFilter<EntityProps, EntityActions> = {
-  type: typeof APP_EVENT_FILTER
+type AppEventBase<EntityProps, EntityActions> = {
   entityProps: EntityProps
-  entityAction: EntityActions // 'create' | 'publish' etc etc.
+  entityAction: EntityActions
+  type: typeof APP_EVENT_HANDLER | typeof APP_EVENT_TRANSFORMATION | typeof APP_EVENT_FILTER
 }
-export type AppEventContentTypeFilter = {
+export type AppEventContentType = {
   entityType: 'ContentType'
-} & AppEventFilter<ContentTypeProps, ContentTypeActions>
-export type AppEventEntryFilter = {
+} & AppEventBase<ContentTypeProps, ContentTypeActions>
+export type AppEventEntry = {
   entityType: 'Entry'
-} & AppEventFilter<EntryProps, EntryActions>
-export type AppEventAssetFilter = {
+} & AppEventBase<EntryProps, EntryActions>
+export type AppEventAsset = {
   entityType: 'Asset'
-} & AppEventFilter<AssetProps, AssetActions>
-export type AppEventAppInstallationFilter = {
+} & AppEventBase<AssetProps, AssetActions>
+export type AppEventAppInstallation = {
   entityType: 'AppInstallation'
-} & AppEventFilter<AppInstallationProps, AppInstallationActions>
-export type AppEventTaskFilter = {
+} & AppEventBase<AppInstallationProps, AppInstallationActions>
+export type AppEventTask = {
   entityType: 'Task'
-} & AppEventFilter<TaskProps, TaskActions>
-export type AppEventCommentFilter = {
+} & AppEventBase<TaskProps, TaskActions>
+export type AppEventComment = {
   entityType: 'Comment'
-} & AppEventFilter<CommentProps, CommentActions>
-export type AppEventReleaseFilter = {
+} & AppEventBase<CommentProps, CommentActions>
+export type AppEventRelease = {
   entityType: 'Release'
-} & AppEventFilter<ReleaseProps, ReleaseActions>
-export type AppEventReleaseActionFilter = {
+} & AppEventBase<ReleaseProps, ReleaseActions>
+export type AppEventReleaseAction = {
   entityType: 'ReleaseAction'
-} & AppEventFilter<ReleaseActionProps, ReleaseActionActions>
-export type AppEventScheduledActionFilter = {
+} & AppEventBase<ReleaseActionProps, ReleaseActionActions>
+export type AppEventScheduledAction = {
   entityType: 'ScheduledAction'
-} & AppEventFilter<ScheduledActionProps, ScheduledActionActions>
-export type AppEventBulkActionFilter = {
+} & AppEventBase<ScheduledActionProps, ScheduledActionActions>
+export type AppEventBulkAction = {
   entityType: 'BulkAction'
-} & AppEventFilter<BulkActionProps, BulkActionActions>
-export type AppEventTemplateInstallationFilter = {
+} & AppEventBase<BulkActionProps, BulkActionActions>
+export type AppEventTemplateInstallation = {
   entityType: 'TemplateInstallation'
-} & AppEventFilter<EnvironmentTemplateInstallationProps, TemplateInstallationActions>
-export type AppEventFilterRequest =
-  | AppEventEntryFilter
-  | AppEventAssetFilter
-  | AppEventContentTypeFilter
-  | AppEventAppInstallationFilter
-  | AppEventTaskFilter
-  | AppEventCommentFilter
-  | AppEventReleaseFilter
-  | AppEventReleaseActionFilter
-  | AppEventScheduledActionFilter
-  | AppEventBulkActionFilter
-  | AppEventTemplateInstallationFilter
+} & AppEventBase<EnvironmentTemplateInstallationProps, TemplateInstallationActions>
+export type AppEventRequest =
+  | AppEventEntry
+  | AppEventAsset
+  | AppEventContentType
+  | AppEventAppInstallation
+  | AppEventTask
+  | AppEventComment
+  | AppEventRelease
+  | AppEventReleaseAction
+  | AppEventScheduledAction
+  | AppEventBulkAction
+  | AppEventTemplateInstallation
 
 export type AppEventFilterResponse = {
   result: boolean
 }
+
+export type AppEventHandlerResponse = any
+export type AppEventTransformationResponse = any
 
 /**
  * P: Possibility to type app installation parameters
@@ -162,15 +167,20 @@ type FunctionEventHandlers = {
     response: GraphQLQueryResponse
   }
   [APP_EVENT_FILTER]: {
-    event: AppEventFilterRequest
+    event: AppEventRequest
     response: AppEventFilterResponse
+  }
+  [APP_EVENT_HANDLER]: {
+    event: AppEventRequest
+    response: AppEventHandlerResponse
+  }
+  [APP_EVENT_TRANSFORMATION]: {
+    event: AppEventRequest
+    response: AppEventTransformationResponse
   }
 }
 
-export type FunctionEvent =
-  | GraphQLFieldTypeMappingRequest
-  | GraphQLQueryRequest
-  | AppEventFilterRequest
+export type FunctionEvent = GraphQLFieldTypeMappingRequest | GraphQLQueryRequest | AppEventRequest
 export type FunctionEventType = keyof FunctionEventHandlers
 
 /**
