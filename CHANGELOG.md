@@ -1,3 +1,10 @@
+# [3.4.0](https://github.com/contentful/node-apps-toolkit/compare/v3.3.0...v3.4.0) (2024-04-09)
+
+
+### Features
+
+* app event handler and transformation [EXT-5142] ([#594](https://github.com/contentful/node-apps-toolkit/issues/594)) ([7e7298a](https://github.com/contentful/node-apps-toolkit/commit/7e7298a4d9909e4394a86d6903e0eceefb143789))
+
 # [3.3.0](https://github.com/contentful/node-apps-toolkit/compare/v3.2.1...v3.3.0) (2024-03-27)
 
 
