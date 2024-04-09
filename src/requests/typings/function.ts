@@ -145,8 +145,8 @@ export type AppEventFilterResponse = {
   result: boolean
 }
 
-export type AppEventHandlerResponse = void
-export type AppEventTransformationResponse = void
+export type AppEventHandlerResponse = any
+export type AppEventTransformationResponse = any
 
 /**
  * P: Possibility to type app installation parameters
