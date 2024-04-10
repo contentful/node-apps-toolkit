@@ -29,9 +29,9 @@ For more details, check out the [API documentation](https://contentful.github.io
 
 ```js
 const { getManagementToken } = require('@contentful/node-apps-toolkit');
-const { appInstallationId, spaceId, privateKey } = require('./some-constants');
+const { appInstallationId, spaceId, environmentId, privateKey } = require('./some-constants');
 
-getManagementToken(privateKey, {appInstallationId, spaceId})
+getManagementToken(privateKey, { appInstallationId, spaceId, environmentId })
     .then((token) => {
       console.log('Here is your app token:', token)
     })
