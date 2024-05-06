@@ -90,44 +90,40 @@ type ScheduledActionActions = 'create' | 'save' | 'delete' | 'execute'
 type BulkActionActions = 'create' | 'execute'
 type TemplateInstallationActions = 'complete'
 
-type AppEventBase<EntityProps, EntityActions> = {
-  entityProps: EntityProps
-  entityAction: EntityActions
+type AppEventBase<EntityName extends string, EntityActions extends string, EntityProps> = {
+  headers: Record<string, string | number> & {
+    'X-Contentful-Topic': `ContentManagement.${EntityName}.${EntityActions}`
+  }
+  body: EntityProps
   type: typeof APP_EVENT_HANDLER | typeof APP_EVENT_TRANSFORMATION | typeof APP_EVENT_FILTER
 }
-export type AppEventContentType = {
-  entityType: 'ContentType'
-} & AppEventBase<ContentTypeProps, ContentTypeActions>
-export type AppEventEntry = {
-  entityType: 'Entry'
-} & AppEventBase<EntryProps, EntryActions>
-export type AppEventAsset = {
-  entityType: 'Asset'
-} & AppEventBase<AssetProps, AssetActions>
-export type AppEventAppInstallation = {
-  entityType: 'AppInstallation'
-} & AppEventBase<AppInstallationProps, AppInstallationActions>
-export type AppEventTask = {
-  entityType: 'Task'
-} & AppEventBase<TaskProps, TaskActions>
-export type AppEventComment = {
-  entityType: 'Comment'
-} & AppEventBase<CommentProps, CommentActions>
-export type AppEventRelease = {
-  entityType: 'Release'
-} & AppEventBase<ReleaseProps, ReleaseActions>
-export type AppEventReleaseAction = {
-  entityType: 'ReleaseAction'
-} & AppEventBase<ReleaseActionProps, ReleaseActionActions>
-export type AppEventScheduledAction = {
-  entityType: 'ScheduledAction'
-} & AppEventBase<ScheduledActionProps, ScheduledActionActions>
-export type AppEventBulkAction = {
-  entityType: 'BulkAction'
-} & AppEventBase<BulkActionProps, BulkActionActions>
-export type AppEventTemplateInstallation = {
-  entityType: 'TemplateInstallation'
-} & AppEventBase<EnvironmentTemplateInstallationProps, TemplateInstallationActions>
+export type AppEventContentType = AppEventBase<'ContentType', ContentTypeActions, ContentTypeProps>
+export type AppEventEntry = AppEventBase<'Entry', EntryActions, EntryProps>
+export type AppEventAsset = AppEventBase<'Asset', AssetActions, AssetProps>
+export type AppEventAppInstallation = AppEventBase<
+  'AppInstallation',
+  AppInstallationActions,
+  AppInstallationProps
+>
+export type AppEventTask = AppEventBase<'Task', TaskActions, TaskProps>
+export type AppEventComment = AppEventBase<'Comment', CommentActions, CommentProps>
+export type AppEventRelease = AppEventBase<'Release', ReleaseActions, ReleaseProps>
+export type AppEventReleaseAction = AppEventBase<
+  'ReleaseAction',
+  ReleaseActionActions,
+  ReleaseActionProps
+>
+export type AppEventScheduledAction = AppEventBase<
+  'ScheduledAction',
+  ScheduledActionActions,
+  ScheduledActionProps
+>
+export type AppEventBulkAction = AppEventBase<'BulkAction', BulkActionActions, BulkActionProps>
+export type AppEventTemplateInstallation = AppEventBase<
+  'TemplateInstallation',
+  TemplateInstallationActions,
+  EnvironmentTemplateInstallationProps
+>
 export type AppEventRequest =
   | AppEventEntry
   | AppEventAsset
@@ -145,8 +141,12 @@ export type AppEventFilterResponse = {
   result: boolean
 }
 
-export type AppEventHandlerResponse = any
-export type AppEventTransformationResponse = any
+export type AppEventTransformationResponse = {
+  headers: Record<string, string | number>
+  body: Record<string, unknown>
+}
+
+export type AppEventHandlerResponse = void
 
 /**
  * P: Possibility to type app installation parameters
