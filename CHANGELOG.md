@@ -1,3 +1,10 @@
+## [3.4.1](https://github.com/contentful/node-apps-toolkit/compare/v3.4.0...v3.4.1) (2024-05-06)
+
+
+### Bug Fixes
+
+* app event function interfaces [EXT-5171] ([#608](https://github.com/contentful/node-apps-toolkit/issues/608)) ([ea8cc4c](https://github.com/contentful/node-apps-toolkit/commit/ea8cc4c2d31c4949cff840b2bb0076852b7c33a4))
+
 # [3.4.0](https://github.com/contentful/node-apps-toolkit/compare/v3.3.0...v3.4.0) (2024-04-09)
 
 
