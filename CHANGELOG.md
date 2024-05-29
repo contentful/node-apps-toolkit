@@ -1,3 +1,10 @@
+## [3.4.2](https://github.com/contentful/node-apps-toolkit/compare/v3.4.1...v3.4.2) (2024-05-29)
+
+
+### Bug Fixes
+
+* re-add action for building and publishing docs [] ([#625](https://github.com/contentful/node-apps-toolkit/issues/625)) ([40b89e2](https://github.com/contentful/node-apps-toolkit/commit/40b89e21e549e07849856edee525c91557446631))
+
 ## [3.4.1](https://github.com/contentful/node-apps-toolkit/compare/v3.4.0...v3.4.1) (2024-05-06)
 
 
