@@ -38,7 +38,7 @@
     "@types/mocha": "10.0.6",
     "@types/node": "20.12.12",
     "@types/sinon": "17.0.3",
-    "@typescript-eslint/eslint-plugin": "7.10.0",
+    "@typescript-eslint/eslint-plugin": "7.15.0",
     "@typescript-eslint/parser": "7.10.0",
     "base64url": "3.0.1",
     "dotenv": "16.4.5",
