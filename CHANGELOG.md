@@ -1,3 +1,10 @@
+# [3.5.0](https://github.com/contentful/node-apps-toolkit/compare/v3.4.2...v3.5.0) (2024-07-25)
+
+
+### Features
+
+* add possible cma client to Function context ([#665](https://github.com/contentful/node-apps-toolkit/issues/665)) ([6513ee0](https://github.com/contentful/node-apps-toolkit/commit/6513ee0beb279af57dca63ab549ed89680e7c07f))
+
 ## [3.4.2](https://github.com/contentful/node-apps-toolkit/compare/v3.4.1...v3.4.2) (2024-05-29)
 
 
