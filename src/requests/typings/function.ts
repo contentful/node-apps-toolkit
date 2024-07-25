@@ -10,6 +10,7 @@ import {
   ContentTypeProps,
   EntryProps,
   EnvironmentTemplateInstallationProps,
+  PlainClientAPI,
   ReleaseActionProps,
   ReleaseProps,
   ScheduledActionProps,
@@ -155,6 +156,7 @@ export type FunctionEventContext<P extends Record<string, any> = Record<string, 
   spaceId: string
   environmentId: string
   appInstallationParameters: P
+  cma?: PlainClientAPI
 }
 
 type FunctionEventHandlers = {
