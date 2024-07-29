@@ -16,7 +16,7 @@ jobs:
 
   lint-and-test:
     docker:
-      - image: "cimg/base:stable"
+      - image: "cimg/base:current"
     parameters:
       node-version:
         type: string
@@ -35,7 +35,7 @@ jobs:
 
   build:
     docker:
-      - image: "cimg/base:stable"
+      - image: "cimg/base:current"
     steps:
       - checkout
       - node/install:
@@ -47,7 +47,7 @@ jobs:
 
   lint-commits:
     docker:
-      - image: "cimg/base:stable"
+      - image: "cimg/base:current"
     steps:
       - checkout
       - node/install:
@@ -57,7 +57,7 @@ jobs:
 
   semantic-release:
     docker:
-      - image: "cimg/base:stable"
+      - image: "cimg/base:current"
     steps:
       - checkout
       - vault/get-secrets:
