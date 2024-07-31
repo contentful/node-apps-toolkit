@@ -1,3 +1,10 @@
+# [3.6.0](https://github.com/contentful/node-apps-toolkit/compare/v3.5.0...v3.6.0) (2024-07-31)
+
+
+### Features
+
+* add types for resource events ([#675](https://github.com/contentful/node-apps-toolkit/issues/675)) ([b8fed5b](https://github.com/contentful/node-apps-toolkit/commit/b8fed5b809cb0562982259fbbb13aad6037386fe))
+
 # [3.5.0](https://github.com/contentful/node-apps-toolkit/compare/v3.4.2...v3.5.0) (2024-07-25)
 
 
