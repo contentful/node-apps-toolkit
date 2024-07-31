@@ -24,7 +24,10 @@ describe('Keys Utilities', () => {
       throw new Error('Missing Environment setup')
     }
 
-    const privateKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.pem'), 'utf-8')
+    const privateKeyPath = path.join(__dirname, '..', '..', 'keys', 'key.pem')
+    console.log(fs.readdirSync(path.dirname(privateKeyPath)))
+
+    const privateKey = fs.readFileSync(privateKeyPath, 'utf-8')
 
     const token = await getManagementToken(privateKey, {
       appInstallationId,

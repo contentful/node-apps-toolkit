@@ -37,6 +37,9 @@ describe('getManagementToken', () => {
     const httpClient = { post } as unknown as HttpClient
     const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
 
+    console.log('dirname is ', __dirname)
+    console.log('dirname is ', path.dirname(__dirname))
+    console.log('Private Key Location:', path.join(__dirname, '..', '..', 'keys', 'key.pem'))
     const result = await getManagementToken(PRIVATE_KEY, DEFAULT_OPTIONS)
 
     assert.deepStrictEqual(result, mockToken)
