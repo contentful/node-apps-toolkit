@@ -16,6 +16,14 @@ import {
   ScheduledActionProps,
   TaskProps,
 } from 'contentful-management'
+import {
+  RESOURCES_SEARCH_EVENT,
+  RESOURCES_LOOKUP_EVENT,
+  type ResourcesLookupRequest,
+  type ResourcesLookupResponse,
+  type ResourcesSearchRequest,
+  type ResourcesSearchResponse,
+} from './resources'
 
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
@@ -180,9 +188,22 @@ type FunctionEventHandlers = {
     event: AppEventRequest
     response: AppEventTransformationResponse
   }
+  [RESOURCES_SEARCH_EVENT]: {
+    event: ResourcesSearchRequest
+    response: ResourcesSearchResponse
+  }
+  [RESOURCES_LOOKUP_EVENT]: {
+    event: ResourcesLookupRequest
+    response: ResourcesLookupResponse
+  }
 }
 
-export type FunctionEvent = GraphQLFieldTypeMappingRequest | GraphQLQueryRequest | AppEventRequest
+export type FunctionEvent =
+  | GraphQLFieldTypeMappingRequest
+  | GraphQLQueryRequest
+  | AppEventRequest
+  | ResourcesSearchRequest
+  | ResourcesLookupRequest
 export type FunctionEventType = keyof FunctionEventHandlers
 
 /**
