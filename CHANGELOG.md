@@ -1,3 +1,10 @@
+## [3.6.1](https://github.com/contentful/node-apps-toolkit/compare/v3.6.0...v3.6.1) (2024-08-01)
+
+
+### Bug Fixes
+
+* MEC-1030 upgrade to cimg/base:current ([#672](https://github.com/contentful/node-apps-toolkit/issues/672)) ([9028a30](https://github.com/contentful/node-apps-toolkit/commit/9028a30452c88c63229635aa6e57cc73fa26f6c9))
+
 # [3.6.0](https://github.com/contentful/node-apps-toolkit/compare/v3.5.0...v3.6.0) (2024-07-31)
 
 
