@@ -1,5 +1,5 @@
 export { getManagementToken } from './keys'
-export { signRequest, verifyRequest, ContentfulHeader } from './requests'
+export { signRequest, verifyRequest, ContentfulHeader, ExpiredRequestException } from './requests'
 
 export type {
   AppActionCallContext,
