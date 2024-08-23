@@ -1,3 +1,10 @@
+# [3.7.0](https://github.com/contentful/node-apps-toolkit/compare/v3.6.1...v3.7.0) (2024-08-23)
+
+
+### Features
+
+* export ExpiredRequestException ([#692](https://github.com/contentful/node-apps-toolkit/issues/692)) ([c4e1390](https://github.com/contentful/node-apps-toolkit/commit/c4e1390356d8c527d1606ae52a62122522188a14))
+
 ## [3.6.1](https://github.com/contentful/node-apps-toolkit/compare/v3.6.0...v3.6.1) (2024-08-01)
 
 
