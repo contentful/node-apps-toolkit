@@ -4,18 +4,19 @@ import { ValidationException } from '../../exceptions'
 const NAMED_CONSTRAINT_FAILURE_MSG = /^Failed (.+?) check/
 
 // eslint-disable-next-line no-unused-vars
-export function proxyValidationError<T extends object>(constraint: T): T {
+export function proxyValidationError<T extends { check: (...args: unknown[]) => unknown }>(
+  constraint: T,
+): T {
   // eslint-disable-next-line no-undef
   return new Proxy(constraint, {
     get(target, property) {
-      const value = target[property as keyof T]
-      if (typeof value !== 'function') {
-        return value
+      if (property !== 'check') {
+        return target[property as keyof T]
       }
 
       return (...args: unknown[]) => {
         try {
-          return value(...args)
+          return target.check(...args)
         } catch (error) {
           if (error instanceof runtypes.ValidationError) {
             let constraintName = undefined
