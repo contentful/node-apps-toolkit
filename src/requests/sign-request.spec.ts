@@ -1,4 +1,5 @@
 import * as assert from 'assert'
+import { ValidationException } from './exceptions'
 import { CanonicalRequest, Secret } from './typings'
 import { signRequest } from './sign-request'
 
@@ -21,7 +22,7 @@ const assertThrowsForFieldInValues = (field: keyof CanonicalRequest, values: any
         },
         VALID_TIMESTAMP,
       )
-    }, `Did not throw for ${field.toString()}:${value}`)
+    }, ValidationException)
   }
 }
 
@@ -59,9 +60,9 @@ describe('create-signature', () => {
 
       for (const secret of invalidSecrets) {
         assert.throws(() => {
-          // @ts-ignore
+          // @ts-expect-error
           signRequest(secret, VALID_REQUEST, VALID_TIMESTAMP)
-        }, `Did not throw for ${secret}`)
+        }, ValidationException)
       }
     })
     it('does not throw if valid', () => {
@@ -77,9 +78,9 @@ describe('create-signature', () => {
 
       for (const timestamp of invalidTimestamps) {
         assert.throws(() => {
-          // @ts-ignore
+          // @ts-expect-error
           signRequest(VALID_SECRET, VALID_REQUEST, timestamp)
-        }, `Did not throw for ${timestamp}`)
+        }, ValidationException)
       }
     })
     it('does not throw if missing', () => {
