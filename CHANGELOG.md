@@ -1,3 +1,10 @@
+# [3.8.0](https://github.com/contentful/node-apps-toolkit/compare/v3.7.0...v3.8.0) (2024-09-03)
+
+
+### Features
+
+* add appaction.call to types ([#699](https://github.com/contentful/node-apps-toolkit/issues/699)) ([7ea547d](https://github.com/contentful/node-apps-toolkit/commit/7ea547d5d50cb84c59a74b7d22e4227088e1bcc6))
+
 # [3.7.0](https://github.com/contentful/node-apps-toolkit/compare/v3.6.1...v3.7.0) (2024-08-23)
 
 
