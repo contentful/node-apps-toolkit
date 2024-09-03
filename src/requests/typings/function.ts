@@ -30,6 +30,7 @@ const GRAPHQL_QUERY_EVENT = 'graphql.query'
 const APP_EVENT_FILTER = 'appevent.filter'
 const APP_EVENT_HANDLER = 'appevent.handler'
 const APP_EVENT_TRANSFORMATION = 'appevent.transformation'
+const APP_ACTION_CALL = 'appaction.call'
 
 type GraphQLFieldTypeMappingRequest = {
   type: typeof GRAPHQL_FIELD_MAPPING_EVENT
@@ -157,6 +158,14 @@ export type AppEventTransformationResponse = {
 
 export type AppEventHandlerResponse = void
 
+export type AppActionRequest = {
+  headers: Record<string, string | number>
+  body: Record<string, unknown>
+  type: typeof APP_ACTION_CALL
+}
+
+export type AppActionResponse = void | Record<string, unknown>
+
 /**
  * P: Possibility to type app installation parameters
  */
@@ -175,6 +184,10 @@ type FunctionEventHandlers = {
   [GRAPHQL_QUERY_EVENT]: {
     event: GraphQLQueryRequest
     response: GraphQLQueryResponse
+  }
+  [APP_ACTION_CALL]: {
+    event: AppActionRequest
+    response: AppActionResponse
   }
   [APP_EVENT_FILTER]: {
     event: AppEventRequest
