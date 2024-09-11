@@ -24,6 +24,7 @@ import {
   type ResourcesSearchRequest,
   type ResourcesSearchResponse,
 } from './resources'
+import { AppActionSchema, AppActionSchemaBodyMap } from './appAction'
 
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
@@ -158,9 +159,9 @@ export type AppEventTransformationResponse = {
 
 export type AppEventHandlerResponse = void
 
-export type AppActionRequest = {
+export type AppActionRequest<S extends AppActionSchema = 'Custom'> = {
   headers: Record<string, string | number>
-  body: Record<string, unknown>
+  body: AppActionSchemaBodyMap[S]
   type: typeof APP_ACTION_CALL
 }
 
@@ -186,7 +187,7 @@ type FunctionEventHandlers = {
     response: GraphQLQueryResponse
   }
   [APP_ACTION_CALL]: {
-    event: AppActionRequest
+    event: AppActionRequest<keyof AppActionSchemaBodyMap>
     response: AppActionResponse
   }
   [APP_EVENT_FILTER]: {
@@ -214,6 +215,7 @@ type FunctionEventHandlers = {
 export type FunctionEvent =
   | GraphQLFieldTypeMappingRequest
   | GraphQLQueryRequest
+  | AppActionRequest
   | AppEventRequest
   | ResourcesSearchRequest
   | ResourcesLookupRequest
