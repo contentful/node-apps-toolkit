@@ -159,9 +159,21 @@ export type AppEventTransformationResponse = {
 
 export type AppEventHandlerResponse = void
 
-export type AppActionRequest<S extends AppActionSchema = 'Custom'> = {
+/**
+ * The app action request body will contain different properties depending on the schema of the app action
+ *
+ * Specify your app action schema as the generic type `Schema` to get the correct body type,
+ * e.g. `const { body: { message, recipient }} = event as AppActionRequest<'Notification.v1.0'>`
+ *
+ * If you are using a Custom schema, you can specify its shape as the second generic type `CustomSchemaBody`,
+ * e.g. `const { body: { myNumber }} = event as AppActionRequest<'Custom', { myNumber: number }>`
+ */
+export type AppActionRequest<
+  Schema extends AppActionSchema = 'Custom',
+  CustomSchemaBody = AppActionSchemaBodyMap['Custom'],
+> = {
   headers: Record<string, string | number>
-  body: AppActionSchemaBodyMap[S]
+  body: Schema extends 'Custom' ? CustomSchemaBody : AppActionSchemaBodyMap[Schema]
   type: typeof APP_ACTION_CALL
 }
 
@@ -187,7 +199,7 @@ type FunctionEventHandlers = {
     response: GraphQLQueryResponse
   }
   [APP_ACTION_CALL]: {
-    event: AppActionRequest<keyof AppActionSchemaBodyMap>
+    event: AppActionRequest<AppActionSchema>
     response: AppActionResponse
   }
   [APP_EVENT_FILTER]: {
@@ -226,7 +238,7 @@ export type FunctionEventType = keyof FunctionEventHandlers
  * e.g. `const handler: FunctionEventHandler = (event, context) => { ... }`
  *
  * This type can also be used to construct helper functions for specific events
- * e.g. `const queryHandler: FunctionEventHandler<'graphql.query'> = (event, context) => { ... }
+ * e.g. `const queryHandler: FunctionEventHandler<'graphql.query'> = (event, context) => { ... }`
  */
 export type FunctionEventHandler<
   K extends FunctionEventType = FunctionEventType,
