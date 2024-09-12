@@ -3,6 +3,7 @@
 /*eslint-disable no-unused-vars*/
 
 import {
+  AppActionCategoryType,
   AppInstallationProps,
   AssetProps,
   BulkActionProps,
@@ -24,7 +25,7 @@ import {
   type ResourcesSearchRequest,
   type ResourcesSearchResponse,
 } from './resources'
-import { AppActionCategory, AppActionCategoryBodyMap } from './appAction'
+import { AppActionCategoryBodyMap, AppActionRequestBody } from './appAction'
 
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
@@ -160,7 +161,7 @@ export type AppEventTransformationResponse = {
 export type AppEventHandlerResponse = void
 
 /**
- * The app action request body will contain different properties depending on the category of the app action
+ * The app action request body will contain different parameters depending on the category of the app action
  *
  * Specify your app action category as the generic type `Category` to get the correct body type,
  * e.g. `const { body: { message, recipient }} = event as AppActionRequest<'Notification.v1.0'>`
@@ -169,11 +170,11 @@ export type AppEventHandlerResponse = void
  * e.g. `const { body: { myNumber }} = event as AppActionRequest<'Custom', { myNumber: number }>`
  */
 export type AppActionRequest<
-  Category extends AppActionCategory = 'Custom',
+  CategoryType extends AppActionCategoryType = 'Custom',
   CustomCategoryBody = AppActionCategoryBodyMap['Custom'],
 > = {
   headers: Record<string, string | number>
-  body: Category extends 'Custom' ? CustomCategoryBody : AppActionCategoryBodyMap[Category]
+  body: CategoryType extends 'Custom' ? CustomCategoryBody : AppActionRequestBody<CategoryType>
   type: typeof APP_ACTION_CALL
 }
 
@@ -199,7 +200,7 @@ type FunctionEventHandlers = {
     response: GraphQLQueryResponse
   }
   [APP_ACTION_CALL]: {
-    event: AppActionRequest<AppActionCategory>
+    event: AppActionRequest<AppActionCategoryType>
     response: AppActionResponse
   }
   [APP_EVENT_FILTER]: {
