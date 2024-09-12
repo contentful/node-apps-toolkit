@@ -12,14 +12,14 @@ export type AppActionCallContext = {
   }
 }
 
-export type AppActionCustomSchemaBody = Record<string, unknown>
-export type AppActionEntriesV1SchemaBody = { entryIds: string }
-export type AppActionNotificationsV1SchemaBody = { message: string; recipient: string }
+export type AppActionCustomCategoryBody = Record<string, unknown>
+export type AppActionEntriesV1CategoryBody = { entryIds: string }
+export type AppActionNotificationsV1CategoryBody = { message: string; recipient: string }
 
-export type AppActionSchema = 'Custom' | 'Entries.v1.0' | 'Notifications.v1.0'
+export type AppActionCategory = 'Custom' | 'Entries.v1.0' | 'Notifications.v1.0'
 
-export type AppActionSchemaBodyMap = {
-  Custom: AppActionCustomSchemaBody
-  'Entries.v1.0': AppActionEntriesV1SchemaBody
-  'Notifications.v1.0': AppActionNotificationsV1SchemaBody
+export type AppActionCategoryBodyMap = {
+  Custom: AppActionCustomCategoryBody
+  'Entries.v1.0': AppActionEntriesV1CategoryBody
+  'Notifications.v1.0': AppActionNotificationsV1CategoryBody
 }

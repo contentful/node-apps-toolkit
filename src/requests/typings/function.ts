@@ -24,7 +24,7 @@ import {
   type ResourcesSearchRequest,
   type ResourcesSearchResponse,
 } from './resources'
-import { AppActionSchema, AppActionSchemaBodyMap } from './appAction'
+import { AppActionCategory, AppActionCategoryBodyMap } from './appAction'
 
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
@@ -160,20 +160,20 @@ export type AppEventTransformationResponse = {
 export type AppEventHandlerResponse = void
 
 /**
- * The app action request body will contain different properties depending on the schema of the app action
+ * The app action request body will contain different properties depending on the category of the app action
  *
- * Specify your app action schema as the generic type `Schema` to get the correct body type,
+ * Specify your app action category as the generic type `Category` to get the correct body type,
  * e.g. `const { body: { message, recipient }} = event as AppActionRequest<'Notification.v1.0'>`
  *
- * If you are using a Custom schema, you can specify its shape as the second generic type `CustomSchemaBody`,
+ * If you are using the Custom category, you can specify the parameter shape as the second generic type `CustomCategoryBody`,
  * e.g. `const { body: { myNumber }} = event as AppActionRequest<'Custom', { myNumber: number }>`
  */
 export type AppActionRequest<
-  Schema extends AppActionSchema = 'Custom',
-  CustomSchemaBody = AppActionSchemaBodyMap['Custom'],
+  Category extends AppActionCategory = 'Custom',
+  CustomCategoryBody = AppActionCategoryBodyMap['Custom'],
 > = {
   headers: Record<string, string | number>
-  body: Schema extends 'Custom' ? CustomSchemaBody : AppActionSchemaBodyMap[Schema]
+  body: Category extends 'Custom' ? CustomCategoryBody : AppActionCategoryBodyMap[Category]
   type: typeof APP_ACTION_CALL
 }
 
@@ -199,7 +199,7 @@ type FunctionEventHandlers = {
     response: GraphQLQueryResponse
   }
   [APP_ACTION_CALL]: {
-    event: AppActionRequest<AppActionSchema>
+    event: AppActionRequest<AppActionCategory>
     response: AppActionResponse
   }
   [APP_EVENT_FILTER]: {
