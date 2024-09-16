@@ -3,6 +3,7 @@
 /*eslint-disable no-unused-vars*/
 
 import {
+  AppActionCategoryType,
   AppInstallationProps,
   AssetProps,
   BulkActionProps,
@@ -24,6 +25,7 @@ import {
   type ResourcesSearchRequest,
   type ResourcesSearchResponse,
 } from './resources'
+import { AppActionCategoryBodyMap, AppActionRequestBody } from './appAction'
 
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
@@ -158,9 +160,21 @@ export type AppEventTransformationResponse = {
 
 export type AppEventHandlerResponse = void
 
-export type AppActionRequest = {
+/**
+ * The app action request body will contain different parameters depending on the category of the app action
+ *
+ * Specify your app action category as the generic type `Category` to get the correct body type,
+ * e.g. `const { body: { message, recipient }} = event as AppActionRequest<'Notification.v1.0'>`
+ *
+ * If you are using the Custom category, you can specify the parameter shape as the second generic type `CustomCategoryBody`,
+ * e.g. `const { body: { myNumber }} = event as AppActionRequest<'Custom', { myNumber: number }>`
+ */
+export type AppActionRequest<
+  CategoryType extends AppActionCategoryType = 'Custom',
+  CustomCategoryBody = AppActionCategoryBodyMap['Custom'],
+> = {
   headers: Record<string, string | number>
-  body: Record<string, unknown>
+  body: CategoryType extends 'Custom' ? CustomCategoryBody : AppActionRequestBody<CategoryType>
   type: typeof APP_ACTION_CALL
 }
 
@@ -186,7 +200,7 @@ type FunctionEventHandlers = {
     response: GraphQLQueryResponse
   }
   [APP_ACTION_CALL]: {
-    event: AppActionRequest
+    event: AppActionRequest<AppActionCategoryType>
     response: AppActionResponse
   }
   [APP_EVENT_FILTER]: {
@@ -214,6 +228,7 @@ type FunctionEventHandlers = {
 export type FunctionEvent =
   | GraphQLFieldTypeMappingRequest
   | GraphQLQueryRequest
+  | AppActionRequest
   | AppEventRequest
   | ResourcesSearchRequest
   | ResourcesLookupRequest
@@ -224,7 +239,7 @@ export type FunctionEventType = keyof FunctionEventHandlers
  * e.g. `const handler: FunctionEventHandler = (event, context) => { ... }`
  *
  * This type can also be used to construct helper functions for specific events
- * e.g. `const queryHandler: FunctionEventHandler<'graphql.query'> = (event, context) => { ... }
+ * e.g. `const queryHandler: FunctionEventHandler<'graphql.query'> = (event, context) => { ... }`
  */
 export type FunctionEventHandler<
   K extends FunctionEventType = FunctionEventType,
