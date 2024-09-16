@@ -1,3 +1,10 @@
+# [3.9.0](https://github.com/contentful/node-apps-toolkit/compare/v3.8.0...v3.9.0) (2024-09-16)
+
+
+### Features
+
+* more descriptive app action function types [EXT-5711] ([#702](https://github.com/contentful/node-apps-toolkit/issues/702)) ([f16fbb5](https://github.com/contentful/node-apps-toolkit/commit/f16fbb52208b8d50e3bc2db12ee5931f5e0c0a02))
+
 # [3.8.0](https://github.com/contentful/node-apps-toolkit/compare/v3.7.0...v3.8.0) (2024-09-03)
 
 
