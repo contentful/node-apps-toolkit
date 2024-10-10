@@ -177,6 +177,16 @@ describe('create-signature', () => {
       )
     })
 
+    it('generates different signatures with retried requests', () => {
+      const headers = { 'x-contentful-webhook-request-attempt': '1' }
+      const retryHeaders = { 'x-contentful-webhook-request-attempt': '2' }
+
+      assert.notStrictEqual(
+        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
+        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers: retryHeaders }, VALID_TIMESTAMP),
+      )
+    })
+
     it('does not return undefined headers', () => {
       const result = signRequest(VALID_SECRET, VALID_REQUEST, undefined)
 
