@@ -1,3 +1,10 @@
+## [3.9.1](https://github.com/contentful/node-apps-toolkit/compare/v3.9.0...v3.9.1) (2024-10-23)
+
+
+### Bug Fixes
+
+* app action request function event handler type [EXT-5710] ([#706](https://github.com/contentful/node-apps-toolkit/issues/706)) ([e9e7071](https://github.com/contentful/node-apps-toolkit/commit/e9e7071047663d5751915cbb1d3cc10902a14713))
+
 # [3.9.0](https://github.com/contentful/node-apps-toolkit/compare/v3.8.0...v3.9.0) (2024-09-16)
 
 
