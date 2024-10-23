@@ -190,7 +190,14 @@ export type FunctionEventContext<P extends Record<string, any> = Record<string, 
   cma?: PlainClientAPI
 }
 
-type FunctionEventHandlers = {
+/**
+ * T: Possibility to type app action category
+ * U: Possibility to type app action body (only applies to the Custom category)
+ */
+type FunctionEventHandlers<
+  T extends AppActionCategoryType = never,
+  U extends AppActionRequestBody<T> = never,
+> = {
   [GRAPHQL_FIELD_MAPPING_EVENT]: {
     event: GraphQLFieldTypeMappingRequest
     response: GraphQLFieldTypeMappingResponse
@@ -200,7 +207,7 @@ type FunctionEventHandlers = {
     response: GraphQLQueryResponse
   }
   [APP_ACTION_CALL]: {
-    event: AppActionRequest
+    event: AppActionRequest<T, U>
     response: AppActionResponse
   }
   [APP_EVENT_FILTER]: {
