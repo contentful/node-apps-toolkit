@@ -200,7 +200,7 @@ type FunctionEventHandlers = {
     response: GraphQLQueryResponse
   }
   [APP_ACTION_CALL]: {
-    event: AppActionRequest<AppActionCategoryType>
+    event: AppActionRequest
     response: AppActionResponse
   }
   [APP_EVENT_FILTER]: {
