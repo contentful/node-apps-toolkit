@@ -1,3 +1,10 @@
+## [3.9.2](https://github.com/contentful/node-apps-toolkit/compare/v3.9.1...v3.9.2) (2024-11-07)
+
+
+### Bug Fixes
+
+* soc2 vulns [EXT-5902] ([#707](https://github.com/contentful/node-apps-toolkit/issues/707)) ([f8918ae](https://github.com/contentful/node-apps-toolkit/commit/f8918ae3bd018b31a783cd702141842f635869df))
+
 ## [3.9.1](https://github.com/contentful/node-apps-toolkit/compare/v3.9.0...v3.9.1) (2024-10-23)
 
 
