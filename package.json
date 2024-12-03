@@ -39,7 +39,7 @@
     "@types/node": "22.5.4",
     "@types/sinon": "17.0.3",
     "@typescript-eslint/eslint-plugin": "7.10.0",
-    "@typescript-eslint/parser": "7.10.0",
+    "@typescript-eslint/parser": "8.17.0",
     "base64url": "3.0.1",
     "dotenv": "16.4.5",
     "eslint": "8.57.0",
