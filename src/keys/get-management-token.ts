@@ -1,13 +1,15 @@
-import { decode, sign, SignOptions } from 'jsonwebtoken'
-import * as NodeCache from 'node-cache'
+import * as jwt from 'jsonwebtoken'
+import type { SignOptions } from 'jsonwebtoken'
+import { LRUCache } from 'lru-cache'
 import {
   createLogger,
   Logger,
   createHttpClient,
   createValidateStatusCode,
   HttpClient,
-} from '../utils'
+} from '../utils/index.js'
 
+const { sign, decode } = jwt
 export interface GetManagementTokenOptions {
   appInstallationId: string
   spaceId: string
@@ -17,7 +19,7 @@ export interface GetManagementTokenOptions {
   host?: string
 }
 
-let defaultCache: NodeCache
+let defaultCache: LRUCache<string, string> | undefined
 
 /**
  * Synchronously sign the given privateKey into a JSON Web Token string
@@ -78,7 +80,11 @@ const getTokenFromOneTimeToken = async (
  * Factory method for GetManagementToken
  * @internal
  */
-export const createGetManagementToken = (log: Logger, http: HttpClient, cache: NodeCache) => {
+export const createGetManagementToken = (
+  log: Logger,
+  http: HttpClient,
+  cache: LRUCache<string, string>,
+) => {
   return async (privateKey: unknown, opts: GetManagementTokenOptions): Promise<string> => {
     if (!(typeof privateKey === 'string')) {
       throw new ReferenceError('Invalid privateKey: expected a string representing a private key')
@@ -109,7 +115,7 @@ export const createGetManagementToken = (log: Logger, http: HttpClient, cache: N
         // Internally expire cached tokens a bit earlier to make sure token isn't expired on arrival
         const safetyMargin = 10
         const ttlSeconds = decoded.exp - Math.floor(Date.now() / 1000) - safetyMargin
-        cache.set(cacheKey, ott, ttlSeconds)
+        cache.set(cacheKey, ott, { ttl: ttlSeconds })
       }
     }
 
@@ -142,13 +148,13 @@ export const createGetManagementToken = (log: Logger, http: HttpClient, cache: N
  */
 export const getManagementToken = (privateKey: string, opts: GetManagementTokenOptions) => {
   if ((opts.reuseToken || opts.reuseToken === undefined) && !defaultCache) {
-    defaultCache = new NodeCache()
+    defaultCache = new LRUCache({ max: 10 })
   }
   const httpClientOpts = typeof opts.host !== 'undefined' ? { prefixUrl: opts.host } : {}
 
   return createGetManagementToken(
     createLogger({ filename: __filename }),
     createHttpClient(httpClientOpts),
-    defaultCache,
+    defaultCache!,
   )(privateKey, opts)
 }

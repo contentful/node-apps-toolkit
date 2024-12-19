@@ -41,7 +41,7 @@
     "debug": "^4.2.0",
     "got": "^11.7.0",
     "jsonwebtoken": "^9.0.0",
-    "node-cache": "^5.1.2",
+    "lru-cache": "^10.4.3",
     "runtypes": "^5.0.1"
   },
   "devDependencies": {
