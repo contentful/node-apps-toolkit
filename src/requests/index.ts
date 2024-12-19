@@ -1,7 +1,7 @@
-export { ExpiredRequestException } from './exceptions'
-export { signRequest } from './sign-request'
-export { verifyRequest } from './verify-request'
-export { ContentfulHeader, ContentfulContextHeader } from './typings'
+export { ExpiredRequestException } from './exceptions.js'
+export { signRequest } from './sign-request.js'
+export { verifyRequest } from './verify-request.js'
+export { ContentfulHeader, ContentfulContextHeader } from './typings/index.js'
 export type {
   AppActionCallContext,
   CanonicalRequest,
@@ -13,4 +13,4 @@ export type {
   SignedRequestWithContextHeadersWithUser,
   SignedRequestWithoutContextHeaders,
   SignedRequestHeaders,
-} from './typings'
+} from './typings/index.js'
