@@ -11,14 +11,14 @@ import {
   SubjectHeadersUser,
   SignedRequestWithContextHeadersWithApp,
   SignedRequestWithContextHeadersWithUser,
-} from './typings/index.js'
-import { CanonicalRequestValidator, SecretValidator, TimestampValidator } from './typings/index.js'
+} from './typings'
+import { CanonicalRequestValidator, SecretValidator, TimestampValidator } from './typings'
 import {
   getNormalizedEncodedURI,
   normalizeHeaders,
   sortHeaderKeys,
   normalizeContextHeaders,
-} from './utils.js'
+} from './utils'
 
 const hash = (normalizedCanonicalRequest: NormalizedCanonicalRequest, secret: string) => {
   const stringifiedHeaders = normalizedCanonicalRequest

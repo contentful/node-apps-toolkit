@@ -2,16 +2,16 @@
   "name": "@contentful/node-apps-toolkit",
   "version": "3.9.2",
   "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
-  "main": "lib/cjs/index.js",
-  "module": "lib/esm/index.js",
-  "types": "lib/cjs/index.d.ts",
+  "main": "lib/index.cjs",
+  "module": "lib/index.mjs",
+  "types": "lib/index.d.ts",
   "files": [
     "lib/**/*"
   ],
   "exports": {
     ".": {
-      "import": "./lib/esm/index.js",
-      "require": "./lib/cjs/index.js"
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs"
     }
   },
   "engines": {
@@ -27,7 +27,7 @@
     "test": "npm run test:unit && npm run test:integration",
     "build:cjs": "tsc -p tsconfig.cjs.json",
     "build:esm": "tsc -p tsconfig.esm.json",
-    "build": "rm -rf lib && npm run build:cjs && npm run build:esm",
+    "build": "rm -rf lib && tsup",
     "build:docs": "typedoc --options .typedocrc.json src",
     "start:docs": "serve ./docs",
     "prepublishOnly": "npm run build && npm run build:docs",
@@ -66,6 +66,7 @@
     "serve": "14.2.4",
     "sinon": "18.0.0",
     "ts-node": "10.9.2",
+    "tsup": "^8.3.5",
     "typedoc": "0.25.13",
     "typescript": "5.4.5"
   },

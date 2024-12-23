@@ -1,7 +1,7 @@
 // Remove when this eslint rule covers all the cases
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
-import { CanonicalRequest } from './validators.js'
+import { CanonicalRequest } from './validators'
 
 export enum ContentfulHeader {
   Timestamp = 'x-contentful-timestamp',

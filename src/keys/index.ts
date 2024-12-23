@@ -1,1 +1,1 @@
-export { getManagementToken } from './get-management-token.js'
+export { getManagementToken } from './get-management-token'

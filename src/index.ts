@@ -1,10 +1,5 @@
-export { getManagementToken } from './keys/index.js'
-export {
-  signRequest,
-  verifyRequest,
-  ContentfulHeader,
-  ExpiredRequestException,
-} from './requests/index.js'
+export { getManagementToken } from './keys'
+export { signRequest, verifyRequest, ContentfulHeader, ExpiredRequestException } from './requests'
 
 export type {
   AppActionCallContext,
@@ -14,4 +9,4 @@ export type {
   FunctionEventHandler,
   FunctionEventType,
   FunctionEvent,
-} from './requests/index.js'
+} from './requests'

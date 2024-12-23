@@ -8,10 +8,10 @@ import {
   Timestamp,
   TimeToLive,
   ContentfulHeader,
-} from './typings/index.js'
-import { normalizeHeaders, pickHeaders } from './utils.js'
-import { signRequest } from './sign-request.js'
-import { ExpiredRequestException } from './exceptions.js'
+} from './typings'
+import { normalizeHeaders, pickHeaders } from './utils'
+import { signRequest } from './sign-request'
+import { ExpiredRequestException } from './exceptions'
 
 const getRequestMetadata = (normalizedHeaders: Record<string, string>): RequestMetadata => {
   const signature = normalizedHeaders[ContentfulHeader.Signature]

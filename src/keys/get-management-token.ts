@@ -7,7 +7,7 @@ import {
   createHttpClient,
   createValidateStatusCode,
   HttpClient,
-} from '../utils/index.js'
+} from '../utils'
 
 const { sign, decode } = jwt
 export interface GetManagementTokenOptions {

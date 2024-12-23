@@ -24,8 +24,8 @@ import {
   type ResourcesLookupResponse,
   type ResourcesSearchRequest,
   type ResourcesSearchResponse,
-} from './resources.js'
-import { AppActionCategoryBodyMap, AppActionRequestBody } from './appAction.js'
+} from './resources'
+import { AppActionCategoryBodyMap, AppActionRequestBody } from './appAction'
 
 const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
 const GRAPHQL_QUERY_EVENT = 'graphql.query'
