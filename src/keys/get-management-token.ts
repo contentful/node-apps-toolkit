@@ -1,5 +1,4 @@
-import * as jwt from 'jsonwebtoken'
-import type { SignOptions } from 'jsonwebtoken'
+import { decode, sign, SignOptions } from 'jsonwebtoken'
 import { LRUCache } from 'lru-cache'
 import {
   createLogger,
@@ -9,7 +8,6 @@ import {
   HttpClient,
 } from '../utils'
 
-const { sign, decode } = jwt
 export interface GetManagementTokenOptions {
   appInstallationId: string
   spaceId: string
