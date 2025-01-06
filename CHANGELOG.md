@@ -1,3 +1,20 @@
+# [3.10.0-next.2](https://github.com/contentful/node-apps-toolkit/compare/v3.10.0-next.1...v3.10.0-next.2) (2025-01-06)
+
+
+### Bug Fixes
+
+* bump semantic release ([be01bf5](https://github.com/contentful/node-apps-toolkit/commit/be01bf57485fac02860180f7395a1378d3f43402))
+* infer type rather than any ([b8cb9e3](https://github.com/contentful/node-apps-toolkit/commit/b8cb9e31af0c935fbd04468163d11d34779f6363))
+* manually bump version ([0932810](https://github.com/contentful/node-apps-toolkit/commit/09328103b8372d7ff573d01f8dc2cd0823a18c94))
+* remove unused build scripts ([e7f10ca](https://github.com/contentful/node-apps-toolkit/commit/e7f10caff2f1a8f327b6e4bddda1258d551a5fbe))
+* wrapper around jsonwebtoken to support cjs and esm ([d1dd1b4](https://github.com/contentful/node-apps-toolkit/commit/d1dd1b41912764f03a4612d3a76e397a339bbb72))
+
+
+### Features
+
+* bump semantic release ([028b09e](https://github.com/contentful/node-apps-toolkit/commit/028b09e01b59aeef652ec23ec9298e0e5aea9d73))
+* bump semantic release ([0c1f94a](https://github.com/contentful/node-apps-toolkit/commit/0c1f94a3741fd86a7f2a4d1e2288e5d3884f17c7))
+
 # [3.10.0-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.9.2...v3.10.0-next.1) (2025-01-06)
 
 
