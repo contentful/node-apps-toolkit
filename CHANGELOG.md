@@ -1,3 +1,21 @@
+# [3.10.0-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.9.2...v3.10.0-next.1) (2025-01-06)
+
+
+### Bug Fixes
+
+* back to dynamic require ([4436527](https://github.com/contentful/node-apps-toolkit/commit/44365276e316da7edfa4d579ec661b0338587cb6))
+* infer type rather than any ([b8cb9e3](https://github.com/contentful/node-apps-toolkit/commit/b8cb9e31af0c935fbd04468163d11d34779f6363))
+* remove unused build scripts ([e7f10ca](https://github.com/contentful/node-apps-toolkit/commit/e7f10caff2f1a8f327b6e4bddda1258d551a5fbe))
+* tsup handles interop ([e1a9ec3](https://github.com/contentful/node-apps-toolkit/commit/e1a9ec36718e0296707be0c5365a18260f1db8a5))
+* wrapper around jsonwebtoken to support cjs and esm ([d1dd1b4](https://github.com/contentful/node-apps-toolkit/commit/d1dd1b41912764f03a4612d3a76e397a339bbb72))
+
+
+### Features
+
+* support esm modules ([db67398](https://github.com/contentful/node-apps-toolkit/commit/db6739811a98dffffb69dc7c2a64b0238e746781))
+* support esm modules [EXT-5853] ([6fbc400](https://github.com/contentful/node-apps-toolkit/commit/6fbc400fe2b2dda4565fa7d0bda15679813dbe37))
+* switch build to tsup to support cjs + esm ([944407b](https://github.com/contentful/node-apps-toolkit/commit/944407b2a2a3c34ea6c02302b2ed20dbf12f0746))
+
 # [3.10.0-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.9.2...v3.10.0-next.1) (2025-01-03)
 
 
