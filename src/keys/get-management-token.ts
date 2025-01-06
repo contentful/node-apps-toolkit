@@ -9,8 +9,8 @@ import {
   HttpClient,
 } from '../utils'
 
-const jwt = 'default' in jwtImpl ? (jwtImpl.default as any) : jwtImpl
-const { sign, decode } = jwt
+const jwt = 'default' in jwtImpl ? jwtImpl.default : jwtImpl
+const { sign, decode } = jwt as typeof jwtImpl
 export interface GetManagementTokenOptions {
   appInstallationId: string
   spaceId: string
