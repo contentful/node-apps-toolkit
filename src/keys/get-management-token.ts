@@ -1,4 +1,5 @@
-import { decode, sign, SignOptions } from 'jsonwebtoken'
+import * as jwtImpl from 'jsonwebtoken'
+import type { SignOptions } from 'jsonwebtoken'
 import { LRUCache } from 'lru-cache'
 import {
   createLogger,
@@ -8,6 +9,8 @@ import {
   HttpClient,
 } from '../utils'
 
+const jwt = 'default' in jwtImpl ? jwtImpl.default : jwtImpl
+const { sign, decode } = jwt as typeof jwtImpl
 export interface GetManagementTokenOptions {
   appInstallationId: string
   spaceId: string
