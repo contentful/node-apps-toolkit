@@ -12,7 +12,7 @@ import {
 import { HttpClient, HttpError, Response } from '../utils'
 import { Logger } from '../utils'
 import { sign } from 'jsonwebtoken'
-import NodeCache = require('node-cache')
+import { LRUCache } from 'lru-cache'
 
 const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.pem'), 'utf-8')
 const APP_ID = 'app_id'
@@ -26,7 +26,7 @@ const DEFAULT_OPTIONS: GetManagementTokenOptions = {
 }
 const noop = () => {}
 
-const defaultCache = new NodeCache()
+const defaultCache: LRUCache<string, string> = new LRUCache({ max: 10 })
 
 describe('getManagementToken', () => {
   it('fetches a token', async () => {
@@ -77,7 +77,7 @@ describe('getManagementToken', () => {
 
     post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
     const httpClient = { post } as unknown as HttpClient
-    const cache = new NodeCache()
+    const cache: LRUCache<string, string> = new LRUCache({ max: 10 })
     const getManagementToken = createGetManagementToken(logger, httpClient, cache)
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
@@ -86,7 +86,7 @@ describe('getManagementToken', () => {
 
     // Overwrite TTL expiry to 5ms
     const cacheKey = APP_ID + SPACE_ID + ENVIRONMENT_ID + PRIVATE_KEY.slice(32, 132)
-    cache.set(cacheKey, result, 0.005)
+    cache.set(cacheKey, result, { ttl: 0.005 })
 
     // Sleep 10ms
     await new Promise((resolve) => {
