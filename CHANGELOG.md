@@ -1,3 +1,10 @@
+# [3.10.0](https://github.com/contentful/node-apps-toolkit/compare/v3.9.2...v3.10.0) (2025-01-07)
+
+
+### Features
+
+* support esm modules [EXT-5853] ([#736](https://github.com/contentful/node-apps-toolkit/issues/736)) ([161ca98](https://github.com/contentful/node-apps-toolkit/commit/161ca98580f0231b4e644ab42f06a374807bd810))
+
 ## [3.9.2](https://github.com/contentful/node-apps-toolkit/compare/v3.9.1...v3.9.2) (2024-11-07)
 
 
