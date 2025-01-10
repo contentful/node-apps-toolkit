@@ -6,6 +6,7 @@ export type ResourcesSearchRequest = {
   resourceType: string
   query: string
   limit?: number
+  locale?: string
   pages?: {
     nextCursor: string
   }
