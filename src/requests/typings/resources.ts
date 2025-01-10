@@ -4,8 +4,9 @@ export const RESOURCES_LOOKUP_EVENT = 'resources.lookup'
 export type ResourcesSearchRequest = {
   type: 'resources.search'
   resourceType: string
-  query: string
-  limit?: number
+  query?: string
+  limit: number
+  locale?: string
   pages?: {
     nextCursor: string
   }
@@ -25,7 +26,7 @@ export type ResourcesLookupRequest<L extends Record<string, Scalar[]> = Record<s
     type: 'resources.lookup'
     lookupBy: L
     resourceType: string
-    limit?: number
+    limit: number
     pages?: {
       nextCursor: string
     }
