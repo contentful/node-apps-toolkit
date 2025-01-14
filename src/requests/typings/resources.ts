@@ -5,8 +5,8 @@ export type ResourcesSearchRequest = {
   type: 'resources.search'
   resourceType: string
   query?: string
-  limit: number
   locale?: string
+  limit: number
   pages?: {
     nextCursor: string
   }
@@ -26,6 +26,7 @@ export type ResourcesLookupRequest<L extends Record<string, Scalar[]> = Record<s
     type: 'resources.lookup'
     lookupBy: L
     resourceType: string
+    locale?: string
     limit: number
     pages?: {
       nextCursor: string
