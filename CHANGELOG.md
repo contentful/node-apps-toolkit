@@ -1,3 +1,11 @@
+## [3.10.1](https://github.com/contentful/node-apps-toolkit/compare/v3.10.0...v3.10.1) (2025-01-15)
+
+
+### Bug Fixes
+
+* include index.d.cts for stricter tsconfigs [EXT-6121] ([#748](https://github.com/contentful/node-apps-toolkit/issues/748)) ([9f94d0e](https://github.com/contentful/node-apps-toolkit/commit/9f94d0e98b578846d12c0e495acbae6a2e1ffeef))
+* update resource.lookup event to match the type in functions-api repo ([#746](https://github.com/contentful/node-apps-toolkit/issues/746)) ([b9d031e](https://github.com/contentful/node-apps-toolkit/commit/b9d031ea346d0f122c5a5185722e77e280c97982))
+
 # [3.10.0](https://github.com/contentful/node-apps-toolkit/compare/v3.9.2...v3.10.0) (2025-01-07)
 
 
