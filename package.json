@@ -26,6 +26,7 @@
     "test:integration": "mocha -r dotenv/config -r ts-node/register --timeout 10000 ./test/**/*.test.ts",
     "test": "npm run test:unit && npm run test:integration",
     "build": "rm -rf lib && tsup",
+    "postbuild": "cp ./lib/index.d.ts ./lib/index.d.cts",
     "build:docs": "typedoc --options .typedocrc.json src",
     "start:docs": "serve ./docs",
     "prepublishOnly": "npm run build && npm run build:docs",
