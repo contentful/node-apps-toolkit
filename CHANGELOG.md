@@ -1,3 +1,10 @@
+## [3.10.2-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.10.1...v3.10.2-next.1) (2025-01-27)
+
+
+### Bug Fixes
+
+* allow sub module imports [EXT-6147] ([4f6c7bf](https://github.com/contentful/node-apps-toolkit/commit/4f6c7bf1df557943188bc41bc8b7316296e310eb))
+
 ## [3.10.1](https://github.com/contentful/node-apps-toolkit/compare/v3.10.0...v3.10.1) (2025-01-15)
 
 
