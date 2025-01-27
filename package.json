@@ -12,6 +12,22 @@
     ".": {
       "import": "./lib/index.mjs",
       "require": "./lib/index.cjs"
+    },
+    "./keys": {
+      "import": "./lib/keys/index.mjs",
+      "require": "./lib/keys/index.cjs"
+    },
+    "./requests": {
+      "import": "./lib/requests/index.mjs",
+      "require": "./lib/requests/index.cjs"
+    },
+    "./requests/typings": {
+      "import": "./lib/requests//typingsindex.mjs",
+      "require": "./lib/requests/typings/index.cjs"
+    },
+    "./utils": {
+      "import": "./lib/utils/index.mjs",
+      "require": "./lib/utils/index.cjs"
     }
   },
   "engines": {
