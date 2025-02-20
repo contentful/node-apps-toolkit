@@ -9,7 +9,7 @@ import {
   Context,
 } from './typings'
 import { signRequest } from './sign-request'
-import { ExpiredRequestException } from './exceptions'
+import { ExpiredRequestException, ValidationException } from './exceptions'
 
 const makeContextHeaders = (subject?: { appId: string } | { userId: string }) => {
   return subject
@@ -203,14 +203,14 @@ describe('verifyRequest', () => {
 
           delete incomingRequest.headers[ContentfulHeader.Signature]
 
-          assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest))
+          assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest), ValidationException)
         })
         it('throws when missing timestamp', () => {
           const incomingRequest = makeIncomingRequest({}, makeContextHeaders(contextHeaders))
 
           delete incomingRequest.headers[ContentfulHeader.Timestamp]
 
-          assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest))
+          assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest), ValidationException)
         })
         it('throws when missing signed headers', () => {
           const incomingRequest = makeIncomingRequest(
@@ -222,7 +222,7 @@ describe('verifyRequest', () => {
 
           delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
 
-          assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest))
+          assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest), ValidationException)
         })
       })
 
