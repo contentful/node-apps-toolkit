@@ -1,3 +1,15 @@
+# [3.11.0](https://github.com/contentful/node-apps-toolkit/compare/v3.10.2...v3.11.0) (2025-03-05)
+
+
+### Bug Fixes
+
+* FunctionTypeEnum member case ([#762](https://github.com/contentful/node-apps-toolkit/issues/762)) ([132b8f7](https://github.com/contentful/node-apps-toolkit/commit/132b8f7258b72eeeee3568c2b8a83c5d9808bf4f))
+
+
+### Features
+
+* accurate TS types for each App Event payload type ([#761](https://github.com/contentful/node-apps-toolkit/issues/761)) ([f95db67](https://github.com/contentful/node-apps-toolkit/commit/f95db6759b0f1925a86cbf2cdb0f1f3ceeb12ca7))
+
 ## [3.10.2](https://github.com/contentful/node-apps-toolkit/compare/v3.10.1...v3.10.2) (2025-01-28)
 
 
