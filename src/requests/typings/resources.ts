@@ -1,10 +1,10 @@
 import { FunctionTypeEnum } from './function'
 
-export const RESOURCES_SEARCH_EVENT = FunctionTypeEnum.RESOURCES_SEARCH
-export const RESOURCES_LOOKUP_EVENT = FunctionTypeEnum.RESOURCES_LOOKUP
+export const RESOURCES_SEARCH_EVENT = FunctionTypeEnum.ResourcesSearch
+export const RESOURCES_LOOKUP_EVENT = FunctionTypeEnum.ResourcesLookup
 
 export type ResourcesSearchRequest = {
-  type: FunctionTypeEnum.RESOURCES_SEARCH
+  type: FunctionTypeEnum.ResourcesSearch
   resourceType: string
   query?: string
   locale?: string
@@ -25,7 +25,7 @@ type Scalar = string | number | boolean
 
 export type ResourcesLookupRequest<L extends Record<string, Scalar[]> = Record<string, Scalar[]>> =
   {
-    type: FunctionTypeEnum.RESOURCES_LOOKUP
+    type: FunctionTypeEnum.ResourcesLookup
     lookupBy: L
     resourceType: string
     locale?: string

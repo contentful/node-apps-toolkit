@@ -13,18 +13,18 @@ import {
 } from './resources'
 
 export enum FunctionTypeEnum {
-  GRAPHQL_FIELD_MAPPING = 'graphql.field.mapping',
-  GRAPHQL_QUERY = 'graphql.query',
-  APP_EVENT_FILTER = 'appevent.filter',
-  APP_EVENT_HANDLER = 'appevent.handler',
-  APP_EVENT_TRANSFORMATION = 'appevent.transformation',
-  APP_ACTION_CALL = 'appaction.call',
-  RESOURCES_SEARCH = 'resources.search',
-  RESOURCES_LOOKUP = 'resources.lookup',
+  GraphqlFieldMapping = 'graphql.field.mapping',
+  GraphqlQuery = 'graphql.query',
+  AppEventFilter = 'appevent.filter',
+  AppEventHandler = 'appevent.handler',
+  AppEventTransformation = 'appevent.transformation',
+  AppActionCall = 'appaction.call',
+  ResourcesSearch = 'resources.search',
+  ResourcesLookup = 'resources.lookup',
 }
 
 type GraphQLFieldTypeMappingRequest = {
-  type: FunctionTypeEnum.GRAPHQL_FIELD_MAPPING
+  type: FunctionTypeEnum.GraphqlFieldMapping
   fields: { contentTypeId: string; field: Field }[]
 }
 
@@ -47,7 +47,7 @@ export type GraphQLFieldTypeMapping = {
 }
 
 type GraphQLQueryRequest = {
-  type: FunctionTypeEnum.GRAPHQL_QUERY
+  type: FunctionTypeEnum.GraphqlQuery
   query: string
   isIntrospectionQuery: boolean
   variables: Record<string, unknown>
@@ -79,9 +79,9 @@ type AppEventBase<
   }
   body: AppEventEntityPayload<EntityName, EntityAction>
   type:
-    | FunctionTypeEnum.APP_EVENT_HANDLER
-    | FunctionTypeEnum.APP_EVENT_TRANSFORMATION
-    | FunctionTypeEnum.APP_EVENT_FILTER
+    | FunctionTypeEnum.AppEventHandler
+    | FunctionTypeEnum.AppEventTransformation
+    | FunctionTypeEnum.AppEventFilter
 }
 
 export type AppEventContentType = {
@@ -164,7 +164,7 @@ export type AppActionRequest<
 > = {
   headers: Record<string, string | number>
   body: CategoryType extends 'Custom' ? CustomCategoryBody : AppActionRequestBody<CategoryType>
-  type: FunctionTypeEnum.APP_ACTION_CALL
+  type: FunctionTypeEnum.AppActionCall
 }
 
 export type AppActionResponse = void | Record<string, unknown>
@@ -187,35 +187,35 @@ type FunctionEventHandlers<
   T extends AppActionCategoryType = never,
   U extends AppActionRequestBody<T> = never,
 > = {
-  [FunctionTypeEnum.GRAPHQL_FIELD_MAPPING]: {
+  [FunctionTypeEnum.GraphqlFieldMapping]: {
     event: GraphQLFieldTypeMappingRequest
     response: GraphQLFieldTypeMappingResponse
   }
-  [FunctionTypeEnum.GRAPHQL_QUERY]: {
+  [FunctionTypeEnum.GraphqlQuery]: {
     event: GraphQLQueryRequest
     response: GraphQLQueryResponse
   }
-  [FunctionTypeEnum.APP_ACTION_CALL]: {
+  [FunctionTypeEnum.AppActionCall]: {
     event: AppActionRequest<T, U>
     response: AppActionResponse
   }
-  [FunctionTypeEnum.APP_EVENT_FILTER]: {
+  [FunctionTypeEnum.AppEventFilter]: {
     event: AppEventRequest
     response: AppEventFilterResponse
   }
-  [FunctionTypeEnum.APP_EVENT_HANDLER]: {
+  [FunctionTypeEnum.AppEventHandler]: {
     event: AppEventRequest
     response: AppEventHandlerResponse
   }
-  [FunctionTypeEnum.APP_EVENT_TRANSFORMATION]: {
+  [FunctionTypeEnum.AppEventTransformation]: {
     event: AppEventRequest
     response: AppEventTransformationResponse
   }
-  [FunctionTypeEnum.RESOURCES_SEARCH]: {
+  [FunctionTypeEnum.ResourcesSearch]: {
     event: ResourcesSearchRequest
     response: ResourcesSearchResponse
   }
-  [FunctionTypeEnum.RESOURCES_LOOKUP]: {
+  [FunctionTypeEnum.ResourcesLookup]: {
     event: ResourcesLookupRequest
     response: ResourcesLookupResponse
   }
