@@ -2,40 +2,29 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 
+import { AppActionCategoryType, PlainClientAPI } from 'contentful-management'
+import { AppActionCategoryBodyMap, AppActionRequestBody } from './appAction'
+import { AppEventPayloadMap } from './event-payloads'
 import {
-  AppActionCategoryType,
-  AppInstallationProps,
-  AssetProps,
-  BulkActionProps,
-  CommentProps,
-  ContentTypeProps,
-  EntryProps,
-  EnvironmentTemplateInstallationProps,
-  PlainClientAPI,
-  ReleaseActionProps,
-  ReleaseProps,
-  ScheduledActionProps,
-  TaskProps,
-} from 'contentful-management'
-import {
-  RESOURCES_SEARCH_EVENT,
-  RESOURCES_LOOKUP_EVENT,
   type ResourcesLookupRequest,
   type ResourcesLookupResponse,
   type ResourcesSearchRequest,
   type ResourcesSearchResponse,
 } from './resources'
-import { AppActionCategoryBodyMap, AppActionRequestBody } from './appAction'
 
-const GRAPHQL_FIELD_MAPPING_EVENT = 'graphql.field.mapping'
-const GRAPHQL_QUERY_EVENT = 'graphql.query'
-const APP_EVENT_FILTER = 'appevent.filter'
-const APP_EVENT_HANDLER = 'appevent.handler'
-const APP_EVENT_TRANSFORMATION = 'appevent.transformation'
-const APP_ACTION_CALL = 'appaction.call'
+export enum FunctionTypeEnum {
+  GRAPHQL_FIELD_MAPPING = 'graphql.field.mapping',
+  GRAPHQL_QUERY = 'graphql.query',
+  APP_EVENT_FILTER = 'appevent.filter',
+  APP_EVENT_HANDLER = 'appevent.handler',
+  APP_EVENT_TRANSFORMATION = 'appevent.transformation',
+  APP_ACTION_CALL = 'appaction.call',
+  RESOURCES_SEARCH = 'resources.search',
+  RESOURCES_LOOKUP = 'resources.lookup',
+}
 
 type GraphQLFieldTypeMappingRequest = {
-  type: typeof GRAPHQL_FIELD_MAPPING_EVENT
+  type: FunctionTypeEnum.GRAPHQL_FIELD_MAPPING
   fields: { contentTypeId: string; field: Field }[]
 }
 
@@ -58,7 +47,7 @@ export type GraphQLFieldTypeMapping = {
 }
 
 type GraphQLQueryRequest = {
-  type: typeof GRAPHQL_QUERY_EVENT
+  type: FunctionTypeEnum.GRAPHQL_QUERY
   query: string
   isIntrospectionQuery: boolean
   variables: Record<string, unknown>
@@ -74,80 +63,80 @@ export type GraphQLQueryResponse = {
   extensions?: Record<string, unknown>
 }
 
-type ContentTypeActions = 'create' | 'save' | 'publish' | 'unpublish' | 'delete'
-type EntryActions =
-  | 'create'
-  | 'save'
-  | 'auto_save'
-  | 'publish'
-  | 'unpublish'
-  | 'archive'
-  | 'unarchive'
-  | 'delete'
-type AssetActions =
-  | 'create'
-  | 'save'
-  | 'auto_save'
-  | 'publish'
-  | 'unpublish'
-  | 'archive'
-  | 'unarchive'
-  | 'delete'
-type AppInstallationActions = 'create' | 'save' | 'delete'
-type TaskActions = 'create' | 'save' | 'delete'
-type CommentActions = 'create' | 'delete'
-type ReleaseActions = 'create' | 'save' | 'delete'
-type ReleaseActionActions = 'create' | 'execute'
-type ScheduledActionActions = 'create' | 'save' | 'delete' | 'execute'
-type BulkActionActions = 'create' | 'execute'
-type TemplateInstallationActions = 'complete'
+type AppEventEntityName = keyof AppEventPayloadMap
+type AppEventEntityActions<T extends AppEventEntityName> = keyof AppEventPayloadMap[T] & string
+type AppEventEntityPayload<
+  T extends AppEventEntityName,
+  A extends AppEventEntityActions<T>,
+> = AppEventPayloadMap[T][A]
 
-type AppEventBase<EntityName extends string, EntityActions extends string, EntityProps> = {
+type AppEventBase<
+  EntityName extends AppEventEntityName,
+  EntityAction extends AppEventEntityActions<EntityName>,
+> = {
   headers: Record<string, string | number> & {
-    'X-Contentful-Topic': `ContentManagement.${EntityName}.${EntityActions}`
+    'X-Contentful-Topic': `ContentManagement.${EntityName}.${EntityAction}`
   }
-  body: EntityProps
-  type: typeof APP_EVENT_HANDLER | typeof APP_EVENT_TRANSFORMATION | typeof APP_EVENT_FILTER
+  body: AppEventEntityPayload<EntityName, EntityAction>
+  type:
+    | FunctionTypeEnum.APP_EVENT_HANDLER
+    | FunctionTypeEnum.APP_EVENT_TRANSFORMATION
+    | FunctionTypeEnum.APP_EVENT_FILTER
 }
-export type AppEventContentType = AppEventBase<'ContentType', ContentTypeActions, ContentTypeProps>
-export type AppEventEntry = AppEventBase<'Entry', EntryActions, EntryProps>
-export type AppEventAsset = AppEventBase<'Asset', AssetActions, AssetProps>
-export type AppEventAppInstallation = AppEventBase<
-  'AppInstallation',
-  AppInstallationActions,
-  AppInstallationProps
->
-export type AppEventTask = AppEventBase<'Task', TaskActions, TaskProps>
-export type AppEventComment = AppEventBase<'Comment', CommentActions, CommentProps>
-export type AppEventRelease = AppEventBase<'Release', ReleaseActions, ReleaseProps>
-export type AppEventReleaseAction = AppEventBase<
-  'ReleaseAction',
-  ReleaseActionActions,
-  ReleaseActionProps
->
-export type AppEventScheduledAction = AppEventBase<
-  'ScheduledAction',
-  ScheduledActionActions,
-  ScheduledActionProps
->
-export type AppEventBulkAction = AppEventBase<'BulkAction', BulkActionActions, BulkActionProps>
-export type AppEventTemplateInstallation = AppEventBase<
-  'TemplateInstallation',
-  TemplateInstallationActions,
-  EnvironmentTemplateInstallationProps
->
-export type AppEventRequest =
-  | AppEventEntry
-  | AppEventAsset
-  | AppEventContentType
-  | AppEventAppInstallation
-  | AppEventTask
-  | AppEventComment
-  | AppEventRelease
-  | AppEventReleaseAction
-  | AppEventScheduledAction
-  | AppEventBulkAction
-  | AppEventTemplateInstallation
+
+export type AppEventContentType = {
+  [A in AppEventEntityActions<'ContentType'>]: AppEventBase<'ContentType', A>
+}[AppEventEntityActions<'ContentType'>]
+
+export type AppEventEntry = {
+  [A in AppEventEntityActions<'Entry'>]: AppEventBase<'Entry', A>
+}[AppEventEntityActions<'Entry'>]
+
+export type AppEventAsset = {
+  [A in AppEventEntityActions<'Asset'>]: AppEventBase<'Asset', A>
+}[AppEventEntityActions<'Asset'>]
+
+export type AppEventAppInstallation = {
+  [A in AppEventEntityActions<'AppInstallation'>]: AppEventBase<'AppInstallation', A>
+}[AppEventEntityActions<'AppInstallation'>]
+
+export type AppEventTask = {
+  [A in AppEventEntityActions<'Task'>]: AppEventBase<'Task', A>
+}[AppEventEntityActions<'Task'>]
+
+export type AppEventComment = {
+  [A in AppEventEntityActions<'Comment'>]: AppEventBase<'Comment', A>
+}[AppEventEntityActions<'Comment'>]
+
+export type AppEventRelease = {
+  [A in AppEventEntityActions<'Release'>]: AppEventBase<'Release', A>
+}[AppEventEntityActions<'Release'>]
+
+export type AppEventReleaseAction = {
+  [A in AppEventEntityActions<'ReleaseAction'>]: AppEventBase<'ReleaseAction', A>
+}[AppEventEntityActions<'ReleaseAction'>]
+
+export type AppEventScheduledAction = {
+  [A in AppEventEntityActions<'ScheduledAction'>]: AppEventBase<'ScheduledAction', A>
+}[AppEventEntityActions<'ScheduledAction'>]
+
+export type AppEventBulkAction = {
+  [A in AppEventEntityActions<'BulkAction'>]: AppEventBase<'BulkAction', A>
+}[AppEventEntityActions<'BulkAction'>]
+
+export type AppEventTemplateInstallation = {
+  [A in AppEventEntityActions<'TemplateInstallation'>]: AppEventBase<'TemplateInstallation', A>
+}[AppEventEntityActions<'TemplateInstallation'>]
+
+export type AppEventWorkflow = {
+  [A in AppEventEntityActions<'Workflow'>]: AppEventBase<'Workflow', A>
+}[AppEventEntityActions<'Workflow'>]
+
+export type AppEventRequest = {
+  [T in AppEventEntityName]: {
+    [A in AppEventEntityActions<T>]: AppEventBase<T, A>
+  }[AppEventEntityActions<T>]
+}[AppEventEntityName]
 
 export type AppEventFilterResponse = {
   result: boolean
@@ -175,7 +164,7 @@ export type AppActionRequest<
 > = {
   headers: Record<string, string | number>
   body: CategoryType extends 'Custom' ? CustomCategoryBody : AppActionRequestBody<CategoryType>
-  type: typeof APP_ACTION_CALL
+  type: FunctionTypeEnum.APP_ACTION_CALL
 }
 
 export type AppActionResponse = void | Record<string, unknown>
@@ -198,35 +187,35 @@ type FunctionEventHandlers<
   T extends AppActionCategoryType = never,
   U extends AppActionRequestBody<T> = never,
 > = {
-  [GRAPHQL_FIELD_MAPPING_EVENT]: {
+  [FunctionTypeEnum.GRAPHQL_FIELD_MAPPING]: {
     event: GraphQLFieldTypeMappingRequest
     response: GraphQLFieldTypeMappingResponse
   }
-  [GRAPHQL_QUERY_EVENT]: {
+  [FunctionTypeEnum.GRAPHQL_QUERY]: {
     event: GraphQLQueryRequest
     response: GraphQLQueryResponse
   }
-  [APP_ACTION_CALL]: {
+  [FunctionTypeEnum.APP_ACTION_CALL]: {
     event: AppActionRequest<T, U>
     response: AppActionResponse
   }
-  [APP_EVENT_FILTER]: {
+  [FunctionTypeEnum.APP_EVENT_FILTER]: {
     event: AppEventRequest
     response: AppEventFilterResponse
   }
-  [APP_EVENT_HANDLER]: {
+  [FunctionTypeEnum.APP_EVENT_HANDLER]: {
     event: AppEventRequest
     response: AppEventHandlerResponse
   }
-  [APP_EVENT_TRANSFORMATION]: {
+  [FunctionTypeEnum.APP_EVENT_TRANSFORMATION]: {
     event: AppEventRequest
     response: AppEventTransformationResponse
   }
-  [RESOURCES_SEARCH_EVENT]: {
+  [FunctionTypeEnum.RESOURCES_SEARCH]: {
     event: ResourcesSearchRequest
     response: ResourcesSearchResponse
   }
-  [RESOURCES_LOOKUP_EVENT]: {
+  [FunctionTypeEnum.RESOURCES_LOOKUP]: {
     event: ResourcesLookupRequest
     response: ResourcesLookupResponse
   }
