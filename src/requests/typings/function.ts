@@ -84,6 +84,54 @@ type AppEventBase<
     | FunctionTypeEnum.APP_EVENT_FILTER
 }
 
+export type AppEventContentType = {
+  [A in AppEventEntityActions<'ContentType'>]: AppEventBase<'ContentType', A>
+}[AppEventEntityActions<'ContentType'>]
+
+export type AppEventEntry = {
+  [A in AppEventEntityActions<'Entry'>]: AppEventBase<'Entry', A>
+}[AppEventEntityActions<'Entry'>]
+
+export type AppEventAsset = {
+  [A in AppEventEntityActions<'Asset'>]: AppEventBase<'Asset', A>
+}[AppEventEntityActions<'Asset'>]
+
+export type AppEventAppInstallation = {
+  [A in AppEventEntityActions<'AppInstallation'>]: AppEventBase<'AppInstallation', A>
+}[AppEventEntityActions<'AppInstallation'>]
+
+export type AppEventTask = {
+  [A in AppEventEntityActions<'Task'>]: AppEventBase<'Task', A>
+}[AppEventEntityActions<'Task'>]
+
+export type AppEventComment = {
+  [A in AppEventEntityActions<'Comment'>]: AppEventBase<'Comment', A>
+}[AppEventEntityActions<'Comment'>]
+
+export type AppEventRelease = {
+  [A in AppEventEntityActions<'Release'>]: AppEventBase<'Release', A>
+}[AppEventEntityActions<'Release'>]
+
+export type AppEventReleaseAction = {
+  [A in AppEventEntityActions<'ReleaseAction'>]: AppEventBase<'ReleaseAction', A>
+}[AppEventEntityActions<'ReleaseAction'>]
+
+export type AppEventScheduledAction = {
+  [A in AppEventEntityActions<'ScheduledAction'>]: AppEventBase<'ScheduledAction', A>
+}[AppEventEntityActions<'ScheduledAction'>]
+
+export type AppEventBulkAction = {
+  [A in AppEventEntityActions<'BulkAction'>]: AppEventBase<'BulkAction', A>
+}[AppEventEntityActions<'BulkAction'>]
+
+export type AppEventTemplateInstallation = {
+  [A in AppEventEntityActions<'TemplateInstallation'>]: AppEventBase<'TemplateInstallation', A>
+}[AppEventEntityActions<'TemplateInstallation'>]
+
+export type AppEventWorkflow = {
+  [A in AppEventEntityActions<'Workflow'>]: AppEventBase<'Workflow', A>
+}[AppEventEntityActions<'Workflow'>]
+
 export type AppEventRequest = {
   [T in AppEventEntityName]: {
     [A in AppEventEntityActions<T>]: AppEventBase<T, A>
