@@ -1,6 +1,3 @@
-export const RESOURCES_SEARCH_EVENT = 'resources.search'
-export const RESOURCES_LOOKUP_EVENT = 'resources.lookup'
-
 export type ResourcesSearchRequest = {
   type: 'resources.search'
   resourceType: string

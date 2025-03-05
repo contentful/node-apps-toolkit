@@ -2,6 +2,8 @@ export { getManagementToken } from './keys'
 export { signRequest, verifyRequest, ContentfulHeader, ExpiredRequestException } from './requests'
 
 export type {
+  AppEventRequest,
+  AppEventPayloadMap,
   AppActionCallContext,
   CanonicalRequest,
   SignedRequestHeaders,
@@ -9,4 +11,5 @@ export type {
   FunctionEventHandler,
   FunctionEventType,
   FunctionEvent,
+  FunctionTypeEnum,
 } from './requests'
