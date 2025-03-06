@@ -1,5 +1,11 @@
 export { getManagementToken } from './keys'
-export { signRequest, verifyRequest, ContentfulHeader, ExpiredRequestException } from './requests'
+export {
+  signRequest,
+  verifyRequest,
+  ContentfulHeader,
+  ExpiredRequestException,
+  ValidationException,
+} from './requests'
 
 export type {
   AppEventRequest,
