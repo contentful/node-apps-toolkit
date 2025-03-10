@@ -1,3 +1,10 @@
+## [3.11.1](https://github.com/contentful/node-apps-toolkit/compare/v3.11.0...v3.11.1) (2025-03-06)
+
+
+### Bug Fixes
+
+* export all types ([#764](https://github.com/contentful/node-apps-toolkit/issues/764)) ([25608c5](https://github.com/contentful/node-apps-toolkit/commit/25608c5e7504fbff0374c7fcbcb1e439ed1f8c00))
+
 # [3.11.0](https://github.com/contentful/node-apps-toolkit/compare/v3.10.2...v3.11.0) (2025-03-05)
 
 
