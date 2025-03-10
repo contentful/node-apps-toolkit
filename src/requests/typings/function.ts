@@ -14,7 +14,7 @@ import {
 
 export enum FunctionTypeEnum {
   GraphqlFieldMapping = 'graphql.field.mapping',
-  GraphQLResourceTypeMapping = 'graphql.resourcetype.mapping',
+  GraphqlResourceTypeMapping = 'graphql.resourcetype.mapping',
   GraphqlQuery = 'graphql.query',
   AppEventFilter = 'appevent.filter',
   AppEventHandler = 'appevent.handler',
@@ -48,14 +48,13 @@ export type GraphQLFieldTypeMapping = {
 }
 
 type GraphQLResourceTypeMappingRequest = {
-  type: FunctionTypeEnum.GraphQLResourceTypeMapping
+  type: FunctionTypeEnum.GraphqlResourceTypeMapping
   resourceTypes: {
     resourceTypeId: string
   }[]
 }
 
 type GraphQLResourceTypeMappingResponse = {
-  namespace: string
   resourceTypes: GraphQLResourceTypeMapping[]
 }
 
@@ -64,7 +63,7 @@ type GraphQLResourceTypeMapping = {
     graphQLQueryField: string
     graphQLQueryArguments: Record<string, string>
     resourceTypeId: string
-    graphQLOutputType?: string | undefined
+    graphQLOutputType: string
   }
 }
 
@@ -213,7 +212,7 @@ type FunctionEventHandlers<
     event: GraphQLFieldTypeMappingRequest
     response: GraphQLFieldTypeMappingResponse
   }
-  [FunctionTypeEnum.GraphQLResourceTypeMapping]: {
+  [FunctionTypeEnum.GraphqlResourceTypeMapping]: {
     event: GraphQLResourceTypeMappingRequest
     response: GraphQLResourceTypeMappingResponse
   }
