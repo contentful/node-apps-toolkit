@@ -1,3 +1,10 @@
+# [3.12.0](https://github.com/contentful/node-apps-toolkit/compare/v3.11.1...v3.12.0) (2025-03-10)
+
+
+### Features
+
+* add types for resource type mapping[FUS-177] ([#763](https://github.com/contentful/node-apps-toolkit/issues/763)) ([3d4f8ae](https://github.com/contentful/node-apps-toolkit/commit/3d4f8ae3d60b48eba67aba9660a98a6bd33c737b))
+
 ## [3.11.1](https://github.com/contentful/node-apps-toolkit/compare/v3.11.0...v3.11.1) (2025-03-06)
 
 
