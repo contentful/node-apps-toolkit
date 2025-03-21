@@ -188,6 +188,16 @@ export type AppActionRequest<
 
 export type AppActionResponse = void | Record<string, unknown>
 
+// Recursively convert PlainClientAPI return types to Promise<ReadableStream>
+type ConvertToStreamingAPI<T> = {
+  [K in keyof T]: T[K] extends (...args: infer A) => Promise<infer R>
+    ? (...args: A) => Promise<ReadableStream<R>>
+    : T[K] extends Record<string, any>
+      ? ConvertToStreamingAPI<T[K]>
+      : T[K]
+}
+export type StreamingPlainClientAPI = ConvertToStreamingAPI<PlainClientAPI>
+
 /**
  * P: Possibility to type app installation parameters
  */
@@ -196,6 +206,7 @@ export type FunctionEventContext<P extends Record<string, any> = Record<string, 
   environmentId: string
   appInstallationParameters: P
   cma?: PlainClientAPI
+  streamingCma?: StreamingPlainClientAPI
 }
 
 /**
