@@ -205,7 +205,13 @@ export type FunctionEventContext<P extends Record<string, any> = Record<string, 
   spaceId: string
   environmentId: string
   appInstallationParameters: P
+  /**
+   * The `cma` client is the **default** client for Contentful Management API requests.
+   */
   cma?: PlainClientAPI
+  /**
+   * The `streamingCma` client should be used when processing **big** entries.
+   */
   streamingCma?: StreamingPlainClientAPI
 }
 
