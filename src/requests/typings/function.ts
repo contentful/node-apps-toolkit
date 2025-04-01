@@ -2,7 +2,7 @@
 // https://github.com/typescript-eslint/typescript-eslint/blob/master/packages/eslint-plugin/ROADMAP.md
 /*eslint-disable no-unused-vars*/
 
-import { AppActionCategoryType, PlainClientAPI } from 'contentful-management'
+import { AppActionCategoryType, ClientOptions, PlainClientAPI } from 'contentful-management'
 import { AppActionCategoryBodyMap, AppActionRequestBody } from './appAction'
 import { AppEventPayloadMap } from './event-payloads'
 import {
@@ -195,6 +195,7 @@ export type FunctionEventContext<P extends Record<string, any> = Record<string, 
   spaceId: string
   environmentId: string
   appInstallationParameters: P
+  cmaClientOptions?: ClientOptions
   cma?: PlainClientAPI
 }
 
