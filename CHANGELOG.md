@@ -1,3 +1,10 @@
+# [3.13.0](https://github.com/contentful/node-apps-toolkit/compare/v3.12.0...v3.13.0) (2025-04-01)
+
+
+### Features
+
+* include cmaClientOptions in FunctionEventContext [EXT-6303] ([#767](https://github.com/contentful/node-apps-toolkit/issues/767)) ([b94fcd4](https://github.com/contentful/node-apps-toolkit/commit/b94fcd48b79166f2b124db56a2f48c4228cd3235))
+
 # [3.12.0](https://github.com/contentful/node-apps-toolkit/compare/v3.11.1...v3.12.0) (2025-03-10)
 
 
