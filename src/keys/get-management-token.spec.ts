@@ -14,6 +14,12 @@ import { Logger } from '../utils'
 import { sign } from 'jsonwebtoken'
 import { LRUCache } from 'lru-cache'
 
+// Mock the debug logger to spy on it
+const mockDebugInstance = {
+  extend: sinon.stub().returns(sinon.spy()),
+}
+sinon.stub(require('debug'), 'default').returns(mockDebugInstance)
+
 const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.pem'), 'utf-8')
 const APP_ID = 'app_id'
 const SPACE_ID = 'space_id'
@@ -29,6 +35,64 @@ const noop = () => {}
 const defaultCache: LRUCache<string, string> = new LRUCache({ max: 10 })
 
 describe('getManagementToken', () => {
+  let loggerSpy: sinon.SinonSpy
+
+  beforeEach(() => {
+    // Reset the spy before each test
+    loggerSpy = mockDebugInstance.extend() as sinon.SinonSpy
+    loggerSpy.resetHistory()
+    // Reset cache as well
+    defaultCache.clear()
+  })
+
+  it('fetches a token and logs by default', async () => {
+    const mockToken = 'token'
+    // Use the real logger creator, but we spy on the debug instance it creates
+    const { createLogger } = await import('../utils/logger')
+    const logger = createLogger({ filename: __filename })
+    const post = sinon.stub()
+    post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
+    const httpClient = { post } as unknown as HttpClient
+    const getManagementTokenFn = createGetManagementToken(logger, httpClient, defaultCache)
+
+    const result = await getManagementTokenFn(PRIVATE_KEY, DEFAULT_OPTIONS) // disableLogging is default false
+
+    assert.deepStrictEqual(result, mockToken)
+    assert(
+      post.calledWith(
+        `spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
+        sinon.match({ headers: { Authorization: sinon.match.string } }),
+      ),
+    )
+    // Assert that the logger spy was called
+    assert(loggerSpy.called, 'Logger should have been called by default')
+  })
+
+  it('does not log when disableLogging is true', async () => {
+    const mockToken = 'token-no-log'
+    const { createLogger } = await import('../utils/logger')
+    const logger = createLogger({ filename: __filename })
+    const post = sinon.stub()
+    post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
+    const httpClient = { post } as unknown as HttpClient
+    const getManagementTokenFn = createGetManagementToken(logger, httpClient, defaultCache)
+
+    const result = await getManagementTokenFn(PRIVATE_KEY, {
+      ...DEFAULT_OPTIONS,
+      disableLogging: true,
+    })
+
+    assert.deepStrictEqual(result, mockToken)
+    assert(
+      post.calledWith(
+        `spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
+        sinon.match({ headers: { Authorization: sinon.match.string } }),
+      ),
+    )
+    // Assert that the logger spy was NOT called
+    assert(!loggerSpy.called, 'Logger should not have been called when disableLogging is true')
+  })
+
   it('fetches a token', async () => {
     const mockToken = 'token'
     const logger = noop as unknown as Logger
