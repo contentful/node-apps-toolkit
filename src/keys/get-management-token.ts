@@ -23,6 +23,10 @@ export interface GetManagementTokenOptions {
 
 let defaultCache: LRUCache<string, string> | undefined
 
+// Create a logger with a specific namespace that is unlikely to be enabled,
+// effectively making it a no-op logger while conforming to the Logger type.
+const noOpLogger: Logger = createLogger({ filename: __filename + ':noop' })
+
 /**
  * Synchronously sign the given privateKey into a JSON Web Token string
  * @internal
@@ -30,15 +34,15 @@ let defaultCache: LRUCache<string, string> | undefined
 const generateOneTimeToken = (
   privateKey: string,
   { appId, keyId }: { appId: string; keyId?: string },
-  { log, disableLogging }: { log: Logger; disableLogging: boolean },
+  { log }: { log: Logger },
 ): string => {
-  if (!disableLogging) log('Signing a JWT token with private key')
+  log('Signing a JWT token with private key')
   try {
     const baseSignOptions: SignOptions = { algorithm: 'RS256', issuer: appId, expiresIn: '10m' }
     const signOptions: SignOptions = keyId ? { ...baseSignOptions, keyid: keyId } : baseSignOptions
 
     const token = sign({}, privateKey, signOptions)
-    if (!disableLogging) log('Successfully signed token')
+    log('Successfully signed token')
     return token
   } catch (e) {
     log('Unable to sign token')
@@ -53,11 +57,11 @@ const getTokenFromOneTimeToken = async (
     spaceId,
     environmentId,
   }: { appInstallationId: string; spaceId: string; environmentId: string },
-  { log, http, disableLogging }: { log: Logger; http: HttpClient; disableLogging: boolean },
+  { log, http }: { log: Logger; http: HttpClient },
 ): Promise<string> => {
   const validateStatusCode = createValidateStatusCode([201])
 
-  if (!disableLogging) log(`Requesting CMA Token with given App Token`)
+  log(`Requesting CMA Token with given App Token`)
 
   const response = await http.post(
     `spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
@@ -71,10 +75,9 @@ const getTokenFromOneTimeToken = async (
     },
   )
 
-  if (!disableLogging)
-    log(
-      `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`,
-    )
+  log(
+    `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`,
+  )
 
   return JSON.parse(response.body).token
 }
@@ -95,6 +98,7 @@ export const createGetManagementToken = (
 
     const reuseToken = opts.reuseToken ?? true
     const disableLogging = opts.disableLogging ?? false
+    const effectiveLog = disableLogging ? noOpLogger : log
 
     const cacheKey =
       opts.appInstallationId + opts.spaceId + opts.environmentId + privateKey.slice(32, 132)
@@ -108,9 +112,9 @@ export const createGetManagementToken = (
     const appToken = generateOneTimeToken(
       privateKey,
       { appId: opts.appInstallationId, keyId: opts.keyId },
-      { log, disableLogging },
+      { log: effectiveLog },
     )
-    const ott = await getTokenFromOneTimeToken(appToken, opts, { log, http, disableLogging })
+    const ott = await getTokenFromOneTimeToken(appToken, opts, { log: effectiveLog, http })
     if (reuseToken) {
       const decoded = decode(ott)
       if (decoded && typeof decoded === 'object' && decoded.exp) {
@@ -153,9 +157,11 @@ export const getManagementToken = (privateKey: string, opts: GetManagementTokenO
     defaultCache = new LRUCache({ max: 10 })
   }
   const httpClientOpts = typeof opts.host !== 'undefined' ? { prefixUrl: opts.host } : {}
+  const disableLogging = opts.disableLogging ?? false
+  const effectiveLog = disableLogging ? noOpLogger : createLogger({ filename: __filename })
 
   return createGetManagementToken(
-    createLogger({ filename: __filename }),
+    effectiveLog,
     createHttpClient(httpClientOpts),
     defaultCache!,
   )(privateKey, opts)

@@ -14,11 +14,8 @@ import { Logger } from '../utils'
 import { sign } from 'jsonwebtoken'
 import { LRUCache } from 'lru-cache'
 
-// Mock the debug logger to spy on it
-const mockDebugInstance = {
-  extend: sinon.stub().returns(sinon.spy()),
-}
-sinon.stub(require('debug'), 'default').returns(mockDebugInstance)
+// No longer need to mock debug globally
+// sinon.stub(require('debug'), 'default').returns(mockDebugInstance)
 
 const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.pem'), 'utf-8')
 const APP_ID = 'app_id'
@@ -36,24 +33,44 @@ const defaultCache: LRUCache<string, string> = new LRUCache({ max: 10 })
 
 describe('getManagementToken', () => {
   let loggerSpy: sinon.SinonSpy
+  let createLoggerStub: sinon.SinonStub
 
   beforeEach(() => {
     // Reset the spy before each test
-    loggerSpy = mockDebugInstance.extend() as sinon.SinonSpy
-    loggerSpy.resetHistory()
+    loggerSpy = sinon.spy()
+    // Reset stubs if they exist
+    if (createLoggerStub) {
+      createLoggerStub.restore()
+    }
     // Reset cache as well
     defaultCache.clear()
   })
 
+  afterEach(() => {
+    // Ensure stubs are restored after each test
+    if (createLoggerStub) {
+      createLoggerStub.restore()
+    }
+  })
+
   it('fetches a token and logs by default', async () => {
     const mockToken = 'token'
-    // Use the real logger creator, but we spy on the debug instance it creates
-    const { createLogger } = await import('../utils/logger')
-    const logger = createLogger({ filename: __filename })
+    // Stub createLogger to return our spy directly, as debug instances are functions
+    const loggerUtils = await import('../utils/logger')
+    // The logger instance itself is the function to call for logging
+    createLoggerStub = sinon
+      .stub(loggerUtils, 'createLogger')
+      .returns(loggerSpy as unknown as Logger)
+
     const post = sinon.stub()
     post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
     const httpClient = { post } as unknown as HttpClient
-    const getManagementTokenFn = createGetManagementToken(logger, httpClient, defaultCache)
+    // createGetManagementToken will now receive the loggerSpy via the stub
+    const getManagementTokenFn = createGetManagementToken(
+      loggerSpy as unknown as Logger,
+      httpClient,
+      defaultCache,
+    )
 
     const result = await getManagementTokenFn(PRIVATE_KEY, DEFAULT_OPTIONS) // disableLogging is default false
 
@@ -70,12 +87,21 @@ describe('getManagementToken', () => {
 
   it('does not log when disableLogging is true', async () => {
     const mockToken = 'token-no-log'
-    const { createLogger } = await import('../utils/logger')
-    const logger = createLogger({ filename: __filename })
+    // Stub createLogger like before
+    const loggerUtils = await import('../utils/logger')
+    createLoggerStub = sinon
+      .stub(loggerUtils, 'createLogger')
+      .returns(loggerSpy as unknown as Logger)
+
     const post = sinon.stub()
     post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
     const httpClient = { post } as unknown as HttpClient
-    const getManagementTokenFn = createGetManagementToken(logger, httpClient, defaultCache)
+    // createGetManagementToken receives the spy logger
+    const getManagementTokenFn = createGetManagementToken(
+      loggerSpy as unknown as Logger,
+      httpClient,
+      defaultCache,
+    )
 
     const result = await getManagementTokenFn(PRIVATE_KEY, {
       ...DEFAULT_OPTIONS,
@@ -90,6 +116,8 @@ describe('getManagementToken', () => {
       ),
     )
     // Assert that the logger spy was NOT called
+    // Because disableLogging: true, the internal logic uses noOpLogger,
+    // so the log method of the passed-in mockLogger (our spy) is never invoked.
     assert(!loggerSpy.called, 'Logger should not have been called when disableLogging is true')
   })
 
