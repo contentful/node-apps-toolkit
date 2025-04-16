@@ -18,9 +18,14 @@ export interface GetManagementTokenOptions {
   keyId?: string
   reuseToken?: boolean
   host?: string
+  disableLogging?: boolean
 }
 
 let defaultCache: LRUCache<string, string> | undefined
+
+// Create a logger with a specific namespace that is unlikely to be enabled,
+// effectively making it a no-op logger while conforming to the Logger type.
+const noOpLogger: Logger = createLogger({ filename: __filename + ':noop' })
 
 /**
  * Synchronously sign the given privateKey into a JSON Web Token string
@@ -91,13 +96,13 @@ export const createGetManagementToken = (
       throw new ReferenceError('Invalid privateKey: expected a string representing a private key')
     }
 
-    if (opts.reuseToken === undefined) {
-      opts.reuseToken = true
-    }
+    const reuseToken = opts.reuseToken ?? true
+    const disableLogging = opts.disableLogging ?? false
+    const effectiveLog = disableLogging ? noOpLogger : log
 
     const cacheKey =
       opts.appInstallationId + opts.spaceId + opts.environmentId + privateKey.slice(32, 132)
-    if (opts.reuseToken) {
+    if (reuseToken) {
       const existing = cache.get(cacheKey) as string
       if (existing) {
         return existing as string
@@ -107,10 +112,10 @@ export const createGetManagementToken = (
     const appToken = generateOneTimeToken(
       privateKey,
       { appId: opts.appInstallationId, keyId: opts.keyId },
-      { log },
+      { log: effectiveLog },
     )
-    const ott = await getTokenFromOneTimeToken(appToken, opts, { log, http })
-    if (opts.reuseToken) {
+    const ott = await getTokenFromOneTimeToken(appToken, opts, { log: effectiveLog, http })
+    if (reuseToken) {
       const decoded = decode(ott)
       if (decoded && typeof decoded === 'object' && decoded.exp) {
         // Internally expire cached tokens a bit earlier to make sure token isn't expired on arrival
@@ -152,9 +157,11 @@ export const getManagementToken = (privateKey: string, opts: GetManagementTokenO
     defaultCache = new LRUCache({ max: 10 })
   }
   const httpClientOpts = typeof opts.host !== 'undefined' ? { prefixUrl: opts.host } : {}
+  const disableLogging = opts.disableLogging ?? false
+  const effectiveLog = disableLogging ? noOpLogger : createLogger({ filename: __filename })
 
   return createGetManagementToken(
-    createLogger({ filename: __filename }),
+    effectiveLog,
     createHttpClient(httpClientOpts),
     defaultCache!,
   )(privateKey, opts)
