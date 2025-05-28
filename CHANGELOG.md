@@ -3,7 +3,7 @@
 
 ### Bug Fixes
 
-* rename team-tundra -> team-extensibility [EXT-6372] ([#772](https://github.com/contentful/node-apps-toolkit/issues/772)) ([9aa8701](https://github.com/contentful/node-apps-toolkit/commit/9aa8701379be3e86f5aa71e7b58be5360b3b2055))
+* internal fixes [EXT-6372] ([#772](https://github.com/contentful/node-apps-toolkit/issues/772)) ([9aa8701](https://github.com/contentful/node-apps-toolkit/commit/9aa8701379be3e86f5aa71e7b58be5360b3b2055))
 
 # [3.13.0](https://github.com/contentful/node-apps-toolkit/compare/v3.12.0...v3.13.0) (2025-04-01)
 
