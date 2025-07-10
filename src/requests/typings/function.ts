@@ -58,9 +58,13 @@ type GraphQLResourceTypeMappingResponse = {
   resourceTypes: GraphQLResourceTypeMapping[]
 }
 
+type GraphQLQueryArgumentMapping = {
+  [key: string]: GraphQLQueryArgumentMapping | string
+}
+
 type GraphQLResourceTypeMapping = {
   graphQLQueryField: string
-  graphQLQueryArguments: Record<string, string>
+  graphQLQueryArguments: GraphQLQueryArgumentMapping
   resourceTypeId: string
   graphQLOutputType?: string
 }
