@@ -1,13 +1,8 @@
 import * as jwtImpl from 'jsonwebtoken'
 import type { SignOptions } from 'jsonwebtoken'
 import { LRUCache } from 'lru-cache'
-import {
-  createLogger,
-  Logger,
-  createHttpClient,
-  createValidateStatusCode,
-  HttpClient,
-} from '../utils'
+import { createLogger, Logger, createValidateStatusCode } from '../utils'
+import { FetchOptions, makeRequest, withDefaultOptions, withHook, withRetry } from '../utils/http'
 
 const jwt = 'default' in jwtImpl ? jwtImpl.default : jwtImpl
 const { sign, decode } = jwt as typeof jwtImpl
@@ -52,31 +47,31 @@ const getTokenFromOneTimeToken = async (
     spaceId,
     environmentId,
   }: { appInstallationId: string; spaceId: string; environmentId: string },
-  { log, http }: { log: Logger; http: HttpClient },
+  { log, fetchOptions }: { log: Logger; fetchOptions: FetchOptions },
 ): Promise<string> => {
   const validateStatusCode = createValidateStatusCode([201])
 
   log(`Requesting CMA Token with given App Token`)
 
-  const response = await http
-    .post(
-      `spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
-      {
-        headers: {
-          Authorization: `Bearer ${appToken}`,
-        },
-        hooks: {
-          afterResponse: [validateStatusCode],
-        },
+  const requestor = makeRequest(
+    `/spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${appToken}`,
       },
-    )
-    .json<{ token: string }>()
+    },
+    fetchOptions,
+  )
+  const hookRequestor = withHook(requestor, validateStatusCode)
+  const retryRequestor = withRetry(hookRequestor, fetchOptions)
+  const response = await retryRequestor()
 
   log(
     `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`,
   )
 
-  return response.token
+  return ((await response.json()) as { token: string }).token
 }
 
 /**
@@ -85,7 +80,7 @@ const getTokenFromOneTimeToken = async (
  */
 export const createGetManagementToken = (
   log: Logger,
-  http: HttpClient,
+  fetchOptions: FetchOptions,
   cache: LRUCache<string, string>,
 ) => {
   return async (privateKey: unknown, opts: GetManagementTokenOptions): Promise<string> => {
@@ -111,7 +106,7 @@ export const createGetManagementToken = (
       { appId: opts.appInstallationId, keyId: opts.keyId },
       { log },
     )
-    const ott = await getTokenFromOneTimeToken(appToken, opts, { log, http })
+    const ott = await getTokenFromOneTimeToken(appToken, opts, { log, fetchOptions })
     if (opts.reuseToken) {
       const decoded = decode(ott)
       if (decoded && typeof decoded === 'object' && decoded.exp) {
@@ -157,7 +152,7 @@ export const getManagementToken = async (privateKey: string, opts: GetManagement
 
   return createGetManagementToken(
     createLogger({ filename: __filename }),
-    await createHttpClient(httpClientOpts),
+    withDefaultOptions(httpClientOpts),
     defaultCache!,
   )(privateKey, opts)
 }

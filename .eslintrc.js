@@ -4,6 +4,9 @@ module.exports = {
     node: true,
     mocha: true,
   },
+  parserOptions: {
+    project: './tsconfig.eslint.json',
+  },
   plugins: ['@typescript-eslint', 'prettier'],
   extends: ['eslint:recommended', 'plugin:prettier/recommended'],
   rules: {

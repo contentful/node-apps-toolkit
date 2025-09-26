@@ -1,36 +1,63 @@
-import {
-  Options,
-  KyInstance,
-  HTTPError,
-  KyResponse,
-  AfterResponseHook,
-  KyRequest,
-  NormalizedOptions,
-} from 'ky'
-
-const config = {
+export class HttpError extends Error {
+  constructor(public response: Response) {
+    super(`HTTP error: ${response.status} ${response.statusText}`)
+  }
+}
+export type FetchOptions = {
+  prefixUrl: string
+  retry: { limit: number }
+}
+export const config: FetchOptions = {
   prefixUrl: process.env.BASE_URL || 'https://api.contentful.com',
   retry: { limit: 3 },
 }
-
-export const createHttpClient = async (configOverride: Options = {}) => {
-  const { default: ky } = await import('ky')
-  return ky.extend({ ...config, ...configOverride })
+export const withDefaultOptions = (fetchOptions: Partial<FetchOptions>) => {
+  return { ...config, ...fetchOptions }
 }
-
-export const createValidateStatusCode =
-  (allowedStatusCodes: number[]): AfterResponseHook =>
-  (request: KyRequest, options: NormalizedOptions, response: KyResponse) => {
-    if (!allowedStatusCodes.includes(response.status)) {
-      console.log(response.body)
-      throw new HTTPError(response, request, options)
+type Requestor = () => Promise<Response>
+export const makeRequest = (
+  url: string,
+  options: RequestInit,
+  fetchOptions: FetchOptions,
+): Requestor => {
+  return async (): Promise<Response> => {
+    const response = await fetch(`${fetchOptions.prefixUrl}${url}`, options)
+    if (!response.ok) {
+      throw new HttpError(response)
     }
     return response
   }
+}
 
-export { HTTPError as HttpError }
+// eslint-disable-next-line no-unused-vars
+type Hook = (response: Response) => Response
+export const withHook = (requestor: Requestor, hook: Hook): Requestor => {
+  return async (): Promise<Response> => {
+    const response = await requestor()
+    return hook(response)
+  }
+}
 
-export type HttpClient = KyInstance
-export type Request = KyRequest
-export type Response = KyResponse
-export type ErrorOptions = NormalizedOptions
+export const withRetry = (requestor: Requestor, fetchOptions: FetchOptions): Requestor => {
+  return async (): Promise<Response> => {
+    let lastError: Error | null = null
+    let retries = 0
+    do {
+      try {
+        return await requestor()
+      } catch (error) {
+        lastError = error as Error
+        retries++
+      }
+    } while (retries <= fetchOptions.retry.limit)
+    throw lastError
+  }
+}
+
+export const createValidateStatusCode = (allowedStatusCodes: number[]) => (response: Response) => {
+  if (!allowedStatusCodes.includes(response.status)) {
+    console.log(response.body)
+    throw new HttpError(response)
+  }
+  return response
+}

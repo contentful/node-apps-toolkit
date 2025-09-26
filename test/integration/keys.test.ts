@@ -5,7 +5,7 @@ import * as assert from 'assert'
 //TODO use built version
 import { getManagementToken } from '../../src/keys'
 import { cleanOldKeys, setPublicKey } from '../utils'
-import { createHttpClient } from '../../src/utils'
+import { config, makeRequest } from '../../src/utils/http'
 
 describe('Keys Utilities', () => {
   before(async () => {
@@ -32,14 +32,19 @@ describe('Keys Utilities', () => {
       environmentId,
     })
 
-    await assert.doesNotReject(async () => {
-      const http = await createHttpClient()
-
-      return http.get(`spaces/${spaceId}/entries`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+    await assert.doesNotReject(() => {
+      const requestor = makeRequest(
+        `/spaces/${spaceId}/entries`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      })
+        config,
+      )
+
+      return requestor()
     })
   })
 })

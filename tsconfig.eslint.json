@@ -1,0 +1,8 @@
+{
+    "extends": "./tsconfig.json",
+    "include": ["./src/**/*", "./src/**/*.spec.ts", "./test/**/*.test.ts"],
+    "exclude": [],
+    "compilerOptions": {
+      "lib": ["es2020", "esnext", "dom"]
+    }
+  }
