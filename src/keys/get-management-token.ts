@@ -58,23 +58,25 @@ const getTokenFromOneTimeToken = async (
 
   log(`Requesting CMA Token with given App Token`)
 
-  const response = await http.post(
-    `spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
-    {
-      headers: {
-        Authorization: `Bearer ${appToken}`,
+  const response = await http
+    .post(
+      `spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
+      {
+        headers: {
+          Authorization: `Bearer ${appToken}`,
+        },
+        hooks: {
+          afterResponse: [validateStatusCode],
+        },
       },
-      hooks: {
-        afterResponse: [validateStatusCode],
-      },
-    },
-  )
+    )
+    .json<{ token: string }>()
 
   log(
     `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`,
   )
 
-  return JSON.parse(response.body).token
+  return response.token
 }
 
 /**
