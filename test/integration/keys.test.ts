@@ -32,8 +32,8 @@ describe('Keys Utilities', () => {
       environmentId,
     })
 
-    await assert.doesNotReject(() => {
-      const http = createHttpClient()
+    await assert.doesNotReject(async () => {
+      const http = await createHttpClient()
 
       return http.get(`spaces/${spaceId}/entries`, {
         headers: {

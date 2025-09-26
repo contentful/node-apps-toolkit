@@ -1,4 +1,4 @@
-import ky, {
+import {
   Options,
   KyInstance,
   HTTPError,
@@ -13,7 +13,8 @@ const config = {
   retry: { limit: 3 },
 }
 
-export const createHttpClient = (configOverride: Options = {}) => {
+export const createHttpClient = async (configOverride: Options = {}) => {
+  const { default: ky } = await import('ky')
   return ky.extend({ ...config, ...configOverride })
 }
 

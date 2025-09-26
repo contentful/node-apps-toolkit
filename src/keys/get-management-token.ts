@@ -149,7 +149,7 @@ export const createGetManagementToken = (
  * ~~~
  * @category Keys
  */
-export const getManagementToken = (privateKey: string, opts: GetManagementTokenOptions) => {
+export const getManagementToken = async (privateKey: string, opts: GetManagementTokenOptions) => {
   if ((opts.reuseToken || opts.reuseToken === undefined) && !defaultCache) {
     defaultCache = new LRUCache({ max: 10 })
   }
@@ -157,7 +157,7 @@ export const getManagementToken = (privateKey: string, opts: GetManagementTokenO
 
   return createGetManagementToken(
     createLogger({ filename: __filename }),
-    createHttpClient(httpClientOpts),
+    await createHttpClient(httpClientOpts),
     defaultCache!,
   )(privateKey, opts)
 }
