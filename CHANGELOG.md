@@ -1,3 +1,21 @@
+# [3.14.0-next.3](https://github.com/contentful/node-apps-toolkit/compare/v3.14.0-next.2...v3.14.0-next.3) (2025-09-27)
+
+
+### Bug Fixes
+
+* test setup ([d58331e](https://github.com/contentful/node-apps-toolkit/commit/d58331e66c946e19c0f42372719caf25ca020ec4))
+* test setup ([6afbc01](https://github.com/contentful/node-apps-toolkit/commit/6afbc015cee96b0fc36cdabcac19295e10604a38))
+* test setup ([c5c7dab](https://github.com/contentful/node-apps-toolkit/commit/c5c7daba0ff3925b00e6e1b6516206d2b13e219e))
+* tsup esm + cjs config with jose ([4158d6f](https://github.com/contentful/node-apps-toolkit/commit/4158d6f666bb8665523422415faa604fa21fbfb7))
+
+
+### Features
+
+* dont use default vitest BASE_URL ([ad986f5](https://github.com/contentful/node-apps-toolkit/commit/ad986f54705b0a51f3af3f6134cced945eb1f06d))
+* slash ([c21ae0d](https://github.com/contentful/node-apps-toolkit/commit/c21ae0d01880ab89f0599471d96f67a83b4d08cd))
+* slash ([14437f3](https://github.com/contentful/node-apps-toolkit/commit/14437f35de202e0c22cee6628fb859350a18c146))
+* slash ([aec5c87](https://github.com/contentful/node-apps-toolkit/commit/aec5c879517879c6a1cd527ad55322f64aba36c0))
+
 # [3.14.0-next.2](https://github.com/contentful/node-apps-toolkit/compare/v3.14.0-next.1...v3.14.0-next.2) (2025-09-27)
 
 
