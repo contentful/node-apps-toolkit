@@ -19,6 +19,7 @@ export const cleanOldKeys = async () => {
     },
     config,
   )
+  console.log('config', config)
   const response = await requestor()
   const { items } = (await response.json()) as { items: { jwk: { x5t: string } }[] }
   const fingerprints = items.map((i: any) => i.jwk.x5t)
