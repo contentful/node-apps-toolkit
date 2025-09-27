@@ -10,7 +10,7 @@ import {
   GetManagementTokenOptions,
 } from './get-management-token'
 import { HttpError } from '../utils'
-// import { Logger } from '../utils'
+import { Logger } from '../utils'
 import { sign } from 'jsonwebtoken'
 import { LRUCache } from 'lru-cache'
 
@@ -24,7 +24,7 @@ const DEFAULT_OPTIONS: GetManagementTokenOptions = {
   environmentId: ENVIRONMENT_ID,
   reuseToken: false,
 }
-// const noop = () => {}
+const noop = () => {}
 
 const defaultCache: LRUCache<string, string> = new LRUCache({ max: 10 })
 let fetchStub: sinon.SinonStub
@@ -40,10 +40,10 @@ afterEach(() => {
 describe('getManagementToken', () => {
   it('fetches a token', async () => {
     const mockToken = 'token'
-    // const logger = noop as unknown as Logger
+    const logger = noop as unknown as Logger
     fetchStub.resolves({ ok: true, status: 201, json: () => Promise.resolve({ token: mockToken }) })
     const getManagementToken = createGetManagementToken(
-      // logger,
+      logger,
       { prefixUrl: '', retry: { limit: 0 } },
       defaultCache,
     )
@@ -62,14 +62,14 @@ describe('getManagementToken', () => {
   })
 
   it('caches token while valid', async () => {
-    // const logger = noop as unknown as Logger
+    const logger = noop as unknown as Logger
     const mockToken = sign({ a: 'b' }, 'a-secret-key', {
       expiresIn: '10 minutes',
     })
 
     fetchStub.resolves({ ok: true, status: 201, json: () => Promise.resolve({ token: mockToken }) })
     const getManagementToken = createGetManagementToken(
-      // logger,
+      logger,
       { prefixUrl: '', retry: { limit: 0 } },
       defaultCache,
     )
@@ -84,7 +84,7 @@ describe('getManagementToken', () => {
   })
 
   it('does not cache expired token', async () => {
-    // const logger = noop as unknown as Logger
+    const logger = noop as unknown as Logger
     const mockToken = sign({ a: 'b' }, 'a-secret-key', {
       expiresIn: '5 minutes',
     })
@@ -92,7 +92,7 @@ describe('getManagementToken', () => {
     fetchStub.resolves({ ok: true, status: 201, json: () => Promise.resolve({ token: mockToken }) })
     const cache: LRUCache<string, string> = new LRUCache({ max: 10 })
     const getManagementToken = createGetManagementToken(
-      // logger,
+      logger,
       { prefixUrl: '', retry: { limit: 0 } },
       cache,
     )
@@ -118,14 +118,14 @@ describe('getManagementToken', () => {
   describe('when using a keyId', () => {
     it('fetches a token', async () => {
       const mockToken = 'token'
-      // const logger = noop as unknown as Logger
+      const logger = noop as unknown as Logger
       fetchStub.resolves({
         ok: true,
         status: 201,
         json: () => Promise.resolve({ token: mockToken }),
       })
       const getManagementToken = createGetManagementToken(
-        // logger,
+        logger,
         { prefixUrl: '', retry: { limit: 0 } },
         defaultCache,
       )
@@ -158,10 +158,10 @@ describe('getManagementToken', () => {
 
   describe('when having API problems', () => {
     it(`throws when API returns an error`, async () => {
-      // const logger = noop as unknown as Logger
+      const logger = noop as unknown as Logger
       fetchStub.rejects(new HttpError({ statusCode: 500 } as unknown as Response))
       const getManagementToken = createGetManagementToken(
-        // logger,
+        logger,
         { prefixUrl: '', retry: { limit: 0 } },
         defaultCache,
       )

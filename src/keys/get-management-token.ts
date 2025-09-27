@@ -1,7 +1,7 @@
 import * as jwtImpl from 'jsonwebtoken'
 import type { SignOptions } from 'jsonwebtoken'
 import { LRUCache } from 'lru-cache'
-import { createValidateStatusCode } from '../utils'
+import { createLogger, createValidateStatusCode, Logger } from '../utils'
 import { FetchOptions, makeRequest, withDefaultOptions, withHook, withRetry } from '../utils/http'
 
 const jwt = 'default' in jwtImpl ? jwtImpl.default : jwtImpl
@@ -24,19 +24,18 @@ let defaultCache: LRUCache<string, string> | undefined
 const generateOneTimeToken = (
   privateKey: string,
   { appId, keyId }: { appId: string; keyId?: string },
-  // { log }: { log: Logger },
+  { log }: { log: Logger },
 ): string => {
-  // log('Signing a JWT token with private key')
-  // eslint-disable-next-line no-useless-catch
+  log('Signing a JWT token with private key')
   try {
     const baseSignOptions: SignOptions = { algorithm: 'RS256', issuer: appId, expiresIn: '10m' }
     const signOptions: SignOptions = keyId ? { ...baseSignOptions, keyid: keyId } : baseSignOptions
 
     const token = sign({}, privateKey, signOptions)
-    // log('Successfully signed token')
+    log('Successfully signed token')
     return token
   } catch (e) {
-    // log('Unable to sign token')
+    log('Unable to sign token')
     throw e
   }
 }
@@ -48,11 +47,11 @@ const getTokenFromOneTimeToken = async (
     spaceId,
     environmentId,
   }: { appInstallationId: string; spaceId: string; environmentId: string },
-  { /* log, */ fetchOptions }: { /* log: Logger; */ fetchOptions: FetchOptions },
+  { log, fetchOptions }: { log: Logger; fetchOptions: FetchOptions },
 ): Promise<string> => {
   const validateStatusCode = createValidateStatusCode([201])
 
-  // log(`Requesting CMA Token with given App Token`)
+  log(`Requesting CMA Token with given App Token`)
 
   const requestor = makeRequest(
     `/spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
@@ -68,9 +67,9 @@ const getTokenFromOneTimeToken = async (
   const retryRequestor = withRetry(hookRequestor, fetchOptions)
   const response = await retryRequestor()
 
-  // log(
-  //   `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`,
-  // )
+  log(
+    `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`,
+  )
 
   return ((await response.json()) as { token: string }).token
 }
@@ -80,7 +79,7 @@ const getTokenFromOneTimeToken = async (
  * @internal
  */
 export const createGetManagementToken = (
-  // log: Logger,
+  log: Logger,
   fetchOptions: FetchOptions,
   cache: LRUCache<string, string>,
 ) => {
@@ -105,9 +104,9 @@ export const createGetManagementToken = (
     const appToken = generateOneTimeToken(
       privateKey,
       { appId: opts.appInstallationId, keyId: opts.keyId },
-      // { log },
+      { log },
     )
-    const ott = await getTokenFromOneTimeToken(appToken, opts, { /* log, */ fetchOptions })
+    const ott = await getTokenFromOneTimeToken(appToken, opts, { log, fetchOptions })
     if (opts.reuseToken) {
       const decoded = decode(ott)
       if (decoded && typeof decoded === 'object' && decoded.exp) {
@@ -152,7 +151,7 @@ export const getManagementToken = async (privateKey: string, opts: GetManagement
   const httpClientOpts = typeof opts.host !== 'undefined' ? { prefixUrl: opts.host } : {}
 
   return createGetManagementToken(
-    // createLogger({ filename: __filename }),
+    createLogger({ namespace: 'get-management-token' }),
     withDefaultOptions(httpClientOpts),
     defaultCache!,
   )(privateKey, opts)
