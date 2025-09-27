@@ -14,6 +14,7 @@ import { Logger } from '../utils'
 import { SignJWT } from 'jose'
 import { LRUCache } from 'lru-cache'
 
+console.log('keys', path.join(__dirname, '..', '..', 'keys', 'key.pem'))
 const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.pem'), 'utf-8')
 const APP_ID = 'app_id'
 const SPACE_ID = 'space_id'
