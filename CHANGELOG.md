@@ -1,3 +1,10 @@
+## [3.13.2-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.1...v3.13.2-next.1) (2025-09-26)
+
+
+### Bug Fixes
+
+* publish next [EXT-6803] ([1aaac78](https://github.com/contentful/node-apps-toolkit/commit/1aaac78311eef9e28e69869dc1d2e2dbfbdf6f7f))
+
 ## [3.13.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.0...v3.13.1) (2025-05-28)
 
 

@@ -9,7 +9,7 @@ import {
   getManagementToken,
   GetManagementTokenOptions,
 } from './get-management-token'
-import { HttpClient, HttpError, Response } from '../utils'
+import { HttpClient, HttpError, Response, Request, ErrorOptions } from '../utils'
 import { Logger } from '../utils'
 import { sign } from 'jsonwebtoken'
 import { LRUCache } from 'lru-cache'
@@ -33,7 +33,9 @@ describe('getManagementToken', () => {
     const mockToken = 'token'
     const logger = noop as unknown as Logger
     const post = sinon.stub()
-    post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
+    post.returns({
+      json: () => Promise.resolve({ token: mockToken }),
+    })
     const httpClient = { post } as unknown as HttpClient
     const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
 
@@ -55,7 +57,7 @@ describe('getManagementToken', () => {
       expiresIn: '10 minutes',
     })
 
-    post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
+    post.returns({ json: () => Promise.resolve({ token: mockToken }) })
     const httpClient = { post } as unknown as HttpClient
     const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
 
@@ -75,7 +77,7 @@ describe('getManagementToken', () => {
       expiresIn: '5 minutes',
     })
 
-    post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
+    post.returns({ json: () => Promise.resolve({ token: mockToken }) })
     const httpClient = { post } as unknown as HttpClient
     const cache: LRUCache<string, string> = new LRUCache({ max: 10 })
     const getManagementToken = createGetManagementToken(logger, httpClient, cache)
@@ -103,7 +105,7 @@ describe('getManagementToken', () => {
       const mockToken = 'token'
       const logger = noop as unknown as Logger
       const post = sinon.stub()
-      post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
+      post.returns({ json: () => Promise.resolve({ token: mockToken }) })
       const httpClient = { post } as unknown as HttpClient
       const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
 
@@ -136,7 +138,16 @@ describe('getManagementToken', () => {
   describe('when having API problems', () => {
     it(`throws when API returns an error`, async () => {
       const logger = noop as unknown as Logger
-      const post = sinon.stub().rejects(new HttpError({ statusCode: 500 } as unknown as Response))
+      const post = sinon.stub().returns({
+        json: () =>
+          Promise.reject(
+            new HttpError(
+              { statusCode: 500 } as unknown as Response,
+              {} as unknown as Request,
+              {} as unknown as ErrorOptions,
+            ),
+          ),
+      })
       const httpClient = { post } as unknown as HttpClient
       const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
 

@@ -58,23 +58,25 @@ const getTokenFromOneTimeToken = async (
 
   log(`Requesting CMA Token with given App Token`)
 
-  const response = await http.post(
-    `spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
-    {
-      headers: {
-        Authorization: `Bearer ${appToken}`,
+  const response = await http
+    .post(
+      `spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
+      {
+        headers: {
+          Authorization: `Bearer ${appToken}`,
+        },
+        hooks: {
+          afterResponse: [validateStatusCode],
+        },
       },
-      hooks: {
-        afterResponse: [validateStatusCode],
-      },
-    },
-  )
+    )
+    .json<{ token: string }>()
 
   log(
     `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`,
   )
 
-  return JSON.parse(response.body).token
+  return response.token
 }
 
 /**
@@ -147,7 +149,7 @@ export const createGetManagementToken = (
  * ~~~
  * @category Keys
  */
-export const getManagementToken = (privateKey: string, opts: GetManagementTokenOptions) => {
+export const getManagementToken = async (privateKey: string, opts: GetManagementTokenOptions) => {
   if ((opts.reuseToken || opts.reuseToken === undefined) && !defaultCache) {
     defaultCache = new LRUCache({ max: 10 })
   }
@@ -155,7 +157,7 @@ export const getManagementToken = (privateKey: string, opts: GetManagementTokenO
 
   return createGetManagementToken(
     createLogger({ filename: __filename }),
-    createHttpClient(httpClientOpts),
+    await createHttpClient(httpClientOpts),
     defaultCache!,
   )(privateKey, opts)
 }

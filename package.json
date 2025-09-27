@@ -1,6 +1,6 @@
 {
   "name": "@contentful/node-apps-toolkit",
-  "version": "3.13.1",
+  "version": "3.13.2-next.1",
   "description": "A collection of helpers and utilities for creating NodeJS Contentful Apps",
   "main": "lib/index.cjs",
   "module": "lib/index.mjs",
@@ -55,8 +55,8 @@
     "@types/debug": "^4.1.5",
     "contentful-management": "^11.6.1",
     "debug": "^4.2.0",
-    "got": "^11.7.0",
     "jsonwebtoken": "^9.0.0",
+    "ky": "^1.10.0",
     "lru-cache": "^10.4.3",
     "runtypes": "^5.0.1"
   },
