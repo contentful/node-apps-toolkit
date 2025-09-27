@@ -57,7 +57,7 @@ const getTokenFromOneTimeToken = async (
   log(`Requesting CMA Token with given App Token`)
 
   const requestor = makeRequest(
-    `/spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
+    `spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
     {
       method: 'POST',
       headers: {

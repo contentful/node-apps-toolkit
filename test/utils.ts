@@ -10,7 +10,7 @@ export const cleanOldKeys = async () => {
   const appDefinitionId = process.env.APP_ID
 
   const requestor = makeRequest(
-    `/organizations/${organizationId}/app_definitions/${appDefinitionId}/keys`,
+    `organizations/${organizationId}/app_definitions/${appDefinitionId}/keys`,
     {
       method: 'GET',
       headers: {
@@ -27,7 +27,7 @@ export const cleanOldKeys = async () => {
 
   const deleteKeysRequests = fingerprints.map((fingerprint: string) => {
     const requestor = makeRequest(
-      `/organizations/${organizationId}/app_definitions/${appDefinitionId}/keys/${fingerprint}`,
+      `organizations/${organizationId}/app_definitions/${appDefinitionId}/keys/${fingerprint}`,
       {
         method: 'DELETE',
         headers: {
@@ -48,7 +48,7 @@ export const setPublicKey = async (publicKey: Buffer) => {
   const keyId = base64url(crypto.createHash('sha256').update(publicKey).digest())
 
   const requestor = makeRequest(
-    `/organizations/${organizationId}/app_definitions/${appDefinitionId}/keys`,
+    `organizations/${organizationId}/app_definitions/${appDefinitionId}/keys`,
     {
       method: 'POST',
       headers: {

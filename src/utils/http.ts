@@ -21,7 +21,10 @@ export const makeRequest = (
   fetchOptions: FetchOptions,
 ): Requestor => {
   return async (): Promise<Response> => {
-    const response = await fetch(`${fetchOptions.prefixUrl}${url}`, options)
+    const prefixWithSlash = fetchOptions.prefixUrl.endsWith('/')
+      ? fetchOptions.prefixUrl
+      : `${fetchOptions.prefixUrl}/`
+    const response = await fetch(`${prefixWithSlash}${url}`, options)
     if (!response.ok) {
       throw new HttpError(response)
     }
