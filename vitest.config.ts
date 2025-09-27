@@ -7,5 +7,8 @@ export default defineConfig({
     include: ['src/**/*.spec.ts', 'test/**/*.test.ts'],
     setupFiles: ['dotenv/config', './vitest.setup.ts'],
     timeout: 10000,
+    env: {
+      BASE_URL: undefined, // or delete process.env.BASE_URL
+    },
   },
 })
