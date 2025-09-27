@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import { describe, it, expect } from 'vitest'
 
 import { verifyRequest } from './verify-request'
 import {
@@ -69,7 +69,7 @@ describe('verifyRequest', () => {
           now,
         )
 
-        assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
+        expect(verifyRequest(VALID_SECRET, incomingRequest, 0)).toBe(true)
       })
 
       it('verifies a verified request with subject-id', () => {
@@ -84,7 +84,7 @@ describe('verifyRequest', () => {
           now,
         )
 
-        assert(verifyRequest(VALID_SECRET, incomingRequest, 0))
+        expect(verifyRequest(VALID_SECRET, incomingRequest, 0)).toBe(true)
       })
 
       describe('with time to live', () => {
@@ -100,8 +100,7 @@ describe('verifyRequest', () => {
             oneMinuteAgo,
           )
 
-          assert.throws(
-            () => verifyRequest(VALID_SECRET, incomingRequest, 1),
+          expect(() => verifyRequest(VALID_SECRET, incomingRequest, 1)).toThrow(
             ExpiredRequestException,
           )
         })
@@ -118,8 +117,7 @@ describe('verifyRequest', () => {
             oneMinuteAgo,
           )
 
-          assert.doesNotThrow(
-            () => verifyRequest(VALID_SECRET, incomingRequest, 0),
+          expect(() => verifyRequest(VALID_SECRET, incomingRequest, 0)).not.toThrow(
             ExpiredRequestException,
           )
         })
@@ -160,7 +158,7 @@ describe('verifyRequest', () => {
             delete incomingRequest.headers[ContentfulContextHeader.AppId]
           }
 
-          assert(verifyRequest(VALID_SECRET, incomingRequest))
+          expect(verifyRequest(VALID_SECRET, incomingRequest)).toBe(true)
         })
         it('verifies correctly with keys with whitespace', () => {
           const incomingRequest = makeIncomingRequest({}, makeContextHeaders(contextHeaders))
@@ -196,21 +194,21 @@ describe('verifyRequest', () => {
             delete incomingRequest.headers[ContentfulContextHeader.AppId]
           }
 
-          assert(verifyRequest(VALID_SECRET, incomingRequest))
+          expect(verifyRequest(VALID_SECRET, incomingRequest)).toBe(true)
         })
         it('throws when missing signature', () => {
           const incomingRequest = makeIncomingRequest({}, makeContextHeaders(contextHeaders))
 
           delete incomingRequest.headers[ContentfulHeader.Signature]
 
-          assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest))
+          expect(() => verifyRequest(VALID_SECRET, incomingRequest)).toThrow()
         })
         it('throws when missing timestamp', () => {
           const incomingRequest = makeIncomingRequest({}, makeContextHeaders(contextHeaders))
 
           delete incomingRequest.headers[ContentfulHeader.Timestamp]
 
-          assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest))
+          expect(() => verifyRequest(VALID_SECRET, incomingRequest)).toThrow()
         })
         it('throws when missing signed headers', () => {
           const incomingRequest = makeIncomingRequest(
@@ -222,7 +220,7 @@ describe('verifyRequest', () => {
 
           delete incomingRequest.headers[ContentfulHeader.SignedHeaders]
 
-          assert.throws(() => verifyRequest(VALID_SECRET, incomingRequest))
+          expect(() => verifyRequest(VALID_SECRET, incomingRequest)).toThrow()
         })
       })
 
@@ -252,7 +250,7 @@ describe('verifyRequest', () => {
           delete incomingRequest.headers['Authorization']
           delete incomingRequest.headers['Cache-Control']
 
-          assert(verifyRequest(VALID_SECRET, incomingRequest))
+          expect(verifyRequest(VALID_SECRET, incomingRequest)).toBe(true)
         })
         it('verifies with keys with whitespace', () => {
           const authorization = 'Bearer TOKEN'
@@ -279,7 +277,7 @@ describe('verifyRequest', () => {
           delete incomingRequest.headers['Authorization']
           delete incomingRequest.headers['Cache-Control']
 
-          assert(verifyRequest(VALID_SECRET, incomingRequest))
+          expect(verifyRequest(VALID_SECRET, incomingRequest)).toBe(true)
         })
         it('verifies with different headers, if they are not signed', () => {
           const authorization = 'Bearer TOKEN'
@@ -297,7 +295,7 @@ describe('verifyRequest', () => {
 
           incomingRequest.headers['Content-Type'] = 'application/json'
 
-          assert(verifyRequest(VALID_SECRET, incomingRequest))
+          expect(verifyRequest(VALID_SECRET, incomingRequest)).toBe(true)
         })
         it('does not verify with different signed headers', () => {
           const authorization = 'Bearer TOKEN'
@@ -315,7 +313,7 @@ describe('verifyRequest', () => {
 
           incomingRequest.headers['Authorization'] = 'something else'
 
-          assert(!verifyRequest(VALID_SECRET, incomingRequest))
+          expect(verifyRequest(VALID_SECRET, incomingRequest)).toBe(false)
         })
 
         it("verifies with headers sorted lower than contentful's", () => {
@@ -329,7 +327,7 @@ describe('verifyRequest', () => {
             makeContextHeaders(contextHeaders),
           )
 
-          assert(verifyRequest(VALID_SECRET, incomingRequest))
+          expect(verifyRequest(VALID_SECRET, incomingRequest)).toBe(true)
         })
       })
 
@@ -346,7 +344,7 @@ describe('verifyRequest', () => {
 
           incomingRequest.path = pathWithQueryTwo
 
-          assert(!verifyRequest(VALID_SECRET, incomingRequest))
+          expect(verifyRequest(VALID_SECRET, incomingRequest)).toBe(false)
         })
       })
 
@@ -359,7 +357,7 @@ describe('verifyRequest', () => {
 
           incomingRequest.method = 'POST'
 
-          assert(!verifyRequest(VALID_SECRET, incomingRequest))
+          expect(verifyRequest(VALID_SECRET, incomingRequest)).toBe(false)
         })
       })
 
@@ -375,7 +373,7 @@ describe('verifyRequest', () => {
           )
           const differentSecret = `q${VALID_SECRET.slice(1, VALID_SECRET.length)}`
 
-          assert(!verifyRequest(differentSecret, incomingRequest))
+          expect(verifyRequest(differentSecret, incomingRequest)).toBe(false)
         })
       })
     })

@@ -38,8 +38,8 @@
     "lint": "eslint --ext .ts ./src",
     "lint:fix": "npm run lint -- --fix",
     "pretest": "echo ' 🔑 Creating valid keypair for testing' && sh test/make-private-keys.sh &> /dev/null",
-    "test:unit": "mocha -r dotenv/config -r ts-node/register ./src/**/*.spec.ts",
-    "test:integration": "mocha -r dotenv/config -r ts-node/register --timeout 10000 ./test/**/*.test.ts",
+    "test:unit": "vitest run src",
+    "test:integration": "vitest run test",
     "test": "npm run test:unit && npm run test:integration",
     "build": "rm -rf lib && tsup",
     "postbuild": "cp ./lib/index.d.ts ./lib/index.d.cts",
@@ -55,20 +55,18 @@
     "@types/debug": "^4.1.5",
     "contentful-management": "^11.6.1",
     "debug": "^4.2.0",
-    "jsonwebtoken": "^9.0.0",
-    "ky": "^1.10.0",
+    "jose": "^6.1.0",
     "lru-cache": "^10.4.3",
     "runtypes": "^5.0.1"
   },
   "devDependencies": {
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@types/jsonwebtoken": "9.0.6",
-    "@types/mocha": "10.0.6",
     "@types/node": "^22.18.6",
     "@types/sinon": "17.0.3",
     "@typescript-eslint/eslint-plugin": "7.10.0",
     "@typescript-eslint/parser": "7.10.0",
+    "@vitest/ui": "^3.2.4",
     "base64url": "3.0.1",
     "dotenv": "16.4.5",
     "eslint": "8.57.0",
@@ -76,7 +74,6 @@
     "eslint-plugin-prettier": "^5.0.0",
     "husky": "9.0.11",
     "lint-staged": "15.2.10",
-    "mocha": "10.4.0",
     "prettier": "3.2.5",
     "semantic-release": "23.1.1",
     "serve": "14.2.4",
@@ -84,7 +81,8 @@
     "ts-node": "10.9.2",
     "tsup": "^8.3.5",
     "typedoc": "0.25.13",
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "vitest": "^3.2.4"
   },
   "lint-staged": {
     "*.ts": [

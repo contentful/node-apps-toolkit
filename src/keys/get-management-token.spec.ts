@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -11,7 +11,7 @@ import {
 } from './get-management-token'
 import { HttpError } from '../utils'
 import { Logger } from '../utils'
-import { sign } from 'jsonwebtoken'
+import { SignJWT } from 'jose'
 import { LRUCache } from 'lru-cache'
 
 const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.pem'), 'utf-8')
@@ -50,22 +50,23 @@ describe('getManagementToken', () => {
 
     const result = await getManagementToken(PRIVATE_KEY, DEFAULT_OPTIONS)
 
-    assert.deepStrictEqual(result, mockToken)
-    assert(fetchStub.calledOnce)
+    expect(result).toEqual(mockToken)
+    expect(fetchStub.calledOnce).toBe(true)
     console.log(fetchStub.args)
-    assert(
+    expect(
       fetchStub.calledWith(
         `/spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
         sinon.match({ method: 'POST', headers: { Authorization: sinon.match.string } }),
       ),
-    )
+    ).toBe(true)
   })
 
   it('caches token while valid', async () => {
     const logger = noop as unknown as Logger
-    const mockToken = sign({ a: 'b' }, 'a-secret-key', {
-      expiresIn: '10 minutes',
-    })
+    const mockToken = await new SignJWT({ a: 'b' })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setExpirationTime('10 minutes')
+      .sign(new TextEncoder().encode('a-secret-key'))
 
     fetchStub.resolves({ ok: true, status: 201, json: () => Promise.resolve({ token: mockToken }) })
     const getManagementToken = createGetManagementToken(
@@ -76,18 +77,19 @@ describe('getManagementToken', () => {
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(result, mockToken)
+    expect(result).toEqual(mockToken)
     const secondResult = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(secondResult, mockToken)
+    expect(secondResult).toEqual(mockToken)
 
-    assert(fetchStub.calledOnce)
+    expect(fetchStub.calledOnce).toBe(true)
   })
 
   it('does not cache expired token', async () => {
     const logger = noop as unknown as Logger
-    const mockToken = sign({ a: 'b' }, 'a-secret-key', {
-      expiresIn: '5 minutes',
-    })
+    const mockToken = await new SignJWT({ a: 'b' })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setExpirationTime('5 minutes')
+      .sign(new TextEncoder().encode('a-secret-key'))
 
     fetchStub.resolves({ ok: true, status: 201, json: () => Promise.resolve({ token: mockToken }) })
     const cache: LRUCache<string, string> = new LRUCache({ max: 10 })
@@ -99,7 +101,7 @@ describe('getManagementToken', () => {
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(result, mockToken)
+    expect(result).toEqual(mockToken)
 
     // Overwrite TTL expiry to 5ms
     const cacheKey = APP_ID + SPACE_ID + ENVIRONMENT_ID + PRIVATE_KEY.slice(32, 132)
@@ -111,8 +113,8 @@ describe('getManagementToken', () => {
     })
 
     const secondResult = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(secondResult, mockToken)
-    assert(fetchStub.calledTwice)
+    expect(secondResult).toEqual(mockToken)
+    expect(fetchStub.calledTwice).toBe(true)
   })
 
   describe('when using a keyId', () => {
@@ -132,27 +134,27 @@ describe('getManagementToken', () => {
 
       const result = await getManagementToken(PRIVATE_KEY, { ...DEFAULT_OPTIONS, keyId: 'keyId' })
 
-      assert.deepStrictEqual(result, mockToken)
-      assert(
+      expect(result).toEqual(mockToken)
+      expect(
         fetchStub.calledWith(
           `/spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
           sinon.match({ method: 'POST', headers: { Authorization: sinon.match.string } }),
         ),
-      )
+      ).toBe(true)
     })
   })
 
   describe('when private key is incorrect', () => {
     it('throws if missing', async () => {
-      await assert.rejects(async () => {
+      await expect(async () => {
         // @ts-ignore Testing javascript code
         await getManagementToken(undefined, DEFAULT_OPTIONS)
-      })
+      }).rejects.toThrow()
     })
     it('throws if generated with wrong algorithm', async () => {
-      await assert.rejects(async () => {
+      await expect(async () => {
         await getManagementToken('not_a_private_key', DEFAULT_OPTIONS)
-      })
+      }).rejects.toThrow()
     })
   })
 
@@ -166,9 +168,9 @@ describe('getManagementToken', () => {
         defaultCache,
       )
 
-      await assert.rejects(async () => {
+      await expect(async () => {
         await getManagementToken(PRIVATE_KEY, DEFAULT_OPTIONS)
-      }, HttpError)
+      }).rejects.toThrow(HttpError)
     })
   })
 })

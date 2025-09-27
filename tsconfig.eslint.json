@@ -1,6 +1,6 @@
 {
     "extends": "./tsconfig.json",
-    "include": ["./src/**/*", "./src/**/*.spec.ts", "./test/**/*.test.ts"],
+    "include": ["./src/**/*", "./src/**/*.spec.ts", "./test/**/*.test.ts", "./vitest.setup.ts", "./vitest.config.ts"],
     "exclude": [],
     "compilerOptions": {
       "lib": ["es2020", "esnext", "dom"]
