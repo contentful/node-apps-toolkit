@@ -37,7 +37,7 @@
     "prepare": "husky install",
     "lint": "eslint --ext .ts ./src",
     "lint:fix": "npm run lint -- --fix",
-    "pretest": "echo ' 🔑 Creating valid keypair for testing' && sh test/make-private-keys.sh &> /dev/null",
+    "pretest": "echo ' 🔑 Creating valid keypair for testing' && bash test/make-private-keys.sh",
     "test:unit": "vitest run src",
     "test:integration": "vitest run test",
     "test": "npm run test:unit && npm run test:integration",
