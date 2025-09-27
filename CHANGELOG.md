@@ -1,3 +1,11 @@
+# [3.14.0-next.2](https://github.com/contentful/node-apps-toolkit/compare/v3.14.0-next.1...v3.14.0-next.2) (2025-09-27)
+
+
+### Bug Fixes
+
+* remove logger ([01d8549](https://github.com/contentful/node-apps-toolkit/commit/01d85499c344ecdfecc3c0d248ef2cab4e470b87))
+* simplified logger with explicit namespacing ([638c786](https://github.com/contentful/node-apps-toolkit/commit/638c786186dc392fbf1ed12abac61ef62eac684b))
+
 # [3.14.0-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.2-next.1...v3.14.0-next.1) (2025-09-26)
 
 
