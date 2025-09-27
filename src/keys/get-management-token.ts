@@ -1,16 +1,7 @@
-import * as jwtImpl from 'jsonwebtoken'
-import type { SignOptions } from 'jsonwebtoken'
+import { createPrivateKey } from 'node:crypto'
 import { LRUCache } from 'lru-cache'
-import {
-  createLogger,
-  Logger,
-  createHttpClient,
-  createValidateStatusCode,
-  HttpClient,
-} from '../utils'
-
-const jwt = 'default' in jwtImpl ? jwtImpl.default : jwtImpl
-const { sign, decode } = jwt as typeof jwtImpl
+import { createLogger, createValidateStatusCode, Logger } from '../utils'
+import { FetchOptions, makeRequest, withDefaultOptions, withHook, withRetry } from '../utils/http'
 export interface GetManagementTokenOptions {
   appInstallationId: string
   spaceId: string
@@ -26,17 +17,24 @@ let defaultCache: LRUCache<string, string> | undefined
  * Synchronously sign the given privateKey into a JSON Web Token string
  * @internal
  */
-const generateOneTimeToken = (
-  privateKey: string,
+const generateOneTimeToken = async (
+  privateKeyPem: string,
   { appId, keyId }: { appId: string; keyId?: string },
   { log }: { log: Logger },
-): string => {
+): Promise<string> => {
   log('Signing a JWT token with private key')
   try {
-    const baseSignOptions: SignOptions = { algorithm: 'RS256', issuer: appId, expiresIn: '10m' }
-    const signOptions: SignOptions = keyId ? { ...baseSignOptions, keyid: keyId } : baseSignOptions
-
-    const token = sign({}, privateKey, signOptions)
+    const { SignJWT, importPKCS8 } = await import('jose')
+    const privateKey = privateKeyPem.includes('BEGIN PRIVATE KEY')
+      ? await importPKCS8(privateKeyPem, 'RS256')
+      : await Promise.resolve(createPrivateKey(privateKeyPem)) // "BEGIN RSA PRIVATE KEY" (PKCS#1)
+    const secureHeaders = keyId ? { kid: keyId, alg: 'RS256' } : { alg: 'RS256' }
+    const signer = new SignJWT({})
+      .setProtectedHeader(secureHeaders)
+      .setIssuedAt()
+      .setIssuer(appId)
+      .setExpirationTime('10m')
+    const token = await signer.sign(privateKey)
     log('Successfully signed token')
     return token
   } catch (e) {
@@ -52,29 +50,31 @@ const getTokenFromOneTimeToken = async (
     spaceId,
     environmentId,
   }: { appInstallationId: string; spaceId: string; environmentId: string },
-  { log, http }: { log: Logger; http: HttpClient },
+  { log, fetchOptions }: { log: Logger; fetchOptions: FetchOptions },
 ): Promise<string> => {
   const validateStatusCode = createValidateStatusCode([201])
 
   log(`Requesting CMA Token with given App Token`)
 
-  const response = await http.post(
-    `spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
+  const requestor = makeRequest(
+    `/spaces/${spaceId}/environments/${environmentId}/app_installations/${appInstallationId}/access_tokens`,
     {
+      method: 'POST',
       headers: {
         Authorization: `Bearer ${appToken}`,
       },
-      hooks: {
-        afterResponse: [validateStatusCode],
-      },
     },
+    fetchOptions,
   )
+  const hookRequestor = withHook(requestor, validateStatusCode)
+  const retryRequestor = withRetry(hookRequestor, fetchOptions)
+  const response = await retryRequestor()
 
   log(
     `Successfully retrieved CMA Token for app ${appInstallationId} in space ${spaceId} and environment ${environmentId}`,
   )
 
-  return JSON.parse(response.body).token
+  return ((await response.json()) as { token: string }).token
 }
 
 /**
@@ -83,10 +83,11 @@ const getTokenFromOneTimeToken = async (
  */
 export const createGetManagementToken = (
   log: Logger,
-  http: HttpClient,
+  fetchOptions: FetchOptions,
   cache: LRUCache<string, string>,
 ) => {
   return async (privateKey: unknown, opts: GetManagementTokenOptions): Promise<string> => {
+    const { decodeJwt } = await import('jose')
     if (!(typeof privateKey === 'string')) {
       throw new ReferenceError('Invalid privateKey: expected a string representing a private key')
     }
@@ -103,15 +104,15 @@ export const createGetManagementToken = (
         return existing as string
       }
     }
-
-    const appToken = generateOneTimeToken(
+    console.log('gettingOneTimeToken')
+    const appToken = await generateOneTimeToken(
       privateKey,
       { appId: opts.appInstallationId, keyId: opts.keyId },
       { log },
     )
-    const ott = await getTokenFromOneTimeToken(appToken, opts, { log, http })
+    const ott = await getTokenFromOneTimeToken(appToken, opts, { log, fetchOptions })
     if (opts.reuseToken) {
-      const decoded = decode(ott)
+      const decoded = decodeJwt(ott)
       if (decoded && typeof decoded === 'object' && decoded.exp) {
         // Internally expire cached tokens a bit earlier to make sure token isn't expired on arrival
         const safetyMargin = 10
@@ -147,15 +148,16 @@ export const createGetManagementToken = (
  * ~~~
  * @category Keys
  */
-export const getManagementToken = (privateKey: string, opts: GetManagementTokenOptions) => {
+export const getManagementToken = async (privateKey: string, opts: GetManagementTokenOptions) => {
   if ((opts.reuseToken || opts.reuseToken === undefined) && !defaultCache) {
     defaultCache = new LRUCache({ max: 10 })
   }
   const httpClientOpts = typeof opts.host !== 'undefined' ? { prefixUrl: opts.host } : {}
 
+  console.log('createGetManagementToken')
   return createGetManagementToken(
-    createLogger({ filename: __filename }),
-    createHttpClient(httpClientOpts),
+    createLogger({ namespace: 'get-management-token' }),
+    withDefaultOptions(httpClientOpts),
     defaultCache!,
   )(privateKey, opts)
 }

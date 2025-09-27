@@ -4,3 +4,5 @@ keys
 .env
 docs
 lib
+
+envs

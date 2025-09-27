@@ -1,3 +1,31 @@
+# [3.14.0-next.2](https://github.com/contentful/node-apps-toolkit/compare/v3.14.0-next.1...v3.14.0-next.2) (2025-09-27)
+
+
+### Bug Fixes
+
+* remove logger ([01d8549](https://github.com/contentful/node-apps-toolkit/commit/01d85499c344ecdfecc3c0d248ef2cab4e470b87))
+* simplified logger with explicit namespacing ([638c786](https://github.com/contentful/node-apps-toolkit/commit/638c786186dc392fbf1ed12abac61ef62eac684b))
+
+# [3.14.0-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.2-next.1...v3.14.0-next.1) (2025-09-26)
+
+
+### Bug Fixes
+
+* cjs compat ([4f24813](https://github.com/contentful/node-apps-toolkit/commit/4f248134660de9c32d7a61f481068dc3a2c5144e))
+* cloudflare compliant [EXT-6803] ([8ede9d1](https://github.com/contentful/node-apps-toolkit/commit/8ede9d19480e9cb943d9fe336ed3f4f213580e80))
+
+
+### Features
+
+* swap got for ky ([2f42033](https://github.com/contentful/node-apps-toolkit/commit/2f42033604a0ce8f7e702eaf100c4d31fa426ef6))
+
+## [3.13.2-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.1...v3.13.2-next.1) (2025-09-26)
+
+
+### Bug Fixes
+
+* publish next [EXT-6803] ([1aaac78](https://github.com/contentful/node-apps-toolkit/commit/1aaac78311eef9e28e69869dc1d2e2dbfbdf6f7f))
+
 ## [3.13.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.0...v3.13.1) (2025-05-28)
 
 

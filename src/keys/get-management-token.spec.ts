@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -9,9 +9,9 @@ import {
   getManagementToken,
   GetManagementTokenOptions,
 } from './get-management-token'
-import { HttpClient, HttpError, Response } from '../utils'
+import { HttpError } from '../utils'
 import { Logger } from '../utils'
-import { sign } from 'jsonwebtoken'
+import { SignJWT } from 'jose'
 import { LRUCache } from 'lru-cache'
 
 const PRIVATE_KEY = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.pem'), 'utf-8')
@@ -27,62 +27,81 @@ const DEFAULT_OPTIONS: GetManagementTokenOptions = {
 const noop = () => {}
 
 const defaultCache: LRUCache<string, string> = new LRUCache({ max: 10 })
+let fetchStub: sinon.SinonStub
+
+beforeEach(() => {
+  fetchStub = sinon.stub(global, 'fetch')
+})
+
+afterEach(() => {
+  fetchStub.restore()
+})
 
 describe('getManagementToken', () => {
   it('fetches a token', async () => {
     const mockToken = 'token'
     const logger = noop as unknown as Logger
-    const post = sinon.stub()
-    post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
-    const httpClient = { post } as unknown as HttpClient
-    const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
+    fetchStub.resolves({ ok: true, status: 201, json: () => Promise.resolve({ token: mockToken }) })
+    const getManagementToken = createGetManagementToken(
+      logger,
+      { prefixUrl: '', retry: { limit: 0 } },
+      defaultCache,
+    )
 
     const result = await getManagementToken(PRIVATE_KEY, DEFAULT_OPTIONS)
 
-    assert.deepStrictEqual(result, mockToken)
-    assert(
-      post.calledWith(
-        `spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
-        sinon.match({ headers: { Authorization: sinon.match.string } }),
+    expect(result).toEqual(mockToken)
+    expect(fetchStub.calledOnce).toBe(true)
+    console.log(fetchStub.args)
+    expect(
+      fetchStub.calledWith(
+        `/spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
+        sinon.match({ method: 'POST', headers: { Authorization: sinon.match.string } }),
       ),
-    )
+    ).toBe(true)
   })
 
   it('caches token while valid', async () => {
     const logger = noop as unknown as Logger
-    const post = sinon.stub()
-    const mockToken = sign({ a: 'b' }, 'a-secret-key', {
-      expiresIn: '10 minutes',
-    })
+    const mockToken = await new SignJWT({ a: 'b' })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setExpirationTime('10 minutes')
+      .sign(new TextEncoder().encode('a-secret-key'))
 
-    post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
-    const httpClient = { post } as unknown as HttpClient
-    const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
+    fetchStub.resolves({ ok: true, status: 201, json: () => Promise.resolve({ token: mockToken }) })
+    const getManagementToken = createGetManagementToken(
+      logger,
+      { prefixUrl: '', retry: { limit: 0 } },
+      defaultCache,
+    )
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(result, mockToken)
+    expect(result).toEqual(mockToken)
     const secondResult = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(secondResult, mockToken)
+    expect(secondResult).toEqual(mockToken)
 
-    assert(post.calledOnce)
+    expect(fetchStub.calledOnce).toBe(true)
   })
 
   it('does not cache expired token', async () => {
     const logger = noop as unknown as Logger
-    const post = sinon.stub()
-    const mockToken = sign({ a: 'b' }, 'a-secret-key', {
-      expiresIn: '5 minutes',
-    })
+    const mockToken = await new SignJWT({ a: 'b' })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setExpirationTime('5 minutes')
+      .sign(new TextEncoder().encode('a-secret-key'))
 
-    post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
-    const httpClient = { post } as unknown as HttpClient
+    fetchStub.resolves({ ok: true, status: 201, json: () => Promise.resolve({ token: mockToken }) })
     const cache: LRUCache<string, string> = new LRUCache({ max: 10 })
-    const getManagementToken = createGetManagementToken(logger, httpClient, cache)
+    const getManagementToken = createGetManagementToken(
+      logger,
+      { prefixUrl: '', retry: { limit: 0 } },
+      cache,
+    )
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(result, mockToken)
+    expect(result).toEqual(mockToken)
 
     // Overwrite TTL expiry to 5ms
     const cacheKey = APP_ID + SPACE_ID + ENVIRONMENT_ID + PRIVATE_KEY.slice(32, 132)
@@ -94,55 +113,64 @@ describe('getManagementToken', () => {
     })
 
     const secondResult = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(secondResult, mockToken)
-    assert(post.calledTwice)
+    expect(secondResult).toEqual(mockToken)
+    expect(fetchStub.calledTwice).toBe(true)
   })
 
   describe('when using a keyId', () => {
     it('fetches a token', async () => {
       const mockToken = 'token'
       const logger = noop as unknown as Logger
-      const post = sinon.stub()
-      post.resolves({ statusCode: 201, body: JSON.stringify({ token: mockToken }) })
-      const httpClient = { post } as unknown as HttpClient
-      const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
+      fetchStub.resolves({
+        ok: true,
+        status: 201,
+        json: () => Promise.resolve({ token: mockToken }),
+      })
+      const getManagementToken = createGetManagementToken(
+        logger,
+        { prefixUrl: '', retry: { limit: 0 } },
+        defaultCache,
+      )
 
       const result = await getManagementToken(PRIVATE_KEY, { ...DEFAULT_OPTIONS, keyId: 'keyId' })
 
-      assert.deepStrictEqual(result, mockToken)
-      assert(
-        post.calledWith(
-          `spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
-          sinon.match({ headers: { Authorization: sinon.match.string } }),
+      expect(result).toEqual(mockToken)
+      expect(
+        fetchStub.calledWith(
+          `/spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
+          sinon.match({ method: 'POST', headers: { Authorization: sinon.match.string } }),
         ),
-      )
+      ).toBe(true)
     })
   })
 
   describe('when private key is incorrect', () => {
     it('throws if missing', async () => {
-      await assert.rejects(async () => {
+      await expect(async () => {
         // @ts-ignore Testing javascript code
         await getManagementToken(undefined, DEFAULT_OPTIONS)
-      })
+      }).rejects.toThrow()
     })
     it('throws if generated with wrong algorithm', async () => {
-      await assert.rejects(async () => {
+      await expect(async () => {
         await getManagementToken('not_a_private_key', DEFAULT_OPTIONS)
-      })
+      }).rejects.toThrow()
     })
   })
 
   describe('when having API problems', () => {
     it(`throws when API returns an error`, async () => {
       const logger = noop as unknown as Logger
-      const post = sinon.stub().rejects(new HttpError({ statusCode: 500 } as unknown as Response))
-      const httpClient = { post } as unknown as HttpClient
-      const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
+      fetchStub.rejects(new HttpError({ statusCode: 500 } as unknown as Response))
+      const getManagementToken = createGetManagementToken(
+        logger,
+        { prefixUrl: '', retry: { limit: 0 } },
+        defaultCache,
+      )
 
-      await assert.rejects(async () => {
+      await expect(async () => {
         await getManagementToken(PRIVATE_KEY, DEFAULT_OPTIONS)
-      }, HttpError)
+      }).rejects.toThrow(HttpError)
     })
   })
 })
