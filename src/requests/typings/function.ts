@@ -193,33 +193,36 @@ export type AppActionRequest<
 export type AppActionResponse = void | Record<string, unknown>
 
 /**
+ * @deprecated use FunctionEventDeliveryContext and FunctionEventManagementContext instead
+ */
+export type FunctionEventContext<P extends Record<string, any> = Record<string, any>> =
+  FunctionEventManagementContext<P>
+
+/**
  * P: Possibility to type app installation parameters
  */
-export type FunctionEventContext<P extends Record<string, any> = Record<string, any>> = {
+export type FunctionEventDeliveryContext<P extends Record<string, any> = Record<string, any>> = {
   spaceId: string
   environmentId: string
   appInstallationParameters: P
-  cmaClientOptions?: ClientOptions
-  cma?: PlainClientAPI
-}
-/**
- * Enhanced FunctionEventContext with specific context types for different function types
- */
-type FunctionEventContextMap<P extends Record<string, any> = Record<string, any>> = {
-  [FunctionTypeEnum.GraphqlFieldMapping]: FunctionEventContext<P>
-  [FunctionTypeEnum.GraphqlResourceTypeMapping]: FunctionEventContext<P>
-  [FunctionTypeEnum.GraphqlQuery]: FunctionEventContext<P>
-  [FunctionTypeEnum.AppActionCall]: FunctionEventContext<P>
-  [FunctionTypeEnum.AppEventFilter]: FunctionEventContext<P>
-  [FunctionTypeEnum.AppEventHandler]: FunctionEventContext<P>
-  [FunctionTypeEnum.AppEventTransformation]: FunctionEventContext<P>
-  [FunctionTypeEnum.ResourcesSearch]: FunctionEventContext<P>
-  [FunctionTypeEnum.ResourcesLookup]: FunctionEventContext<P> & {
-    originalRequest?: {
-      headers: Record<string, string>
-    }
+  requestId: string
+  organizationId: string
+  environmentUuid: string
+  appDefinitionId: string
+  appFunctionId: string
+  originalRequest?: {
+    headers: Record<string, string>
   }
 }
+
+export type FunctionEventManagementContext<P extends Record<string, any> = Record<string, any>> =
+  FunctionEventDeliveryContext<P> & {
+    cmaHost: string
+    uploadHost: string
+    appToken: string
+    cmaClientOptions?: ClientOptions
+    cma?: PlainClientAPI
+  }
 
 /**
  * T: Possibility to type app action category
@@ -228,41 +231,51 @@ type FunctionEventContextMap<P extends Record<string, any> = Record<string, any>
 type FunctionEventHandlers<
   T extends AppActionCategoryType = never,
   U extends AppActionRequestBody<T> = never,
+  P extends Record<string, any> = Record<string, any>,
 > = {
   [FunctionTypeEnum.GraphqlFieldMapping]: {
     event: GraphQLFieldTypeMappingRequest
+    context: FunctionEventDeliveryContext<P>
     response: GraphQLFieldTypeMappingResponse
   }
   [FunctionTypeEnum.GraphqlResourceTypeMapping]: {
     event: GraphQLResourceTypeMappingRequest
+    context: FunctionEventDeliveryContext<P>
     response: GraphQLResourceTypeMappingResponse
   }
   [FunctionTypeEnum.GraphqlQuery]: {
     event: GraphQLQueryRequest
+    context: FunctionEventDeliveryContext<P>
     response: GraphQLQueryResponse
   }
   [FunctionTypeEnum.AppActionCall]: {
     event: AppActionRequest<T, U>
+    context: FunctionEventManagementContext<P>
     response: AppActionResponse
   }
   [FunctionTypeEnum.AppEventFilter]: {
     event: AppEventRequest
+    context: FunctionEventManagementContext<P>
     response: AppEventFilterResponse
   }
   [FunctionTypeEnum.AppEventHandler]: {
     event: AppEventRequest
+    context: FunctionEventManagementContext<P>
     response: AppEventHandlerResponse
   }
   [FunctionTypeEnum.AppEventTransformation]: {
     event: AppEventRequest
+    context: FunctionEventManagementContext<P>
     response: AppEventTransformationResponse
   }
   [FunctionTypeEnum.ResourcesSearch]: {
     event: ResourcesSearchRequest
+    context: FunctionEventManagementContext<P>
     response: ResourcesSearchResponse
   }
   [FunctionTypeEnum.ResourcesLookup]: {
     event: ResourcesLookupRequest
+    context: FunctionEventManagementContext<P> & FunctionEventDeliveryContext<P>
     response: ResourcesLookupResponse
   }
 }
@@ -290,5 +303,5 @@ export type FunctionEventHandler<
   P extends Record<string, any> = Record<string, any>,
 > = (
   event: FunctionEventHandlers[K]['event'],
-  context: FunctionEventContextMap<P>[K],
+  context: FunctionEventHandlers<never, never, P>[K]['context'],
 ) => Promise<FunctionEventHandlers[K]['response']> | FunctionEventHandlers[K]['response']
