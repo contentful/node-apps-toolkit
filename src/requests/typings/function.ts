@@ -202,6 +202,24 @@ export type FunctionEventContext<P extends Record<string, any> = Record<string, 
   cmaClientOptions?: ClientOptions
   cma?: PlainClientAPI
 }
+/**
+ * Enhanced FunctionEventContext with specific context types for different function types
+ */
+type FunctionEventContextMap<P extends Record<string, any> = Record<string, any>> = {
+  [FunctionTypeEnum.GraphqlFieldMapping]: FunctionEventContext<P>
+  [FunctionTypeEnum.GraphqlResourceTypeMapping]: FunctionEventContext<P>
+  [FunctionTypeEnum.GraphqlQuery]: FunctionEventContext<P>
+  [FunctionTypeEnum.AppActionCall]: FunctionEventContext<P>
+  [FunctionTypeEnum.AppEventFilter]: FunctionEventContext<P>
+  [FunctionTypeEnum.AppEventHandler]: FunctionEventContext<P>
+  [FunctionTypeEnum.AppEventTransformation]: FunctionEventContext<P>
+  [FunctionTypeEnum.ResourcesSearch]: FunctionEventContext<P>
+  [FunctionTypeEnum.ResourcesLookup]: FunctionEventContext<P> & {
+    originalRequest?: {
+      headers: Record<string, string>
+    }
+  }
+}
 
 /**
  * T: Possibility to type app action category
@@ -266,10 +284,11 @@ export type FunctionEventType = keyof FunctionEventHandlers
  * This type can also be used to construct helper functions for specific events
  * e.g. `const queryHandler: FunctionEventHandler<'graphql.query'> = (event, context) => { ... }`
  */
+
 export type FunctionEventHandler<
   K extends FunctionEventType = FunctionEventType,
   P extends Record<string, any> = Record<string, any>,
 > = (
   event: FunctionEventHandlers[K]['event'],
-  context: FunctionEventContext<P>,
+  context: FunctionEventContextMap<P>[K],
 ) => Promise<FunctionEventHandlers[K]['response']> | FunctionEventHandlers[K]['response']
