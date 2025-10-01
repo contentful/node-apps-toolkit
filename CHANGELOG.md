@@ -1,3 +1,10 @@
+## [3.13.2-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.1...v3.13.2-next.1) (2025-10-01)
+
+
+### Bug Fixes
+
+* __dirname problems in some hosting envs [EXT-6803] ([a05f2ad](https://github.com/contentful/node-apps-toolkit/commit/a05f2ad52d1b5ea32e0386475b907fe23ea0a22a))
+
 ## [3.13.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.0...v3.13.1) (2025-05-28)
 
 
