@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import { describe, it, expect } from 'vitest'
 import { CanonicalRequest, Secret } from './typings'
 import { signRequest } from './sign-request'
 
@@ -11,7 +11,7 @@ const VALID_REQUEST: CanonicalRequest = {
 
 const assertThrowsForFieldInValues = (field: keyof CanonicalRequest, values: any[]) => {
   for (const value of values) {
-    assert.throws(() => {
+    expect(() => {
       signRequest(
         VALID_SECRET,
         {
@@ -21,7 +21,7 @@ const assertThrowsForFieldInValues = (field: keyof CanonicalRequest, values: any
         },
         VALID_TIMESTAMP,
       )
-    }, `Did not throw for ${field.toString()}:${value}`)
+    }).toThrow()
   }
 }
 
@@ -41,15 +41,15 @@ describe('create-signature', () => {
     })
     it('does not throw with empty bodies', () => {
       const { body, ...requestWithoutBody } = VALID_REQUEST
-      assert.doesNotThrow(() => {
+      expect(() => {
         signRequest(VALID_SECRET, requestWithoutBody, VALID_TIMESTAMP)
-      })
+      }).not.toThrow()
     })
     it('does not throw with empty headers', () => {
       const { headers, ...requestWithoutBody } = VALID_REQUEST
-      assert.doesNotThrow(() => {
+      expect(() => {
         signRequest(VALID_SECRET, requestWithoutBody, VALID_TIMESTAMP)
-      })
+      }).not.toThrow()
     })
   })
 
@@ -58,16 +58,16 @@ describe('create-signature', () => {
       const invalidSecrets = [undefined, false, 'too-short', 1103379941037 /* too old */]
 
       for (const secret of invalidSecrets) {
-        assert.throws(() => {
+        expect(() => {
           // @ts-ignore
           signRequest(secret, VALID_REQUEST, VALID_TIMESTAMP)
-        }, `Did not throw for ${secret}`)
+        }).toThrow()
       }
     })
     it('does not throw if valid', () => {
-      assert.doesNotThrow(() => {
+      expect(() => {
         signRequest(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP)
-      })
+      }).not.toThrow()
     })
   })
 
@@ -76,16 +76,16 @@ describe('create-signature', () => {
       const invalidTimestamps = [1, false, 'string']
 
       for (const timestamp of invalidTimestamps) {
-        assert.throws(() => {
+        expect(() => {
           // @ts-ignore
           signRequest(VALID_SECRET, VALID_REQUEST, timestamp)
-        }, `Did not throw for ${timestamp}`)
+        }).toThrow()
       }
     })
     it('does not throw if missing', () => {
-      assert.doesNotThrow(() => {
+      expect(() => {
         signRequest(VALID_SECRET, VALID_REQUEST)
-      })
+      }).not.toThrow()
     })
   })
 
@@ -95,12 +95,13 @@ describe('create-signature', () => {
 
       const headers = { headerOne }
 
-      assert.notStrictEqual(
+      expect(
         signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers },
           VALID_TIMESTAMP,
         ),
+      ).not.toBe(
         signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?w=2&q=1', headers },
@@ -114,12 +115,13 @@ describe('create-signature', () => {
 
       const headers = { headerOne }
 
-      assert.notStrictEqual(
+      expect(
         signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?q=1&w=2', headers },
           VALID_TIMESTAMP,
         ),
+      ).not.toBe(
         signRequest(
           VALID_SECRET,
           { ...VALID_REQUEST, path: '/api/resources?q=12', headers },
@@ -133,7 +135,7 @@ describe('create-signature', () => {
 
       const headers = { headerTwo }
 
-      assert.doesNotThrow(() =>
+      expect(() =>
         signRequest(
           VALID_SECRET,
           {
@@ -142,7 +144,7 @@ describe('create-signature', () => {
           },
           VALID_TIMESTAMP,
         ),
-      )
+      ).not.toThrow()
     })
 
     it('generates same signature if headers key are provided with different casing', () => {
@@ -152,8 +154,7 @@ describe('create-signature', () => {
       const headers = { headerOne, headerTwo }
       const headersCased = { headerone: headerOne, headerTWO: headerTwo }
 
-      assert.deepStrictEqual(
-        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
+      expect(signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP)).toEqual(
         signRequest(VALID_SECRET, { ...VALID_REQUEST, headers: headersCased }, VALID_TIMESTAMP),
       )
     })
@@ -164,15 +165,13 @@ describe('create-signature', () => {
       const headers = { headerOne, headerTwo }
       const headersSpaced = { '      headerOne': headerOne, 'headerTwo        ': headerTwo }
 
-      assert.deepStrictEqual(
-        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
+      expect(signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP)).toEqual(
         signRequest(VALID_SECRET, { ...VALID_REQUEST, headers: headersSpaced }, VALID_TIMESTAMP),
       )
     })
     it('generates different signatures with different secrets', () => {
       const newSecret = `q${VALID_SECRET.slice(1, VALID_SECRET.length)}`
-      assert.notStrictEqual(
-        signRequest(newSecret, VALID_REQUEST, VALID_TIMESTAMP),
+      expect(signRequest(newSecret, VALID_REQUEST, VALID_TIMESTAMP)).not.toBe(
         signRequest(VALID_SECRET, VALID_REQUEST, VALID_TIMESTAMP),
       )
     })
@@ -181,8 +180,7 @@ describe('create-signature', () => {
       const headers = { 'x-contentful-webhook-request-attempt': '1' }
       const retryHeaders = { 'x-contentful-webhook-request-attempt': '2' }
 
-      assert.notStrictEqual(
-        signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP),
+      expect(signRequest(VALID_SECRET, { ...VALID_REQUEST, headers }, VALID_TIMESTAMP)).not.toBe(
         signRequest(VALID_SECRET, { ...VALID_REQUEST, headers: retryHeaders }, VALID_TIMESTAMP),
       )
     })
@@ -190,7 +188,7 @@ describe('create-signature', () => {
     it('does not return undefined headers', () => {
       const result = signRequest(VALID_SECRET, VALID_REQUEST, undefined)
 
-      assert.ok(Object.values(result).every((h) => typeof h !== 'undefined'))
+      expect(Object.values(result).every((h) => typeof h !== 'undefined')).toBe(true)
     })
 
     it('CRN header is optional', () => {
@@ -200,8 +198,8 @@ describe('create-signature', () => {
         envId: 'envId',
       })
 
-      assert.ok(!result['x-contentful-signed-headers'].includes('x-contentful-crn'))
-      assert.equal(result['x-contentful-crn'], undefined)
+      expect(result['x-contentful-signed-headers'].includes('x-contentful-crn')).toBe(false)
+      expect(result['x-contentful-crn']).toBe(undefined)
     })
 
     it('includes CRN header', () => {
@@ -212,8 +210,8 @@ describe('create-signature', () => {
         envId: 'envId',
       })
 
-      assert.ok(result['x-contentful-signed-headers'].includes('x-contentful-crn'))
-      assert.equal(result['x-contentful-crn'], 'this-is-a-crn')
+      expect(result['x-contentful-signed-headers'].includes('x-contentful-crn')).toBe(true)
+      expect(result['x-contentful-crn']).toBe('this-is-a-crn')
     })
   })
 })
