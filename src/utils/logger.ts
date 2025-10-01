@@ -1,11 +1,9 @@
-import * as path from 'path'
 import debug from 'debug'
 
-const SRC_PATH = path.join(__dirname, '..')
-const { name: APP_NAME } = require('../../package.json')
+const APP_NAME = '@contentful/node-apps-toolkit'
 
 const getNamespaceFromFilename = (filename: string) => {
-  return filename.split(SRC_PATH)[1].slice(0, -3)
+  return filename.slice(0, -3)
 }
 
 /**
