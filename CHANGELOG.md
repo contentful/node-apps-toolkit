@@ -1,3 +1,16 @@
+# [3.14.0-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.1...v3.14.0-next.1) (2025-10-02)
+
+
+### Bug Fixes
+
+* __dirname problems in some hosting envs [EXT-6803] ([a05f2ad](https://github.com/contentful/node-apps-toolkit/commit/a05f2ad52d1b5ea32e0386475b907fe23ea0a22a))
+* release ([d0e5b67](https://github.com/contentful/node-apps-toolkit/commit/d0e5b67a01550ed34cdca03f4e217cfdc7f9caa5))
+
+
+### Features
+
+* use filename ([1e628cf](https://github.com/contentful/node-apps-toolkit/commit/1e628cf87f7c9de7c9c35bd1cc8e5f1d4e3a1e4d))
+
 ## [3.13.2-next.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.1...v3.13.2-next.1) (2025-10-02)
 
 
