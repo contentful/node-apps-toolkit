@@ -275,7 +275,7 @@ type FunctionEventHandlers<
   }
   [FunctionTypeEnum.ResourcesLookup]: {
     event: ResourcesLookupRequest
-    context: FunctionEventManagementContext<P> & FunctionEventDeliveryContext<P>
+    context: FunctionEventManagementContext<P> | FunctionEventDeliveryContext<P>
     response: ResourcesLookupResponse
   }
 }
