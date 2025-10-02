@@ -193,15 +193,36 @@ export type AppActionRequest<
 export type AppActionResponse = void | Record<string, unknown>
 
 /**
+ * @deprecated use FunctionEventDeliveryContext and FunctionEventManagementContext instead
+ */
+export type FunctionEventContext<P extends Record<string, any> = Record<string, any>> =
+  FunctionEventManagementContext<P>
+
+/**
  * P: Possibility to type app installation parameters
  */
-export type FunctionEventContext<P extends Record<string, any> = Record<string, any>> = {
+export type FunctionEventDeliveryContext<P extends Record<string, any> = Record<string, any>> = {
   spaceId: string
   environmentId: string
   appInstallationParameters: P
-  cmaClientOptions?: ClientOptions
-  cma?: PlainClientAPI
+  requestId: string
+  organizationId: string
+  environmentUuid: string
+  appDefinitionId: string
+  appFunctionId: string
+  originalRequest?: {
+    headers: Record<string, string>
+  }
 }
+
+export type FunctionEventManagementContext<P extends Record<string, any> = Record<string, any>> =
+  FunctionEventDeliveryContext<P> & {
+    cmaHost: string
+    uploadHost: string
+    appToken: string
+    cmaClientOptions?: ClientOptions
+    cma?: PlainClientAPI
+  }
 
 /**
  * T: Possibility to type app action category
@@ -210,41 +231,51 @@ export type FunctionEventContext<P extends Record<string, any> = Record<string, 
 type FunctionEventHandlers<
   T extends AppActionCategoryType = never,
   U extends AppActionRequestBody<T> = never,
+  P extends Record<string, any> = Record<string, any>,
 > = {
   [FunctionTypeEnum.GraphqlFieldMapping]: {
     event: GraphQLFieldTypeMappingRequest
+    context: FunctionEventDeliveryContext<P>
     response: GraphQLFieldTypeMappingResponse
   }
   [FunctionTypeEnum.GraphqlResourceTypeMapping]: {
     event: GraphQLResourceTypeMappingRequest
+    context: FunctionEventDeliveryContext<P>
     response: GraphQLResourceTypeMappingResponse
   }
   [FunctionTypeEnum.GraphqlQuery]: {
     event: GraphQLQueryRequest
+    context: FunctionEventDeliveryContext<P>
     response: GraphQLQueryResponse
   }
   [FunctionTypeEnum.AppActionCall]: {
     event: AppActionRequest<T, U>
+    context: FunctionEventManagementContext<P>
     response: AppActionResponse
   }
   [FunctionTypeEnum.AppEventFilter]: {
     event: AppEventRequest
+    context: FunctionEventManagementContext<P>
     response: AppEventFilterResponse
   }
   [FunctionTypeEnum.AppEventHandler]: {
     event: AppEventRequest
+    context: FunctionEventManagementContext<P>
     response: AppEventHandlerResponse
   }
   [FunctionTypeEnum.AppEventTransformation]: {
     event: AppEventRequest
+    context: FunctionEventManagementContext<P>
     response: AppEventTransformationResponse
   }
   [FunctionTypeEnum.ResourcesSearch]: {
     event: ResourcesSearchRequest
+    context: FunctionEventManagementContext<P>
     response: ResourcesSearchResponse
   }
   [FunctionTypeEnum.ResourcesLookup]: {
     event: ResourcesLookupRequest
+    context: FunctionEventManagementContext<P> | FunctionEventDeliveryContext<P>
     response: ResourcesLookupResponse
   }
 }
@@ -266,10 +297,11 @@ export type FunctionEventType = keyof FunctionEventHandlers
  * This type can also be used to construct helper functions for specific events
  * e.g. `const queryHandler: FunctionEventHandler<'graphql.query'> = (event, context) => { ... }`
  */
+
 export type FunctionEventHandler<
   K extends FunctionEventType = FunctionEventType,
   P extends Record<string, any> = Record<string, any>,
 > = (
   event: FunctionEventHandlers[K]['event'],
-  context: FunctionEventContext<P>,
+  context: FunctionEventHandlers<never, never, P>[K]['context'],
 ) => Promise<FunctionEventHandlers[K]['response']> | FunctionEventHandlers[K]['response']
