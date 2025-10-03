@@ -37,9 +37,9 @@
     "prepare": "husky install",
     "lint": "eslint --ext .ts ./src",
     "lint:fix": "npm run lint -- --fix",
-    "pretest": "echo ' 🔑 Creating valid keypair for testing' && sh test/make-private-keys.sh &> /dev/null",
-    "test:unit": "mocha -r dotenv/config -r ts-node/register ./src/**/*.spec.ts",
-    "test:integration": "mocha -r dotenv/config -r ts-node/register --timeout 10000 ./test/**/*.test.ts",
+    "pretest": "echo ' 🔑 Creating valid keypair for testing' && bash test/make-private-keys.sh",
+    "test:unit": "vitest run src",
+    "test:integration": "vitest run test",
     "test": "npm run test:unit && npm run test:integration",
     "build": "rm -rf lib && tsup",
     "postbuild": "cp ./lib/index.d.ts ./lib/index.d.cts",
@@ -69,7 +69,9 @@
     "@types/sinon": "17.0.3",
     "@typescript-eslint/eslint-plugin": "7.10.0",
     "@typescript-eslint/parser": "7.10.0",
+    "@vitest/coverage-v8": "^3.2.4",
     "base64url": "3.0.1",
+    "cross-env": "^7.0.3",
     "dotenv": "16.4.5",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
@@ -84,7 +86,8 @@
     "ts-node": "10.9.2",
     "tsup": "^8.3.5",
     "typedoc": "0.25.13",
-    "typescript": "5.4.5"
+    "typescript": "5.4.5",
+    "vitest": "^3.2.4"
   },
   "lint-staged": {
     "*.ts": [

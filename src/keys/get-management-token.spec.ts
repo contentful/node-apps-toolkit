@@ -1,4 +1,4 @@
-import * as assert from 'assert'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
 import * as fs from 'fs'
 import * as path from 'path'
 
@@ -29,6 +29,16 @@ const noop = () => {}
 const defaultCache: LRUCache<string, string> = new LRUCache({ max: 10 })
 
 describe('getManagementToken', () => {
+  let fetchStub: sinon.SinonStub
+
+  beforeEach(() => {
+    fetchStub = sinon.stub(global, 'fetch')
+  })
+
+  afterEach(() => {
+    fetchStub.restore()
+  })
+
   it('fetches a token', async () => {
     const mockToken = 'token'
     const logger = noop as unknown as Logger
@@ -39,13 +49,13 @@ describe('getManagementToken', () => {
 
     const result = await getManagementToken(PRIVATE_KEY, DEFAULT_OPTIONS)
 
-    assert.deepStrictEqual(result, mockToken)
-    assert(
+    expect(result).toEqual(mockToken)
+    expect(
       post.calledWith(
         `spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
         sinon.match({ headers: { Authorization: sinon.match.string } }),
       ),
-    )
+    ).toBe(true)
   })
 
   it('caches token while valid', async () => {
@@ -61,11 +71,11 @@ describe('getManagementToken', () => {
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(result, mockToken)
+    expect(result).toBe(mockToken)
     const secondResult = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(secondResult, mockToken)
+    expect(secondResult).toBe(mockToken)
 
-    assert(post.calledOnce)
+    expect(post.calledOnce).toBe(true)
   })
 
   it('does not cache expired token', async () => {
@@ -82,7 +92,7 @@ describe('getManagementToken', () => {
 
     const optionsWithCaching = { ...DEFAULT_OPTIONS, reuseToken: true }
     const result = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(result, mockToken)
+    expect(result).toBe(mockToken)
 
     // Overwrite TTL expiry to 5ms
     const cacheKey = APP_ID + SPACE_ID + ENVIRONMENT_ID + PRIVATE_KEY.slice(32, 132)
@@ -94,8 +104,8 @@ describe('getManagementToken', () => {
     })
 
     const secondResult = await getManagementToken(PRIVATE_KEY, optionsWithCaching)
-    assert.strictEqual(secondResult, mockToken)
-    assert(post.calledTwice)
+    expect(secondResult).toBe(mockToken)
+    expect(post.calledTwice).toBe(true)
   })
 
   describe('when using a keyId', () => {
@@ -109,27 +119,27 @@ describe('getManagementToken', () => {
 
       const result = await getManagementToken(PRIVATE_KEY, { ...DEFAULT_OPTIONS, keyId: 'keyId' })
 
-      assert.deepStrictEqual(result, mockToken)
-      assert(
+      expect(result).toEqual(mockToken)
+      expect(
         post.calledWith(
           `spaces/${SPACE_ID}/environments/${ENVIRONMENT_ID}/app_installations/${APP_ID}/access_tokens`,
           sinon.match({ headers: { Authorization: sinon.match.string } }),
         ),
-      )
+      ).toBe(true)
     })
   })
 
   describe('when private key is incorrect', () => {
     it('throws if missing', async () => {
-      await assert.rejects(async () => {
+      await expect(async () => {
         // @ts-ignore Testing javascript code
         await getManagementToken(undefined, DEFAULT_OPTIONS)
-      })
+      }).rejects.toThrow()
     })
     it('throws if generated with wrong algorithm', async () => {
-      await assert.rejects(async () => {
+      await expect(async () => {
         await getManagementToken('not_a_private_key', DEFAULT_OPTIONS)
-      })
+      }).rejects.toThrow()
     })
   })
 
@@ -140,9 +150,9 @@ describe('getManagementToken', () => {
       const httpClient = { post } as unknown as HttpClient
       const getManagementToken = createGetManagementToken(logger, httpClient, defaultCache)
 
-      await assert.rejects(async () => {
+      await expect(async () => {
         await getManagementToken(PRIVATE_KEY, DEFAULT_OPTIONS)
-      }, HttpError)
+      }).rejects.toThrow(HttpError)
     })
   })
 })

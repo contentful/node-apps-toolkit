@@ -154,7 +154,7 @@ export const getManagementToken = (privateKey: string, opts: GetManagementTokenO
   const httpClientOpts = typeof opts.host !== 'undefined' ? { prefixUrl: opts.host } : {}
 
   return createGetManagementToken(
-    createLogger({ filename: __filename }),
+    createLogger({ namespace: 'get-management-token.js' }),
     createHttpClient(httpClientOpts),
     defaultCache!,
   )(privateKey, opts)

@@ -1,6 +1,6 @@
+import { describe, it, expect, beforeAll } from 'vitest'
 import * as fs from 'fs'
 import * as path from 'path'
-import * as assert from 'assert'
 
 //TODO use built version
 import { getManagementToken } from '../../src/keys'
@@ -8,7 +8,7 @@ import { cleanOldKeys, setPublicKey } from '../utils'
 import { createHttpClient } from '../../src/utils'
 
 describe('Keys Utilities', () => {
-  before(async () => {
+  beforeAll(async () => {
     await cleanOldKeys()
 
     const pubKey = fs.readFileSync(path.join(__dirname, '..', '..', 'keys', 'key.der.pub'))
@@ -32,7 +32,7 @@ describe('Keys Utilities', () => {
       environmentId,
     })
 
-    await assert.doesNotReject(() => {
+    await expect(async () => {
       const http = createHttpClient()
 
       return http.get(`spaces/${spaceId}/entries`, {
@@ -40,6 +40,6 @@ describe('Keys Utilities', () => {
           Authorization: `Bearer ${token}`,
         },
       })
-    })
+    }).not.toThrow()
   })
 })
