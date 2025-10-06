@@ -1,3 +1,10 @@
+# [3.14.0](https://github.com/contentful/node-apps-toolkit/compare/v3.13.1...v3.14.0) (2025-10-06)
+
+
+### Features
+
+* remove __dirname, __filename [EXT-6803] ([#779](https://github.com/contentful/node-apps-toolkit/issues/779)) ([753c274](https://github.com/contentful/node-apps-toolkit/commit/753c2747d2296be0c5a6c5d9d3725478def733b7))
+
 ## [3.13.1](https://github.com/contentful/node-apps-toolkit/compare/v3.13.0...v3.13.1) (2025-05-28)
 
 
