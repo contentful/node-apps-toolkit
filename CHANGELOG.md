@@ -1,3 +1,10 @@
+## [3.14.1](https://github.com/contentful/node-apps-toolkit/compare/v3.14.0...v3.14.1) (2025-10-06)
+
+
+### Reverts
+
+* Revert "feat[CNX-271]: adding additional types in context required for NER in…" (#781) ([d1940d9](https://github.com/contentful/node-apps-toolkit/commit/d1940d96b45d6fe9e5e2f6f094280911106752af)), closes [#781](https://github.com/contentful/node-apps-toolkit/issues/781)
+
 # [3.14.0](https://github.com/contentful/node-apps-toolkit/compare/v3.13.1...v3.14.0) (2025-10-06)
 
 
