@@ -201,9 +201,6 @@ export type FunctionEventContext<P extends Record<string, any> = Record<string, 
   appInstallationParameters: P
   cmaClientOptions?: ClientOptions
   cma?: PlainClientAPI
-  originalRequest?: {
-    headers: Record<string, any>
-  }
 }
 
 /**
