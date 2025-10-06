@@ -1,3 +1,10 @@
+# [3.15.0](https://github.com/contentful/node-apps-toolkit/compare/v3.14.1...v3.15.0) (2025-10-06)
+
+
+### Features
+
+* additional types in function context for native external reference in CDA ([#782](https://github.com/contentful/node-apps-toolkit/issues/782)) ([e4bcd16](https://github.com/contentful/node-apps-toolkit/commit/e4bcd16bdb6540f2b4b7147789a7bbaa9b38f784))
+
 ## [3.14.1](https://github.com/contentful/node-apps-toolkit/compare/v3.14.0...v3.14.1) (2025-10-06)
 
 
