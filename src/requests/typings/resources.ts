@@ -9,6 +9,7 @@ export type ResourcesSearchRequest = {
   query?: string
   locale?: string
   limit: number
+  referencingEntryId?: string
   pages?: {
     nextCursor: string
   }
@@ -30,6 +31,7 @@ export type ResourcesLookupRequest<L extends Record<string, Scalar[]> = Record<s
     resourceType: string
     locale?: string
     limit: number
+    referencingEntryId?: string
     pages?: {
       nextCursor: string
     }
