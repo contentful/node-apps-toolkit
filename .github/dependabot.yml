@@ -17,3 +17,6 @@ updates:
     include: scope
   allow:
   - dependency-type: "development"
+
+  cooldown:
+    default-days: 15
