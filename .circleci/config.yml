@@ -24,6 +24,7 @@ jobs:
       - checkout
       - node/install:
           node-version: << parameters.node-version >>
+          with-cache: false
       - setup-npm
       - run: npm ci
       - run:
@@ -39,7 +40,8 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "18"
+          node-version: "20"
+          with-cache: false
       - setup-npm
       - run: npm ci
       - run: npm run build
@@ -51,7 +53,8 @@ jobs:
     steps:
       - checkout
       - node/install:
-          node-version: "18"
+          node-version: "20"
+          with-cache: false
       - setup-npm
       - run: npm ci
 
@@ -65,7 +68,8 @@ jobs:
       - run: echo "//npm.pkg.github.com/:_authToken=${GITHUB_PACKAGES_WRITE_TOKEN}" > ~/.npmrc
       - run: echo "@contentful:registry=https://npm.pkg.github.com" >> ~/.npmrc
       - node/install:
-          node-version: "20.8.1"
+          node-version: "20"
+          with-cache: false
       - run: npm ci
       - run:
           name: Releasing
@@ -79,7 +83,7 @@ workflows:
             - vault
           matrix:
             parameters:
-              node-version: ["18.12.0", "20.6.1"]
+              node-version: ["20", "22", "24"]
       - lint-commits:
           context:
             - vault
