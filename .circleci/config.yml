@@ -69,7 +69,7 @@ jobs:
       - run: npm ci
       - run:
           name: Releasing
-          command: npm run semantic-release
+          command: npm run publish
 
 workflows:
   lint-build-release:
