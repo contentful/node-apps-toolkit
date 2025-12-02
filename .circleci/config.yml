@@ -24,7 +24,6 @@ jobs:
       - checkout
       - node/install:
           node-version: << parameters.node-version >>
-          with-cache: false
       - setup-npm
       - run: npm ci
       - run:
@@ -41,7 +40,6 @@ jobs:
       - checkout
       - node/install:
           node-version: "20"
-          with-cache: false
       - setup-npm
       - run: npm ci
       - run: npm run build
@@ -54,7 +52,6 @@ jobs:
       - checkout
       - node/install:
           node-version: "20"
-          with-cache: false
       - setup-npm
       - run: npm ci
 
@@ -69,11 +66,10 @@ jobs:
       - run: echo "@contentful:registry=https://npm.pkg.github.com" >> ~/.npmrc
       - node/install:
           node-version: "20"
-          with-cache: false
       - run: npm ci
       - run:
           name: Releasing
-          command: npm run semantic-release
+          command: npm run publish
 
 workflows:
   lint-build-release:
