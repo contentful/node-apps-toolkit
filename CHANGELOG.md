@@ -1,3 +1,17 @@
+# [3.16.0](https://github.com/contentful/node-apps-toolkit/compare/v3.15.0...v3.16.0) (2026-01-28)
+
+
+### Bug Fixes
+
+* contentful/node-apps-toolkit.git-denied-to-github-actions-bot ([#813](https://github.com/contentful/node-apps-toolkit/issues/813)) ([ec9d202](https://github.com/contentful/node-apps-toolkit/commit/ec9d202bf398da99c7cededd6882ae8d633cc42e))
+* remove vault steps so that the build can pass with new vault  setup ([#815](https://github.com/contentful/node-apps-toolkit/issues/815)) ([5fef6b8](https://github.com/contentful/node-apps-toolkit/commit/5fef6b80aa455f3ccf8bfeb4a3bdb39fc1854b8d))
+* semantic-release GH policy ([#814](https://github.com/contentful/node-apps-toolkit/issues/814)) ([0f60359](https://github.com/contentful/node-apps-toolkit/commit/0f6035956d07bffd20fb2b325f86d29d217aecad))
+
+
+### Features
+
+* [ARC-708] add referencingEntryId to resources types release ([#812](https://github.com/contentful/node-apps-toolkit/issues/812)) ([ccb67f5](https://github.com/contentful/node-apps-toolkit/commit/ccb67f5291ab237b80a06f1775333568aa35a2d2))
+
 # [3.15.0](https://github.com/contentful/node-apps-toolkit/compare/v3.14.1...v3.15.0) (2025-10-06)
 
 
