@@ -10,6 +10,7 @@ import {
   ContentfulHeader,
 } from './typings'
 import { normalizeHeaders, pickHeaders } from './utils'
+import { timingSafeUtf8StringEqual } from './timing-safe-string-equal'
 import { signRequest } from './sign-request'
 import { ExpiredRequestException } from './exceptions'
 
@@ -83,5 +84,5 @@ export const verifyRequest = (
     timestamp,
   )
 
-  return signature === computedSignature
+  return timingSafeUtf8StringEqual(signature, computedSignature)
 }
