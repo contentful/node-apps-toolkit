@@ -201,6 +201,15 @@ describe('verifyRequest', () => {
 
           expect(() => verifyRequest(VALID_SECRET, incomingRequest)).toThrow()
         })
+        it('throws when signature length is not 64 (before timing-safe compare)', () => {
+          const incomingRequest = makeIncomingRequest({}, makeContextHeaders(contextHeaders))
+
+          incomingRequest.headers[ContentfulHeader.Signature] = incomingRequest.headers[
+            ContentfulHeader.Signature
+          ].slice(0, 63)
+
+          expect(() => verifyRequest(VALID_SECRET, incomingRequest, 0)).toThrow()
+        })
         it('throws when missing timestamp', () => {
           const incomingRequest = makeIncomingRequest({}, makeContextHeaders(contextHeaders))
 
