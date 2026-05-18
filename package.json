@@ -22,7 +22,7 @@
       "require": "./lib/requests/index.cjs"
     },
     "./requests/typings": {
-      "import": "./lib/requests//typingsindex.mjs",
+      "import": "./lib/requests/typings/index.mjs",
       "require": "./lib/requests/typings/index.cjs"
     },
     "./utils": {
