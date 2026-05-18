@@ -1,3 +1,20 @@
+# [4.0.0](https://github.com/contentful/node-apps-toolkit/compare/v3.16.1...v4.0.0) (2026-05-18)
+
+
+### Features
+
+* upgrade contentful-management to v12 ([#823](https://github.com/contentful/node-apps-toolkit/issues/823)) ([0da1c84](https://github.com/contentful/node-apps-toolkit/commit/0da1c849b8c32205d65963a83745cb871ee8df2e)), closes [#822](https://github.com/contentful/node-apps-toolkit/issues/822)
+
+
+### BREAKING CHANGES
+
+* Minimum Node.js version is now 20. Node 18 is no longer supported.
+
+* fix: correct export map path for requests/typings subpath
+
+The ESM import path had a typo ("./lib/requests//typingsindex.mjs")
+that broke the ./requests/typings subpath export.
+
 ## [3.16.1](https://github.com/contentful/node-apps-toolkit/compare/v3.16.0...v3.16.1) (2026-03-24)
 
 
