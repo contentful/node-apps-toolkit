@@ -25,6 +25,6 @@ spec:
   type: library
   #deprecated, experimental, production, unknown
   lifecycle: production
-  system: unknown #optional
+  system: app-framework
   # your team name as it appears in github when tagging them for reviews
   owner: group:team-extensibility
