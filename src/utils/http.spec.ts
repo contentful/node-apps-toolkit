@@ -2,7 +2,7 @@ import { describe, it, expect, vi, afterEach } from 'vitest'
 import { createValidateStatusCode, HttpError, Response } from '.'
 
 const makeResponse = (statusCode: number, body = '{"sys":{"type":"Error"}}') =>
-  ({ statusCode, body } as Response)
+  ({ statusCode, body }) as Response
 
 describe('createValidateStatusCode', () => {
   afterEach(() => {
