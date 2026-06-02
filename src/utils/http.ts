@@ -11,7 +11,6 @@ export const createHttpClient = (configOverride: ExtendOptions = {}) => {
 
 export const createValidateStatusCode = (allowedStatusCodes: number[]) => (response: Response) => {
   if (!allowedStatusCodes.includes(response.statusCode)) {
-    console.log(response.body)
     throw new HTTPError(response)
   }
   return response
