@@ -1,3 +1,10 @@
+## [4.0.1](https://github.com/contentful/node-apps-toolkit/compare/v4.0.0...v4.0.1) (2026-06-24)
+
+
+### Bug Fixes
+
+* bump form-data to 4.0.6 to clear CVE-2025-7783 [EXT-7482] ([#835](https://github.com/contentful/node-apps-toolkit/issues/835)) ([14def8a](https://github.com/contentful/node-apps-toolkit/commit/14def8a31f157a2d3164a8e5876e116cbf8577b6))
+
 # [4.0.0](https://github.com/contentful/node-apps-toolkit/compare/v3.16.1...v4.0.0) (2026-05-18)
 
 
