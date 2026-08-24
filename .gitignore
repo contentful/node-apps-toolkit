@@ -2,5 +2,7 @@ node_modules
 .idea
 keys
 .env
-docs
+# Generated typedoc output; hand-written decision records are tracked.
+docs/*
+!docs/ADRs
 lib
