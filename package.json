@@ -43,7 +43,7 @@
     "test": "npm run generate:key && npm run test:unit && npm run test:integration",
     "build": "rm -rf lib && tsup && cp ./lib/index.d.ts ./lib/index.d.cts",
     "build:docs": "typedoc --options .typedocrc.json src",
-    "start:docs": "serve ./docs",
+    "start:docs": "serve ./docs/api",
     "build:all": "npm run build && npm run build:docs",
     "semantic-release": "semantic-release",
     "publish": "npm run build:all && npm run semantic-release",
