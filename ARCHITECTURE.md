@@ -178,8 +178,11 @@ well-formed or was too old". Callers are expected to map those to `403` and `422
 - **Both the CJS and ESM outputs must be exercised** when touching `src/keys` — the
   `jsonwebtoken` interop shim exists because that package resolves differently in each
   module system.
-- **Typedoc output in `docs/` is generated and committed by the release job.** Local
-  `npm run build:docs` diffs are expected noise; don't commit them separately from a release.
+- **Typedoc owns `docs/api/` exclusively and empties it on every run** (`cleanOutputDir`
+  defaults to `true`). The output is gitignored and rebuilt from source by the Pages workflow;
+  it is not committed. Never point `"out"` at a directory holding hand-written files — doing so
+  deletes them. See
+  [ADR 2026-08-24](./docs/ADRs/2026-08-24-separate-generated-docs-from-decision-records.md).
 - **Polaris SAST is not enabled** on this repo (`sast-disabled` tag in
   `catalog-info.yaml`), and the Backstage service tier is still `unknown`. Both are known
   gaps rather than intentional choices.

@@ -57,7 +57,7 @@ agree — a mismatch builds cleanly and breaks at the consumer's resolver.
 | Command | What it does |
 | --- | --- |
 | `npm run build` | tsup → `lib/` (CJS + ESM + `.d.ts`), then copies `index.d.ts` to `index.d.cts` |
-| `npm run build:docs` | typedoc → `docs/` (generated; the release job commits this) |
+| `npm run build:docs` | typedoc → `docs/api/` (generated, gitignored, rebuilt by CI) |
 | `npm run build:all` | both of the above |
 | `npm run start:docs` | serves the built docs locally |
 | `npm run generate:key` | `test/make-private-keys.sh` → `keys/key.pem`, `keys/key.der.pub` |
@@ -71,8 +71,9 @@ agree — a mismatch builds cleanly and breaks at the consumer's resolver.
 ## Folder Structure
 
 Library source and its unit tests live in `src/`. Integration tests live in `test/`.
-Decision records live in `docs/ADRs/`; the rest of `docs/` is generated typedoc output and
-should not be hand-edited.
+Decision records live in `docs/ADRs/` and are tracked. Generated typedoc output goes to
+`docs/api/`, which is gitignored — typedoc empties that directory on every run, so nothing
+hand-written may be placed inside it.
 
 ## Testing
 

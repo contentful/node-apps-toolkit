@@ -11,7 +11,7 @@ consumed by Contentful apps, app backends, and third-party integrators — every
 | --- | --- |
 | Install | `npm ci` |
 | Build the library | `npm run build` (tsup → `lib/`, dual CJS + ESM) |
-| Build API docs | `npm run build:docs` (typedoc → `docs/`) |
+| Build API docs | `npm run build:docs` (typedoc → `docs/api/`, gitignored) |
 | Build both | `npm run build:all` |
 | Unit tests | `npm run test:unit` (`vitest run src`) |
 | Integration tests | `npm run test:integration` (`vitest run test`, needs `.env`) |
@@ -90,6 +90,8 @@ consumed by Contentful apps, app backends, and third-party integrators — every
 - **Commits:** Conventional Commits, enforced in CI. `feat` → minor, `fix` → patch,
   `BREAKING CHANGE:` → major. `docs`/`chore` do not release.
 - **Release:** semantic-release from `main` (and prereleases from `next`), publishing to
-  npm and committing `CHANGELOG.md`, `docs`, `package.json`, `package-lock.json` back.
-  Generated typedoc output in `docs/` is committed as part of the release — do not
-  hand-edit it. `docs/ADRs/` is hand-written and outside typedoc's scope.
+  npm and committing `CHANGELOG.md`, `package.json`, `package-lock.json` back. Generated
+  typedoc output is **not** committed — `docs/api/` is gitignored and the Pages workflow
+  rebuilds it on every push to `main`. `docs/ADRs/` is hand-written and tracked; typedoc must
+  never be pointed at it. See
+  [`docs/ADRs/2026-08-24-separate-generated-docs-from-decision-records.md`](./docs/ADRs/2026-08-24-separate-generated-docs-from-decision-records.md).
