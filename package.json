@@ -10,24 +10,34 @@
   ],
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "import": "./lib/index.mjs",
       "require": "./lib/index.cjs"
     },
     "./keys": {
+      "types": "./lib/keys/index.d.ts",
       "import": "./lib/keys/index.mjs",
       "require": "./lib/keys/index.cjs"
     },
     "./requests": {
+      "types": "./lib/requests/index.d.ts",
       "import": "./lib/requests/index.mjs",
       "require": "./lib/requests/index.cjs"
     },
     "./requests/typings": {
+      "types": "./lib/requests/typings/index.d.ts",
       "import": "./lib/requests/typings/index.mjs",
       "require": "./lib/requests/typings/index.cjs"
     },
     "./utils": {
+      "types": "./lib/utils/index.d.ts",
       "import": "./lib/utils/index.mjs",
       "require": "./lib/utils/index.cjs"
+    },
+    "./validation": {
+      "types": "./lib/validation/index.d.ts",
+      "import": "./lib/validation/index.mjs",
+      "require": "./lib/validation/index.cjs"
     }
   },
   "engines": {

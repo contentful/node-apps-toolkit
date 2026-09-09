@@ -24,6 +24,7 @@ consumed by Contentful apps, app backends, and third-party integrators — every
 | Token minting | `src/keys/get-management-token.ts` |
 | Request signing / verification | `src/requests/sign-request.ts`, `src/requests/verify-request.ts` |
 | Public type surface | `src/requests/typings/` |
+| Manifest validation rules | `src/validation/` |
 | Build config | `tsup.config.js`, subpath map in `package.json#exports` |
 | Release config | `.releaserc`, `.circleci/config.yml` |
 | Decision records | `docs/ADRs/` |
@@ -31,9 +32,20 @@ consumed by Contentful apps, app backends, and third-party integrators — every
 ## Guardrails
 
 - **This package is published publicly.** Anything exported from `src/index.ts`,
-  `src/keys/index.ts`, `src/requests/index.ts`, `src/requests/typings/index.ts` or
-  `src/utils/index.ts` is a public contract. Removing or renaming an export is a breaking
-  change and must be released as one (`BREAKING CHANGE:` footer).
+  `src/keys/index.ts`, `src/requests/index.ts`, `src/requests/typings/index.ts`,
+  `src/utils/index.ts` or `src/validation/index.ts` is a public contract. Removing or
+  renaming an export is a breaking change and must be released as one
+  (`BREAKING CHANGE:` footer).
+- **A validation rule in `src/validation/` is a published contract in both directions.**
+  Loosening a rule is a `fix`; making one *stricter* rejects manifests that used to be
+  accepted and is breaking, even though no export changed name. These rules are consumed by
+  both the app CLI and the service that validates the same manifest on upload — the whole
+  point is that the two agree, so a change here must land in lockstep with a version bump in
+  every consumer, never in one alone. Each rule is exported twice on purpose: as a `*_PATTERN`
+  string for consumers that compose JSON Schema, and as an `isValid*` predicate for consumers
+  that validate imperatively. Keep both in step, and keep the patterns engine-agnostic
+  strings — no validation library belongs in this package's dependencies. See
+  [`docs/ADRs/2026-09-09-app-manifest-validation-shipped-from-the-root-entry-point.md`](./docs/ADRs/2026-09-09-app-manifest-validation-shipped-from-the-root-entry-point.md).
 - **Do not weaken the crypto paths.** `verifyRequest` compares signatures with
   `timingSafeUtf8StringEqual` (`crypto.timingSafeEqual`), never `===`. See
   [`docs/ADRs/2026-03-24-constant-time-signature-comparison.md`](./docs/ADRs/2026-03-24-constant-time-signature-comparison.md).
