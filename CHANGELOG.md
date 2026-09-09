@@ -5,6 +5,13 @@
 
 * **validation:** add shared App Action and Function manifest validation ([c08a7c5](https://github.com/contentful/node-apps-toolkit/commit/c08a7c5a3bff654aea095372e5d888ca358e3fb2))
 
+# [4.1.0-next.1](https://github.com/contentful/node-apps-toolkit/compare/v4.0.1...v4.1.0-next.1) (2026-09-09)
+
+
+### Features
+
+* **validation:** add shared App Action and Function manifest validation ([c08a7c5](https://github.com/contentful/node-apps-toolkit/commit/c08a7c5a3bff654aea095372e5d888ca358e3fb2))
+
 ## [4.0.1](https://github.com/contentful/node-apps-toolkit/compare/v4.0.0...v4.0.1) (2026-06-24)
 
 
