@@ -28,6 +28,10 @@
     "./utils": {
       "import": "./lib/utils/index.mjs",
       "require": "./lib/utils/index.cjs"
+    },
+    "./validation": {
+      "import": "./lib/validation/index.mjs",
+      "require": "./lib/validation/index.cjs"
     }
   },
   "engines": {
