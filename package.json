@@ -73,7 +73,7 @@
   "devDependencies": {
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@types/jsonwebtoken": "9.0.6",
+    "@types/jsonwebtoken": "9.0.10",
     "@types/mocha": "10.0.6",
     "@types/node": "22.5.4",
     "@types/sinon": "17.0.3",
