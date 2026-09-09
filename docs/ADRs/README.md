@@ -9,6 +9,7 @@ Add a new record as `YYYY-MM-DD-short-title.md` using the same
 
 | Date | Status | Title |
 | --- | --- | --- |
+| 2026-09-09 | Accepted | [Ship app manifest validation from the root entry point, as patterns plus predicates](./2026-09-09-app-manifest-validation-shipped-from-the-root-entry-point.md) |
 | 2026-08-24 | Accepted | [Separate generated API docs from tracked decision records](./2026-08-24-separate-generated-docs-from-decision-records.md) |
 | 2026-05-18 | Accepted | [Keep `contentful-management` as a type-only dependency (and follow its Node floor)](./2026-05-18-contentful-management-v12-as-a-type-only-dependency.md) |
 | 2026-03-24 | Accepted | [Compare request signatures in constant time](./2026-03-24-constant-time-signature-comparison.md) |
