@@ -46,7 +46,7 @@ npx husky install
 2. Make the change, with unit tests beside it as `src/**/*.spec.ts`.
 3. Run `npm run lint` and `npm run test:unit`.
 4. Commit using the [conventional commit format](https://conventionalcommits.org).
-5. Open a PR against `main`. `@contentful/team-extensibility` is the code owner.
+5. Open a PR against `main`. `@contentful/group-applied-ai-solutions` is the code owner.
 
 If you are adding or changing a **public export**, update the module's `index.ts`, and if it
 is a new subpath, `tsup.config.js#entry` and `package.json#exports` as well. All three must
