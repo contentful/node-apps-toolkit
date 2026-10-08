@@ -82,7 +82,7 @@
     "@vitest/coverage-v8": "^3.2.4",
     "base64url": "3.0.1",
     "cross-env": "^10.0.0",
-    "dotenv": "18.0.5",
+    "dotenv": "18.0.6",
     "eslint": "8.57.0",
     "eslint-config-prettier": "9.1.0",
     "eslint-plugin-prettier": "^5.0.0",
