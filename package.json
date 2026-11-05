@@ -71,8 +71,8 @@
     "runtypes": "^5.0.1"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "6.0.3",
-    "@semantic-release/git": "10.0.1",
+    "@semantic-release/changelog": "7.0.0",
+    "@semantic-release/git": "11.0.1",
     "@types/jsonwebtoken": "9.0.10",
     "@types/mocha": "10.0.10",
     "@types/node": "22.20.5",
@@ -90,7 +90,7 @@
     "lint-staged": "17.6.0",
     "mocha": "10.8.2",
     "prettier": "3.2.5",
-    "semantic-release": "23.1.1",
+    "semantic-release": "25.0.9",
     "serve": "14.2.6",
     "sinon": "18.0.1",
     "ts-node": "10.9.2",
